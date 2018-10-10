@@ -1,7 +1,6 @@
 package gribiwe.model;
 
 import gribiwe.model.dto.HistoryLineDTO;
-import gribiwe.model.dto.OutputNumberDTO;
 import gribiwe.model.util.CalculatorMath;
 import gribiwe.model.util.Operation;
 import gribiwe.model.util.SimpleOperation;
@@ -17,7 +16,7 @@ class HistoryLine {
    private ArrayList<ArrayList<SpecialOperation>> specialOperations;
 
    private BigDecimal savedResult;
-   private Operation savedOperation;
+   private SimpleOperation savedOperation;
 
    HistoryLine() {
       numbers = new ArrayList<>();
@@ -43,7 +42,7 @@ class HistoryLine {
       return savedResult;
    }
 
-   Operation getSavedOperation() {
+   SimpleOperation getSavedOperation() {
       return savedOperation;
    }
 
@@ -103,7 +102,7 @@ class HistoryLine {
       BigDecimal calculatingResult;
 
       if (numbers.size() == 0) {
-         return null;
+         return BigDecimal.ZERO;
       }
 
       calculatingResult = numbers.get(0);

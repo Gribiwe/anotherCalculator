@@ -9,4 +9,5 @@ public enum SimpleOperation implements Operation{
    SUBTRACT,
    MULTIPLY,
    DIVIDE,
+   NOTHING
 }

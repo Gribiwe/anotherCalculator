@@ -42,9 +42,8 @@ public class ModelBrainImpl implements ModelBrain {
 
    @Override
    public AnswerDTO deleteAllDigits() {
-      if (buildingNumber) {
-         enteringNumber.removeAllSymbols();
-      }
+      buildingNumber = true;
+      enteringNumber.removeAllSymbols();
       return formAnswer();
    }
 
@@ -54,7 +53,6 @@ public class ModelBrainImpl implements ModelBrain {
       enteringNumber = new EnteringNumberImpl();
       lastSpecialOperationHistory = new LastSpecialOperationHistory();
       historyLine = new HistoryLine();
-      memory = new Memory();
       return formAnswer();
    }
 
@@ -80,42 +78,38 @@ public class ModelBrainImpl implements ModelBrain {
       }
    }
 
-   private BigDecimal stopBuildingAndGetNumber() {
-      buildingNumber = false;
-      BigDecimal builtNumber;
-      builtNumber = enteringNumber.getNumber();
-      enteringNumber = new EnteringNumberImpl();
-      return builtNumber;
-   }
-
    @Override
    public AnswerDTO doOperation(SimpleOperation operation) throws CalculatorException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
-      if (buildingNumber) {
-         doOperationWithBuiltNumber(operation);
+
+      if (lastSpecialOperationHistory.isProcessing()) {
+         doOperationAfterSpecialOperation();
+      } else if (buildingNumber || resultNumber.getStatus().equals(ResultNumberStatus.EQUALS_RESULT)) {
+         doOperationWithBuiltOrEqualsNumber(operation);
       } else if (resultNumber.getStatus().equals(ResultNumberStatus.HISTORY_RESULT)) {
          historyLine.changeLastOperation(operation);
       }
       return formAnswer();
    }
 
-   private void doOperationWithBuiltNumber(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException {
-      BigDecimal builtNumber;
-      builtNumber = stopBuildingAndGetNumber();
-
-      verifyZeroDividingByZero(builtNumber, operation);
-      verifyDividingByZero(builtNumber, operation);
-
-      historyLine.add(builtNumber, operation, true);
-      BigDecimal historyResult;
-      historyResult = historyLine.calculate();
-      resultNumber.loadAsHistoryResult(historyResult);
-   }
-
    @Override
    public AnswerDTO doEquals() throws CalculatorException {
-      buildingNumber = false;
+      if (lastSpecialOperationHistory.isProcessing()) {
+         doEqualsAfterSpecialOperation();
+      } else if (resultNumber.getStatus().equals(ResultNumberStatus.EQUALS_RESULT)) {
+         doEqualsAfterEquals();
+      } else {
+         doEqualsWithHistoryAndBuiltNumber();
+      }
       return formAnswer();
+   }
+
+   private void doOperationAfterSpecialOperation() {
+
+   }
+
+   private void doEqualsAfterSpecialOperation() {
+
    }
 
    @Override
@@ -158,12 +152,56 @@ public class ModelBrainImpl implements ModelBrain {
       return formAnswer();
    }
 
-   private AnswerDTO formAnswer() {
+   private BigDecimal stopBuildingAndGetNumber() {
+      buildingNumber = false;
+      BigDecimal builtNumber;
+      builtNumber = enteringNumber.getNumber();
+      enteringNumber = new EnteringNumberImpl();
+      return builtNumber;
+   }
+
+   private void doOperationWithBuiltOrEqualsNumber(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException {
+      BigDecimal numberToAdd;
       if (buildingNumber) {
-         return new AnswerDTO(enteringNumber.getNumberDTO(), historyLine.getHistoryLineDTO(), lastSpecialOperationHistory.getDTO(), memory.getDTO());
+         numberToAdd = stopBuildingAndGetNumber();
       } else {
-         return new AnswerDTO(resultNumber.getNumberDTO(), historyLine.getHistoryLineDTO(), lastSpecialOperationHistory.getDTO(), memory.getDTO());
+         numberToAdd = resultNumber.getNumber();
       }
+      verifyZeroDividingByZero(numberToAdd, operation);
+      verifyDividingByZero(numberToAdd, operation);
+      historyLine.add(numberToAdd, operation, true);
+      BigDecimal historyResult;
+      historyResult = historyLine.calculate();
+      resultNumber.loadAsHistoryResult(historyResult);
+   }
+
+   private void doEqualsAfterEquals() {
+      historyLine.add(resultNumber.getNumber(), historyLine.getSavedOperation(), false);
+      historyLine.add(historyLine.getSavedResult(), SimpleOperation.NOTHING, false);
+      BigDecimal equalsResult;
+      equalsResult = historyLine.calculate();
+      historyLine.clearHistory();
+      resultNumber.loadAsEqualsResult(equalsResult);
+   }
+
+   private void doEqualsWithHistoryAndBuiltNumber() throws ZeroDivideZeroException {
+      BigDecimal numberToCalculate;
+
+      if (buildingNumber) {
+         numberToCalculate = stopBuildingAndGetNumber();
+         verifyZeroDividingByZero(numberToCalculate);
+         verifyDividingByZero(numberToCalculate);
+      } else {
+         numberToCalculate = resultNumber.getNumber();
+      }
+
+      historyLine.setSavedResult(numberToCalculate);
+      historyLine.add(numberToCalculate, SimpleOperation.NOTHING, false);
+
+      BigDecimal equalsResult = historyLine.calculate();
+      resultNumber.loadAsEqualsResult(equalsResult);
+
+      historyLine.clearHistory();
    }
 
    private void verifyZeroDividingByZero(BigDecimal divisor) throws ZeroDivideZeroException {
@@ -178,7 +216,7 @@ public class ModelBrainImpl implements ModelBrain {
       BigDecimal dividend = historyLine.calculate();
       SimpleOperation lastOperation = historyLine.getLastOperation();
 
-      if (dividend != null && lastOperation != null && isZero(dividend) &&
+      if (lastOperation != null && isZero(dividend) &&
               lastOperation.equals(SimpleOperation.DIVIDE) && isZero(divisor)) {
          if (operation != null) {
             historyLine.add(divisor, operation, false);
@@ -206,5 +244,13 @@ public class ModelBrainImpl implements ModelBrain {
 
    private boolean isZero(BigDecimal number) {
       return number.compareTo(BigDecimal.ZERO) == 0;
+   }
+
+   private AnswerDTO formAnswer() {
+      if (buildingNumber) {
+         return new AnswerDTO(enteringNumber.getNumberDTO(), historyLine.getHistoryLineDTO(), lastSpecialOperationHistory.getDTO(), memory.getDTO());
+      } else {
+         return new AnswerDTO(resultNumber.getNumberDTO(), historyLine.getHistoryLineDTO(), lastSpecialOperationHistory.getDTO(), memory.getDTO());
+      }
    }
 }

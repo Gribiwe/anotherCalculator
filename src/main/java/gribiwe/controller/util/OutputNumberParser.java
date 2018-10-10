@@ -1,7 +1,6 @@
 package gribiwe.controller.util;
 
 import gribiwe.model.dto.EnteredNumberDTO;
-import gribiwe.model.dto.OutputNumberDTO;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -32,7 +31,7 @@ public class OutputNumberParser {
          origin = "";
       }
       for (int i = leftOfPoint.length() - 3; i > 0; i -= 3) {
-         leftOfPoint = leftOfPoint.substring(0, i) + " " + leftOfPoint.substring(i, leftOfPoint.length());
+         leftOfPoint = leftOfPoint.substring(0, i) + " " + leftOfPoint.substring(i);
       }
       return leftOfPoint + origin;
    }
@@ -46,9 +45,11 @@ public class OutputNumberParser {
     */
    public String formatInput(EnteredNumberDTO dto) {
       String minus = "";
+
       if (dto.isNegated()) {
          minus = "-";
       }
+
       BigDecimal value = dto.getValue().abs();
       StringBuilder pattern;
       pattern = new StringBuilder("0");
@@ -70,37 +71,54 @@ public class OutputNumberParser {
     * method for parsing a BigDecimal value
     * it's can be really big or small values with exponents
     *
-    * @param value     number to parse
-    * @param addSpaces if true - result will be with group
-    *                  separating spaces
+    * @param value      number to parse
+    * @param needSpaces if true string will be
+    *                   with group separate spaces
     * @return parsed number
     */
-   public String formatResult(BigDecimal value, boolean addSpaces) {
+   public String formatResult(BigDecimal value, boolean needSpaces) {
       String minus = "";
-      if (cut(value).compareTo(BigDecimal.ZERO) < 0) {
+
+      if (value.compareTo(BigDecimal.ZERO) < 0) {
          minus = "-";
       }
-      String result;
-      value = value.abs();
+
+      String result = formatResult(value.abs());
+
+      if (needSpaces) {
+         result = addSpaces(result);
+      }
+      return minus + result;
+   }
+
+   /**
+    * method for parsing a BigDecimal value
+    * it's can be really big or small values with exponents
+    *
+    * @param value number to parse
+    * @return parsed number
+    */
+   private String formatResult(BigDecimal value) {
       if (value.compareTo(BigDecimal.ZERO) == 0) {
          return "0";
       }
-      Long localLeftOfPoint;
+      long localLeftOfPoint;
       String leftValue;
       String rightValue;
 
       if (value.toBigInteger().compareTo(BigInteger.ONE) >= 0) {
          leftValue = value.toBigInteger().toString();
          if (leftValue.length() > 16) {
-            String patternn = "0.###############E0";
-            DecimalFormat myFormatter = new DecimalFormat(patternn);
+            String pattern = "0.###############E0";
+            DecimalFormat myFormatter = new DecimalFormat(pattern);
             myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            result = myFormatter.format(value);
-            if (result.contains(",")) {
-               result = result.replaceAll("E", "e+");
+            String output = myFormatter.format(value);
+            if (output.contains(",")) {
+               output = output.replaceAll("E", "e+");
             } else {
-               result = result.replaceAll("E", ",e+");
+               output = output.replaceAll("E", ",e+");
             }
+            return output;
          } else if (new BigDecimal(value.toBigInteger().toString()).subtract(cut(value)).compareTo(BigDecimal.ZERO) == 0) {
             String pattern = "################";
             DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
@@ -108,7 +126,7 @@ public class OutputNumberParser {
             decimalFormatSymbols.setGroupingSeparator(' ');
             DecimalFormat myFormatter = new DecimalFormat(pattern, decimalFormatSymbols);
             myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            result = myFormatter.format(value);
+            return myFormatter.format(value);
          } else {
             localLeftOfPoint = Long.parseLong(leftValue);
             rightValue = value.toPlainString().substring(value.toPlainString().indexOf(".") + 1);
@@ -129,10 +147,11 @@ public class OutputNumberParser {
 
             myFormatter = new DecimalFormat(pattern.toString());
             myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            result = myFormatter.format(new BigDecimal(localLeftOfPoint + "." + rightValue));
+            return myFormatter.format(new BigDecimal(localLeftOfPoint + "." + rightValue));
          }
       } else {
          String allValue = value.toPlainString();
+         allValue = allValue.substring(allValue.indexOf(".") + 1);
 
          int indexOfNormNumber = -1;
          for (int i = 0; i < allValue.length(); i++) {
@@ -152,30 +171,26 @@ public class OutputNumberParser {
                zeroCount++;
             }
          }
+
          if ((indexOfNormNumber > 2 && indexOfLastNormNumber >= indexOfNormNumber + 16) ||
                  indexOfNormNumber + 1 == 17 && indexOfLastNormNumber >= indexOfNormNumber ||
                  indexOfNormNumber + 1 > 17) {
             String pattern = "#.###############E0";
             DecimalFormat myFormatter = new DecimalFormat(pattern);
             myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            String formattedNumber = myFormatter.format(value);
-            formattedNumber = formattedNumber.replaceAll("E", "e");
-            if (!formattedNumber.contains(",")) {
-               formattedNumber = formattedNumber.replace("e", ",e");
+            String output = myFormatter.format(value);
+            output = output.replaceAll("E", "e");
+            if (!output.contains(",")) {
+               output = output.replace("e", ",e");
             }
-            result = formattedNumber;
+            return output;
          } else {
             String pattern = "#.################";
             DecimalFormat myFormatter = new DecimalFormat(pattern);
             myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            result = myFormatter.format(value);
+            return myFormatter.format(value);
          }
       }
-      if (addSpaces) {
-         result = addSpaces(result);
-      }
-
-      return minus + result;
    }
 
    /**

@@ -12,7 +12,7 @@ public class ResultNumber {
 
    public ResultNumber() {
       number = BigDecimal.ZERO;
-      status = ResultNumberStatus.HISTORY_RESULT;
+      status = ResultNumberStatus.EQUALS_RESULT;
    }
 
    public void loadAsHistoryResult(BigDecimal historyResult) {

@@ -143,11 +143,11 @@ public class SimpleOperationsTest {
       testUtil.doTest("1 + 1 + +", "2", "1   +   1   +   ");
       testUtil.doTest("1 + 1 + + + + + + +", "2", "1   +   1   +   ");
 
-      testUtil.doTest(",0000000000000 +","0","0   +   ");
-      testUtil.doTest(",000000000000000000 +","0","0   +   ");
-      testUtil.doTest("0000000,000000000000000000 +","0","0   +   ");
-      testUtil.doTest("00000000000000 +","0","0   +   ");
-      testUtil.doTest("+","0","0   +   ");
+      testUtil.doTest(",0000000000000 +", "0", "0   +   ");
+      testUtil.doTest(",000000000000000000 +", "0", "0   +   ");
+      testUtil.doTest("0000000,000000000000000000 +", "0", "0   +   ");
+      testUtil.doTest("00000000000000 +", "0", "0   +   ");
+      testUtil.doTest("+", "0", "0   +   ");
    }
 
    /**
@@ -273,11 +273,11 @@ public class SimpleOperationsTest {
       testUtil.doTest("1 - 1 - -", "0", "1   -   1   -   ");
       testUtil.doTest("1 - 1 - - - - - - -", "0", "1   -   1   -   ");
 
-      testUtil.doTest(",0000000000000 -","0","0   -   ");
-      testUtil.doTest(",000000000000000000 -","0","0   -   ");
-      testUtil.doTest("0000000,000000000000000000 -","0","0   -   ");
-      testUtil.doTest("00000000000000 -","0","0   -   ");
-      testUtil.doTest("-","0","0   -   ");
+      testUtil.doTest(",0000000000000 -", "0", "0   -   ");
+      testUtil.doTest(",000000000000000000 -", "0", "0   -   ");
+      testUtil.doTest("0000000,000000000000000000 -", "0", "0   -   ");
+      testUtil.doTest("00000000000000 -", "0", "0   -   ");
+      testUtil.doTest("-", "0", "0   -   ");
    }
 
    /**
@@ -329,7 +329,7 @@ public class SimpleOperationsTest {
       testUtil.doTest("48 / 6 =", "8", "");
       testUtil.doTest("48 / 6 /", "8", "48   ÷   6   ÷   ");
       testUtil.doTest("48 / 6 =", "8", "");
-      testUtil.doTest("1000000000000000 / =" , "1", "");
+      testUtil.doTest("1000000000000000 / =", "1", "");
       testUtil.doTest("1000000000000000 / 1000000000000000 =", "1", "");
       testUtil.doTest("1000000000000000 / 2 =", "500 000 000 000 000", "");
       testUtil.doTest("500000000000000 / 2 =", "250 000 000 000 000", "");

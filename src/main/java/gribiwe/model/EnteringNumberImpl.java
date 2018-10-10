@@ -32,9 +32,6 @@ public class EnteringNumberImpl implements EnteringNumber {
       } else {
          limitToCompare = MAX_LENGTH;
       }
-      System.out.println(limitToCompare);
-      System.out.println(numberString);
-      System.out.println(numberString.length());
       if (numberString.equals("0") || numberString.equals("")) {
          numberString = String.valueOf(digit.ordinal());
       } else if (numberString.length() < limitToCompare && !(numberString.equals("0") && digit.equals(Digit.ZERO))) {
