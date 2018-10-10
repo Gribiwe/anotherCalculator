@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="root" minHeight="900.0" minWidth="1600.0" stylesheets="@stylesheet/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gribiwe.controller.Controller">
+    <AnchorPane fx:id="borderedVisionPane" maxHeight="900" maxWidth="1600" style="-fx-background-color: black;" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="631.0" AnchorPane.rightAnchor="631.0" AnchorPane.topAnchor="193.0">
+        <GridPane fx:id="visionPane" styleClass="visionPane" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
+            <columnConstraints>
+                <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="81.0" minHeight="74.0" prefHeight="0.0" vgrow="NEVER" />
+                <RowConstraints minHeight="80.0" percentHeight="18.3" prefHeight="86.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="320.0" prefHeight="320.0" vgrow="ALWAYS" />
+            </rowConstraints>
+            <AnchorPane minHeight="0.0" styleClass="bar" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
+                <AnchorPane id="bar" minHeight="31.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <Text smooth="false" strokeType="INSIDE" strokeWidth="0.0" text="Калькулятор" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="7.0" />
+                    <AnchorPane fx:id="exit" prefHeight="31.0" prefWidth="46.0" styleClass="exitButton" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Text fx:id="exitText" layoutX="40.0" layoutY="40.0" strokeType="INSIDE" strokeWidth="0.0" text="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                            <font>
+                                <Font name="Segoe MDL2 Assets" size="10.0" />
+                            </font>
+                        </Text>
+                    </AnchorPane>
+                    <AnchorPane fx:id="maximize" prefHeight="31.0" prefWidth="46.0" styleClass="standardButton" AnchorPane.rightAnchor="46.0" AnchorPane.topAnchor="0.0">
+                  <Label fx:id="maximizeText" text="" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font name="Segoe MDL2 Assets" size="10.0" />
+                     </font>
+                  </Label>
+                    </AnchorPane>
+                    <AnchorPane fx:id="hide" prefHeight="31.0" prefWidth="46.0" styleClass="standardButton" AnchorPane.rightAnchor="92.0" AnchorPane.topAnchor="0.0">
+                        <Text fx:id="minimizeText" layoutX="20.0" layoutY="20.0" smooth="false" strokeType="INSIDE" strokeWidth="0.0" text="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="11.0">
+                            <font>
+                                <Font name="Segoe MDL2 Assets" size="10.0" />
+                            </font>
+                        </Text>
+                    </AnchorPane>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="31.0">
+                    <AnchorPane fx:id="menuButton" maxHeight="1.7976931348623157E308" maxWidth="48.0" minHeight="0.0" prefWidth="48.0" styleClass="standardButton" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Text layoutX="10.0" layoutY="10.0" smooth="false" strokeType="INSIDE" strokeWidth="0.0" text="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+                            <font>
+                                <Font name="HoloLens MDL2 Assets" size="17.0" />
+                            </font>
+                        </Text>
+                    </AnchorPane>
+                    <AnchorPane minHeight="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="48.0" AnchorPane.topAnchor="0.0">
+                        <Text smooth="false" strokeType="INSIDE" strokeWidth="0.0" text="Обычный" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                            <font>
+                                <Font name="Segoe UI" size="20.0" />
+                            </font>
+                        </Text>
+                    </AnchorPane>
+                    <AnchorPane fx:id="button_history" minHeight="0.0" prefHeight="40.0" prefWidth="40.0" styleClass="standardButton" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
+                        <Text smooth="false" strokeType="INSIDE" strokeWidth="0.0" text="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="12.0">
+                            <font>
+                                <Font name="Segoe MDL2 Assets" size="16.0" />
+                            </font>
+                        </Text>
+                    </AnchorPane>
+                </AnchorPane>
+            </AnchorPane>
+            <AnchorPane styleClass="output" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints percentHeight="5.75" vgrow="ALWAYS" />
+                        <RowConstraints percentHeight="16.0" vgrow="ALWAYS" />
+                        <RowConstraints percentHeight="79.25" vgrow="ALWAYS" />
+                    </rowConstraints>
+                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                        <GridPane.margin>
+                            <Insets />
+                        </GridPane.margin>
+                        <AnchorPane minWidth="20.0" prefWidth="20.0" styleClass="littleHistoryButton" visible="false" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="1.0">
+                            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="20.0" maxHeight="70.0" styleClass="littleHistoryButtonLabel" text="" textFill="black" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="11.0" />
+                                </font>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane minWidth="18.0" prefWidth="18.0" styleClass="littleHistoryButton" visible="false" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+                            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="70.0" styleClass="littleHistoryButtonLabel" text="" textFill="black" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="11.0" />
+                                </font>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane layoutX="10.0" layoutY="10.0" minWidth="22.0" prefHeight="200.0" prefWidth="22.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="0.0">
+                            <Label fx:id="historyLine" alignment="CENTER_RIGHT" contentDisplay="CENTER" textFill="#656565" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI" size="15.0" />
+                                </font>
+                            </Label>
+                        </AnchorPane>
+                    </AnchorPane>
+                    <AnchorPane GridPane.rowIndex="2">
+                        <Label fx:id="inputFieldNumber" alignment="TOP_RIGHT" cache="true" cacheHint="SCALE" cacheShape="false" contentDisplay="CENTER" ellipsisString="Жирно" scaleShape="false" text="0" textAlignment="CENTER" textFill="black" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <font>
+                                <Font name="Segoe UI Semibold" size="46.0" />
+
+                            </font>
+                     <padding>
+                        <Insets left="10.0" right="12.0" />
+                     </padding>
+                        </Label>
+                    </AnchorPane>
+                </GridPane>
+            </AnchorPane>
+            <AnchorPane fx:id="thirdPartOfcalc" styleClass="input" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                <GridPane AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="2.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="28.0" prefHeight="28.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="285.0" percentHeight="90.8" prefHeight="285.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="48.0" prefWidth="48.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="48.0" prefWidth="48.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="48.0" prefWidth="48.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="48.0" prefWidth="48.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="49.0" prefWidth="49.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="48.0" prefWidth="48.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints vgrow="SOMETIMES" />
+                            <RowConstraints percentHeight="94.0" />
+                        </rowConstraints>
+                        <GridPane.margin>
+                            <Insets />
+                        </GridPane.margin>
+                        <Pane prefHeight="200.0" prefWidth="200.0" />
+                        <AnchorPane fx:id="button_mc" disable="true" minHeight="28.0" minWidth="48.0" onMouseClicked="#doClearMemory" prefHeight="28.0" prefWidth="48.0" styleClass="standardButton" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="4.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="12.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MC">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="12.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_mr" disable="true" minHeight="27.0" minWidth="48.0" onMouseClicked="#loadFromMemory" prefHeight="27.0" prefWidth="48.0" styleClass="standardButton" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="4.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="22.0" layoutY="6.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="13.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MR">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="12.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_mp" minWidth="48.0" onMouseClicked="#doAddMemory" prefWidth="48.0" styleClass="standardButton" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="4.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="22.0" layoutY="6.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="12.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="M+">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="12.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_msub" minWidth="48.0" onMouseClicked="#doRemoveMemory" prefWidth="48.0" styleClass="standardButton" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets right="4.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="22.0" layoutY="6.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="12.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="M-">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="12.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_ms" minHeight="28.0" minWidth="49.0" prefWidth="49.0" styleClass="standardButton" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="22.0" layoutY="6.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="12.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="MS">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="12.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_open_memory" disable="true" minWidth="48.0" prefWidth="48.0" styleClass="standardButton" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets left="3.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="22.0" layoutY="6.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="12.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="M">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="12.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                            <Label alignment="CENTER" layoutX="32.0" layoutY="16.0" textAlignment="CENTER" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="4.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="12.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="4.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                    </GridPane>
+                    <GridPane GridPane.rowIndex="1">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints percentHeight="16.666666666666664" vgrow="ALWAYS" />
+                            <RowConstraints percentHeight="16.666666666666664" vgrow="ALWAYS" />
+                            <RowConstraints percentHeight="16.666666666666664" vgrow="ALWAYS" />
+                            <RowConstraints percentHeight="16.666666666666664" vgrow="ALWAYS" />
+                            <RowConstraints percentHeight="16.666666666666664" vgrow="ALWAYS" />
+                            <RowConstraints vgrow="ALWAYS" />
+                        </rowConstraints>
+                        <AnchorPane fx:id="button_percent" minHeight="44.0" onMouseClicked="#doPercent" prefHeight="44.0" prefWidth="200.0" styleClass="operationButton" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="16.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_root" minHeight="44.0" onMouseClicked="#doRoot" prefHeight="44.0" prefWidth="200.0" styleClass="operationButton" GridPane.columnIndex="1">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="18.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_square" minHeight="44.0" onMouseClicked="#doSquare" prefHeight="44.0" prefWidth="200.0" styleClass="operationButton" GridPane.columnIndex="2">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Serif Italic" size="20.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="x">
+                                        <font>
+                                            <Font name="Serif Italic" size="19.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="19.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="   ²">
+                                        <font>
+                                            <Font name="Segoe UI" size="19.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_onedix" minHeight="44.0" onMouseClicked="#doOneDivX" prefHeight="40.0" prefWidth="72.0" styleClass="operationButton" GridPane.columnIndex="3">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" rotate="4.0" textAlignment="CENTER" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI" size="15.5" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/">
+                                        <font>
+                                            <Font name="Segoe UI" size="15.5" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                            <Label alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="19.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="¹">
+                                        <font>
+                                            <Font name="Segoe UI" size="19.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Serif Italic" size="20.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="x">
+                                        <font>
+                                            <Font name="Serif Italic" size="19.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_delete_stroke" minHeight="44.0" onMouseClicked="#deleteAllDigits" prefHeight="44.0" prefWidth="200.0" styleClass="operationButton" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CE">
+                                        <font>
+                                            <Font name="Segoe UI" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_clear" minHeight="44.0" onMouseClicked="#deleteAllDigitsAndHistory" prefHeight="44.0" prefWidth="200.0" styleClass="operationButton" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="C">
+                                        <font>
+                                            <Font name="Segoe UI" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_delete_digit" minHeight="44.0" onMouseClicked="#deleteDigit" prefHeight="44.0" prefWidth="200.0" styleClass="operationButton" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="HoloLens MDL2 Assets" size="17.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_divide" minHeight="44.0" onMouseClicked="#doDivide" prefHeight="44.0" prefWidth="200.0" styleClass="commonOperationButton" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" styleClass="commonOperationButton" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="22.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_7" minHeight="44.0" onMouseClicked="#addDigitSeven" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.rowIndex="2">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="7">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_8" minHeight="44.0" onMouseClicked="#addDigitEight" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="8">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_9" minHeight="44.0" onMouseClicked="#addDigitNine" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="9">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_multiple" minHeight="44.0" onMouseClicked="#doMultiply" prefHeight="44.0" prefWidth="200.0" styleClass="commonOperationButton" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" styleClass="commonOperationButton" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="16.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_4" minHeight="44.0" onMouseClicked="#addDigitFour" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.rowIndex="3">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="4">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_5" minHeight="44.0" onMouseClicked="#addDigitFive" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_6" minHeight="44.0" onMouseClicked="#addDigitSix" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="6">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_subtract" minHeight="44.0" onMouseClicked="#doSubtract" prefHeight="44.0" prefWidth="200.0" styleClass="commonOperationButton" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" styleClass="commonOperationButton" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="20.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_1" minHeight="44.0" onMouseClicked="#addDigitOne" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.rowIndex="4">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_2" minHeight="44.0" onMouseClicked="#addDigitTwo" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="2">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_3" minHeight="44.0" onMouseClicked="#addDigitThree" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="3">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_plus" minHeight="44.0" onMouseClicked="#doPlus" prefHeight="44.0" prefWidth="200.0" styleClass="commonOperationButton" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" styleClass="commonOperationButton" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="22.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_negate" minHeight="44.0" onMouseClicked="#doNegate" prefHeight="44.0" prefWidth="200.0" styleClass="operationButton" GridPane.rowIndex="5">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="21.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_0" minHeight="44.0" onMouseClicked="#addDigitZero" prefHeight="44.0" prefWidth="200.0" styleClass="numberButton" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="24.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_point" minHeight="44.0" onMouseClicked="#addPoint" prefHeight="44.0" prefWidth="200.0" styleClass="operationButton" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" textAlignment="CENTER" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe UI Semibold" size="25.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text=",">
+                                        <font>
+                                            <Font name="Segoe UI Semibold" size="25.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                        <AnchorPane fx:id="button_equals" minHeight="44.0" onMouseClicked="#doEquals" prefHeight="44.0" prefWidth="200.0" styleClass="commonOperationButton" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                            <GridPane.margin>
+                                <Insets left="1.0" right="1.0" top="2.0" />
+                            </GridPane.margin>
+                            <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="28.0" prefWidth="48.0" styleClass="commonOperationButton" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <font>
+                                    <Font name="Segoe MDL2 Assets" size="19.0" />
+                                </font>
+                                <graphic>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                                        <font>
+                                            <Font name="Segoe MDL2 Assets" size="16.0" />
+                                        </font>
+                                    </Text>
+                                </graphic>
+                            </Label>
+                        </AnchorPane>
+                    </GridPane>
+                </GridPane>
+            </AnchorPane>
+        </GridPane>
+    </AnchorPane>
+   <Label fx:id="memoryText" layoutX="567.0" layoutY="288.0" opacity="0.0" />
+</AnchorPane>
