@@ -10,6 +10,7 @@ import gribiwe.model.util.SpecialOperation;
  * some class for logic of calculator
  *
  * @author Gribiwe
+ * @see ModelBrainImpl
  */
 public interface ModelBrain {
 

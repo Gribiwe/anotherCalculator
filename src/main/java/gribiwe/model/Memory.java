@@ -4,38 +4,49 @@ import gribiwe.model.dto.MemoryDTO;
 
 import java.math.BigDecimal;
 
-class Memory {
+/**
+ * interface for class designed to
+ * keep some number in specified place
+ * for some kind of calculations
+ *
+ * @author Gribiwe
+ * @see MemoryImpl
+ */
+public interface Memory {
 
-   private boolean enable;
-   private BigDecimal number;
+   /**
+    * @return current memory number
+    */
+   BigDecimal getNumber();
 
-   Memory() {
-      number = BigDecimal.ZERO;
-   }
+   /**
+    * sets memory as enabled
+    */
+   void enable();
 
-   public BigDecimal getNumber() {
-      return number;
-   }
+   /**
+    * making add operation to current number
+    *
+    * @param num number to add
+    */
+   void add(BigDecimal num);
 
-   void setEnable(boolean enable) {
-      this.enable = enable;
-   }
+   /**
+    * making subtract operation from current number
+    *
+    * @param num number to subtract
+    */
+   void remove(BigDecimal num);
 
-   void add(BigDecimal num) {
-      number = number.add(num);
-   }
+   /**
+    * clears memory
+    */
+   void clear();
 
-   void remove(BigDecimal num) {
-      number  = number.subtract(num);
-   }
-
-   void clear() {
-      number = BigDecimal.ZERO;
-      enable = false;
-   }
-
-   MemoryDTO getDTO() {
-      return new MemoryDTO(number, enable);
-   }
-
+   /**
+    * forms a DTO with info about memory
+    *
+    * @return dto for answer from model
+    */
+   MemoryDTO getDTO();
 }

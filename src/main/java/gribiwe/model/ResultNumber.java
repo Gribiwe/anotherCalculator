@@ -5,46 +5,61 @@ import gribiwe.model.util.ResultNumberStatus;
 
 import java.math.BigDecimal;
 
-public class ResultNumber {
+/**
+ * interface of class for keeping number
+ * which will be viewed as result number
+ *
+ * @author Gribiwe
+ * @see ResultNumberImpl
+ */
+public interface ResultNumber {
+   /**
+    * method for loading number as history
+    * calculation result
+    *
+    * @param historyResult number to load
+    */
+   void loadAsHistoryResult(BigDecimal historyResult);
 
-   private BigDecimal number;
-   private ResultNumberStatus status;
+   /**
+    * method for loading number as memory number
+    * with blocking a number for some operations with it
+    *
+    * @param memoryNumber number to load
+    */
+   void loadAsMemoryNumbersWithBlock(BigDecimal memoryNumber);
 
-   ResultNumber() {
-      number = BigDecimal.ZERO;
-      status = ResultNumberStatus.EQUALS_RESULT;
-   }
+   /**
+    * method for loading number as memory number
+    *
+    * @param memoryNumber number to load
+    */
+   void loadAsMemoryNumber(BigDecimal memoryNumber);
 
-   void loadAsHistoryResult(BigDecimal historyResult) {
-      number = historyResult;
-      status = ResultNumberStatus.HISTORY_RESULT;
-   }
+   /**
+    * method for loading number as history
+    * calculation result after calling of equals
+    *
+    * @param equalsResult number to load
+    */
+   void loadAsEqualsResult(BigDecimal equalsResult);
 
-   void loadAsMemoryNumbersWithBlock(BigDecimal memoryNumber) {
-      number = memoryNumber;
-      status = ResultNumberStatus.BLOCKED_BY_MEMORY;
-   }
+   /**
+    * forms new OutputNumberDTO object with
+    * number on it
+    *
+    * @return current number in OutputNumberDTO object
+    */
+   OutputNumberDTO getNumberDTO();
 
-   void loadAsMemoryNumber(BigDecimal memoryNumber) {
-      number = memoryNumber;
-      status = ResultNumberStatus.LOADED_FROM_MEMORY;
-   }
+   /**
+    * @return current BigDecimal number
+    */
+   BigDecimal getNumber();
 
-
-   void loadAsEqualsResult(BigDecimal equalsResult) {
-      number = equalsResult;
-      status = ResultNumberStatus.EQUALS_RESULT;
-   }
-
-   OutputNumberDTO getNumberDTO() {
-      return new OutputNumberDTO(number);
-   }
-
-   public BigDecimal getNumber() {
-      return number;
-   }
-
-   ResultNumberStatus getStatus() {
-      return status;
-   }
+   /**
+    * @return current status or result number
+    * @see ResultNumberStatus
+    */
+   ResultNumberStatus getStatus();
 }

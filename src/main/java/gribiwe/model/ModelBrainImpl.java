@@ -26,6 +26,7 @@ public class ModelBrainImpl implements ModelBrain {
     * needs for building a new number
     *
     * @see EnteringNumber
+    * @see EnteringNumberImpl
     */
    private EnteringNumber enteringNumber;
 
@@ -48,6 +49,7 @@ public class ModelBrainImpl implements ModelBrain {
     * keeps number saved to memory
     *
     * @see Memory
+    * @see MemoryImpl
     */
    private Memory memory;
 
@@ -57,6 +59,7 @@ public class ModelBrainImpl implements ModelBrain {
     * and status of number
     *
     * @see ResultNumber
+    * @see ResultNumberImpl
     */
    private ResultNumber resultNumber;
 
@@ -79,8 +82,8 @@ public class ModelBrainImpl implements ModelBrain {
       enteringNumber = new EnteringNumberImpl();
       tailSpecialOperationHistory = new TailSpecialOperationHistory();
       historyLine = new HistoryLine();
-      memory = new Memory();
-      resultNumber = new ResultNumber();
+      memory = new MemoryImpl();
+      resultNumber = new ResultNumberImpl();
    }
 
    @Override
@@ -204,7 +207,7 @@ public class ModelBrainImpl implements ModelBrain {
 
    @Override
    public AnswerDTO addMemory() {
-      memory.setEnable(true);
+      memory.enable();
       BigDecimal numberToMemory;
       numberToMemory = getNumberFromBuildingOrResultNumber();
       memory.add(numberToMemory);
@@ -215,7 +218,7 @@ public class ModelBrainImpl implements ModelBrain {
 
    @Override
    public AnswerDTO removeMemory() {
-      memory.setEnable(true);
+      memory.enable();
       BigDecimal numberToMemory;
       numberToMemory = getNumberFromBuildingOrResultNumber();
       memory.remove(numberToMemory);

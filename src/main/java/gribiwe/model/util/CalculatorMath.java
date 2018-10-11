@@ -1,7 +1,5 @@
 package gribiwe.model.util;
 
-import gribiwe.model.dto.OutputNumberDTO;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -26,7 +24,7 @@ public class CalculatorMath {
 
    /**
     * number for calculation a percent
-    * because percent is {@value ONE_HUNDRED} part of number
+    * one percent is hundred part of number
     */
    private static final int ONE_HUNDRED = 100;
 
@@ -151,12 +149,10 @@ public class CalculatorMath {
     * method for calculation a special operations
     * provided by number and array of special operations for this number
     *
-//    * @param previousNumber number for calculation percent
     * @param number         number to make calculations
     * @param operations     operations to do
     * @return processed number by operations
     */
-//   public BigDecimal calculateSpecialOperations(BigDecimal previousNumber, BigDecimal number, ArrayList<SpecialOperation> operations) {
    public BigDecimal calculateSpecialOperations(BigDecimal number, ArrayList<SpecialOperation> operations) {
       BigDecimal result = number;
       for (Operation operation : operations) {
@@ -169,9 +165,6 @@ public class CalculatorMath {
          } else if (operation.equals(SpecialOperation.NEGATE)) {
             result = result.negate();
          }
-//         else if (previousNumber != null && operation.equals(SpecialOperation.PERCENT)) {
-//            result = percent(previousNumber, result);
-//         }
       }
       return result;
    }
