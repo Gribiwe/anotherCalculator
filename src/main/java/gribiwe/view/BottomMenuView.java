@@ -83,6 +83,16 @@ public class BottomMenuView {
    private double startHistoryAnchorLeft;
 
    /**
+    * number of monitor width
+    */
+   private int screenWidth;
+
+   /**
+    * number of monitor height
+    */
+   private int screenHeight;
+
+   /**
     * right anchor padding value of
     * mainPane for dragging before dragging
     */
@@ -153,14 +163,18 @@ public class BottomMenuView {
    /**
     * constructor of bottom menu
     *
-    * @param mainPane    root visible pane
-    * @param root        root invisible pane
-    * @param keyListener key listener which will blocked
+    * @param mainPane     root visible pane
+    * @param root         root invisible pane
+    * @param keyListener  key listener which will blocked
+    * @param screenHeight height size of screen
+    * @param screenWidth  width size of screen
     */
-   public BottomMenuView(AnchorPane mainPane, AnchorPane root, KeyListener keyListener) {
+   public BottomMenuView(AnchorPane mainPane, AnchorPane root, int screenWidth, int screenHeight, KeyListener keyListener) {
       this.mainPane = mainPane;
       this.root = root;
       this.keyListener = keyListener;
+      this.screenHeight = screenHeight;
+      this.screenWidth = screenWidth;
    }
 
    /**
@@ -177,7 +191,7 @@ public class BottomMenuView {
       mainPaneScreenBounds = mainPane.localToScreen(mainPane.getBoundsInLocal());
       root.lookup("#thirdPartOfcalc").setDisable(true);
       initInvisibleArea();
-      initHistory();
+      initVisibleMenu();
 
       if (callHistory) {
          initHistoryLabel();
@@ -194,10 +208,10 @@ public class BottomMenuView {
       root.getChildren().add(invisibleArea);
       invisibleArea.setId("invisibleArea");
 
-      AnchorPane.setLeftAnchor(invisibleArea, mainPaneScreenBounds.getMinX() + X_BORDER + 1);
-      AnchorPane.setTopAnchor(invisibleArea, mainPaneScreenBounds.getMinY() + 42);
-      AnchorPane.setBottomAnchor(invisibleArea, 900 - mainPaneScreenBounds.getMaxY() - Y_BORDER / 2);
-      AnchorPane.setRightAnchor(invisibleArea, 1600 - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
+      AnchorPane.setLeftAnchor(invisibleArea, mainPaneScreenBounds.getMinX() + X_BORDER  + 1);
+      AnchorPane.setTopAnchor(invisibleArea, mainPaneScreenBounds.getMinY() + 35);
+      AnchorPane.setBottomAnchor(invisibleArea, screenHeight - mainPaneScreenBounds.getMaxY() + Y_BORDER + 1);
+      AnchorPane.setRightAnchor(invisibleArea, screenWidth - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
 
       invisibleArea.setStyle("-fx-background-color: #c6c6c6");
       invisibleArea.setOpacity(0.01);
@@ -250,16 +264,16 @@ public class BottomMenuView {
    /**
     * initials of visible panes of history
     */
-   private void initHistory() {
+   private void initVisibleMenu() {
       visibleArea = new AnchorPane();
       root.getChildren().add(visibleArea);
       visibleArea.setId("visibleArea");
 
-      AnchorPane.setBottomAnchor(visibleArea, 900 - mainPaneScreenBounds.getMaxY() - Y_BORDER / 2);
+      AnchorPane.setBottomAnchor(visibleArea, screenHeight - mainPaneScreenBounds.getMaxY() + Y_BORDER);
       AnchorPane.setLeftAnchor(visibleArea, mainPaneScreenBounds.getMinX() + X_BORDER + 1);
-      AnchorPane.setRightAnchor(visibleArea, 1600 - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
+      AnchorPane.setRightAnchor(visibleArea, screenWidth - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
 
-      double maxTopAnchor = percentButtonScreenBounds.getMinY() + 10;
+      double maxTopAnchor = percentButtonScreenBounds.getMinY();
 
       neededHeight = percentButtonScreenBounds.getMinY() - mainPaneScreenBounds.getMinY();
 
@@ -325,6 +339,7 @@ public class BottomMenuView {
 
    /**
     * drags the bottom menu
+    *
     * @param xDir amount of pixels to drag on X
     * @param yDir amount of pixels to drag on Y
     */

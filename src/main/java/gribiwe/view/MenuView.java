@@ -83,6 +83,20 @@ public class MenuView {
    private Font fontForLabels;
 
    /**
+    * number of monitor width
+    */
+   private int screenWidth;
+
+   private final static double Y_BORDER = 6;
+
+   private final static double BORDER = 8;
+
+   /**
+    * number of monitor height
+    */
+   private int screenHeight;
+
+   /**
     * key listener for blocking it
     * while menu is shows
     */
@@ -96,13 +110,17 @@ public class MenuView {
     * @param root        invisible root pane of calculator
     * @param keyListener key listener for blocking it while
     *                    menu is shows
+    * @param screenHeight       height size of screen
+    * @param screenWidth        width size of screen
     */
-   public MenuView(AnchorPane button, AnchorPane mainPane, AnchorPane root, KeyListener keyListener) {
+   public MenuView(AnchorPane button, AnchorPane mainPane, AnchorPane root, int screenWidth, int screenHeight, KeyListener keyListener) {
       this.button = button;
       this.mainPane = mainPane;
       this.root = root;
-      shows = false;
       this.keyListener = keyListener;
+      this.screenHeight = screenHeight;
+      this.screenWidth = screenWidth;
+      shows = false;
    }
 
    /**
@@ -111,8 +129,8 @@ public class MenuView {
    public void show() {
       keyListener.setEnable(false);
       shows = true;
-      double yBorder = 6;
-      topYOfButton = button.localToScreen(button.getBoundsInLocal()).getMinY() + yBorder + yBorder / 2 + 1;
+
+      topYOfButton = button.localToScreen(button.getBoundsInLocal()).getMinY();
       bottomYOfButton = mainPane.localToScreen(mainPane.getBoundsInLocal()).getMaxY() + 2;
 
       initInvisibleMenuArea();
@@ -132,7 +150,7 @@ public class MenuView {
       root.getChildren().add(invisibleMenu);
       invisibleMenu.setId("invisibleMenuArea");
       double border = 8;
-      invisibleMenu.setMinSize(mainPane.getWidth() - border * 2 - 2, bottomYOfButton - topYOfButton);
+      invisibleMenu.setMinSize(mainPane.getWidth() - border * 2 - 2, bottomYOfButton - topYOfButton - BORDER - 1);
       invisibleMenu.setLayoutX(button.localToScreen(button.getBoundsInLocal()).getMinX());
       invisibleMenu.setLayoutY(topYOfButton);
       invisibleMenu.setStyle("-fx-background-color: #c6c6c6");
@@ -147,7 +165,7 @@ public class MenuView {
       menu = new AnchorPane();
       root.getChildren().add(menu);
       menu.setId("menu");
-      menu.setMinHeight(bottomYOfButton - topYOfButton);
+      menu.setMinHeight(bottomYOfButton - topYOfButton - BORDER - 1);
       Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
          private double i = WIDTH;
 

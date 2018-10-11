@@ -6,6 +6,7 @@ import gribiwe.view.listener.KeyListener;
 import gribiwe.view.listener.OverrunListener;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,6 +16,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -64,6 +66,21 @@ public class BodyView extends Application {
    private Controller controller;
 
    /**
+    * number of monitor width
+    */
+   private int screenWidth;
+
+   /**
+    * number of monitor height
+    */
+   private int screenHeight;
+
+   private static final int MIN_WIDTH_OF_CALC = 330;
+   private static final int MIN_HEIGHT_OF_CALC = 501;
+   private static final int X_BORDER = 8;
+   private static final int Y_BORDER = 6;
+
+   /**
     * the main method of application
     * starts the application
     */
@@ -76,12 +93,23 @@ public class BodyView extends Application {
     */
    @Override
    public void start(Stage primaryStage) {
+      initScreenSize();
       initRootLayout();
       initBox();
       initScene();
       this.primaryStage = primaryStage;
+      initBorderedVisionPane();
       initViewListeners();
       initStage();
+   }
+
+   /**
+    * initial of screen width and height
+    */
+   private void initScreenSize() {
+      Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+      screenHeight = (int) primaryScreenBounds.getHeight();
+      screenWidth = (int) primaryScreenBounds.getWidth();
    }
 
    /**
@@ -99,6 +127,10 @@ public class BodyView extends Application {
       rootLayout.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
       rootLayout.getChildren().get(0).setStyle("-fx-background-color: rgba(0, 0, 0, 0.01);");
       rootLayout.setBackground(Background.EMPTY);
+      rootLayout.setLayoutX(0);
+      rootLayout.setLayoutY(0);
+      rootLayout.setMinWidth(screenWidth);
+      rootLayout.setMinHeight(screenHeight);
    }
 
    /**
@@ -121,6 +153,12 @@ public class BodyView extends Application {
     */
    private void initBox() {
       box = new VBox(rootLayout);
+      box.setLayoutX(0);
+      box.setLayoutY(0);
+      box.setMinWidth(screenWidth);
+      box.setMaxWidth(screenWidth);
+      box.setMinHeight(screenHeight);
+      box.setMaxHeight(screenHeight);
       box.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
    }
 
@@ -133,6 +171,30 @@ public class BodyView extends Application {
    }
 
    /**
+    * pane of visible calculator
+    * with invisible borders for resizing
+    */
+   private Pane borderedVisiblePane;
+
+   /**
+    * initial of {@link #borderedVisiblePane}
+    */
+   public void initBorderedVisionPane() {
+      borderedVisiblePane = (Pane) scene.lookup("#borderedVisionPane");
+      double requiredBottomAnchorPadding;
+      double requiredTopAnchorPadding;
+      requiredTopAnchorPadding = (screenHeight - MIN_HEIGHT_OF_CALC) / 2D;
+      requiredBottomAnchorPadding = requiredTopAnchorPadding - Y_BORDER;
+      AnchorPane.setTopAnchor(borderedVisiblePane, requiredTopAnchorPadding);
+      AnchorPane.setBottomAnchor(borderedVisiblePane, requiredBottomAnchorPadding);
+
+      double requiredSideAnchorPadding;
+      requiredSideAnchorPadding = (screenWidth - MIN_WIDTH_OF_CALC - X_BORDER) / 2D;
+      AnchorPane.setLeftAnchor(borderedVisiblePane, requiredSideAnchorPadding);
+      AnchorPane.setRightAnchor(borderedVisiblePane, requiredSideAnchorPadding);
+   }
+
+   /**
     * initializing of listeners of keys and mouse
     */
    private void initViewListeners() {
@@ -140,9 +202,9 @@ public class BodyView extends Application {
       Label outputNumber = (Label) scene.lookup("#inputFieldNumber");
       new OverrunListener(outputNumber);
 
-      Pane borderedVisiblePane = (Pane) scene.lookup("#borderedVisionPane");
       Pane maximizeButton = (Pane) scene.lookup("#maximize");
-      cursorListener = new CursorListener((AnchorPane) borderedVisiblePane, (Label) maximizeButton.lookup("#maximizeText"), keyListener);
+      cursorListener = new CursorListener((AnchorPane) borderedVisiblePane,
+              (Label) maximizeButton.lookup("#maximizeText"), keyListener, screenWidth, screenHeight);
       borderedVisiblePane.setOnMouseMoved((mouseEvent) -> cursorListener.updateCursor(mouseEvent));
       borderedVisiblePane.setOnMouseDragged((mouseEvent) -> cursorListener.resizeWindow(mouseEvent));
       borderedVisiblePane.setOnMousePressed((mouseEvent) -> cursorListener.beforeResizePress(mouseEvent));

@@ -10,8 +10,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" minHeight="900.0" minWidth="1600.0" stylesheets="@stylesheet/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gribiwe.controller.Controller">
-    <AnchorPane fx:id="borderedVisionPane" maxHeight="900" maxWidth="1600" style="-fx-background-color: black;" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="631.0" AnchorPane.rightAnchor="631.0" AnchorPane.topAnchor="193.0">
+<AnchorPane fx:id="root" stylesheets="@stylesheet/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gribiwe.controller.Controller">
+    <AnchorPane fx:id="borderedVisionPane">
         <GridPane fx:id="visionPane" styleClass="visionPane" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
                 <ColumnConstraints />

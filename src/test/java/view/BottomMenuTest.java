@@ -30,15 +30,15 @@ class BottomMenuTest extends UITest {
     * appears after clicking a button
     * of opening a history
     */
-//   @Test
+   @Test
    void testHistoryAppears() {
       assertFalse(WindowUtil.isNodeExists("#invisibleArea"));
       assertFalse(WindowUtil.isNodeExists("#visibleArea"));
       clickOpenHistoryButton();
       AnchorPane invisibleMenuArea = (AnchorPane) WindowUtil.getNode("#invisibleArea");
-      assertEquals(WIDTH, (int) invisibleMenuArea.getWidth(), 0);
+      assertEquals(WIDTH, WindowUtil.getRounded(invisibleMenuArea.getWidth()), 0);
       AnchorPane visibleArea = (AnchorPane) WindowUtil.getNode("#visibleArea");
-      assertEquals(WIDTH, (int) visibleArea.getWidth(), 0);
+      assertEquals(WIDTH, WindowUtil.getRounded(visibleArea.getWidth()), 0);
       clickOpenHistoryButton();
    }
 
@@ -47,16 +47,16 @@ class BottomMenuTest extends UITest {
     * appears after clicking a button
     * of opening a memory
     */
-//   @Test
+   @Test
    void testMemoryAppears() {
       assertFalse(WindowUtil.isNodeExists("#invisibleArea"));
       assertFalse(WindowUtil.isNodeExists("#visibleArea"));
       RobotUtil.enterCase("m+", "0", "", false);
       clickOpenMemoryButton();
       AnchorPane invisibleMenuArea = (AnchorPane) WindowUtil.getNode("#invisibleArea");
-      assertEquals(WIDTH, (int) invisibleMenuArea.getWidth(), 0);
+      assertEquals(WIDTH, WindowUtil.getRounded(invisibleMenuArea.getWidth()), 0);
       AnchorPane visibleArea = (AnchorPane) WindowUtil.getNode("#visibleArea");
-      assertEquals(WIDTH, (int) visibleArea.getWidth(), 0);
+      assertEquals(WIDTH, WindowUtil.getRounded(visibleArea.getWidth()), 0);
       clickOpenMemoryButton();
       RobotUtil.enterCase("m-", "0", "", true);
    }
@@ -65,7 +65,7 @@ class BottomMenuTest extends UITest {
     * checking that bottom menu will
     * disappear after some cases
     */
-//   @Test
+   @Test
    void testDisappearing() {
       FXTestUtils.awaitEvents();
       clickOpenHistoryButton();

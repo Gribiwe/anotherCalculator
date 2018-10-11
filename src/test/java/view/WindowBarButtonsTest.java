@@ -2,8 +2,10 @@ package view;
 
 import com.sun.javafx.robot.impl.FXRobotHelper;
 import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,10 @@ public class WindowBarButtonsTest extends UITest {
     */
    @Test
    public void maximizeTest() {
+      Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+      int screenHeight = (int) primaryScreenBounds.getHeight();
+      int screenWidth = (int) primaryScreenBounds.getWidth();
+
       FXTestUtils.awaitEvents();
       AnchorPane visiblePane = (AnchorPane) WindowUtil.getNode("#borderedVisionPane");
       int oldStartX = WindowUtil.getElementStartX(visiblePane);
@@ -32,16 +38,16 @@ public class WindowBarButtonsTest extends UITest {
       int oldStartY = WindowUtil.getElementStartY(visiblePane);
       int oldEndY = WindowUtil.getElementEndY(visiblePane);
       assertNotEquals(oldStartX, 0);
-      assertNotEquals(oldEndX, 1600);
+      assertNotEquals(oldEndX, screenWidth);
       assertNotEquals(oldStartY, 0);
-      assertNotEquals(oldEndY, 870);
+      assertNotEquals(oldEndY, screenHeight);
 
       RobotUtil.clickOn("#maximize");
       FXTestUtils.awaitEvents();
       assertEquals(WindowUtil.getElementStartX(visiblePane), 0);
-      assertEquals(WindowUtil.getElementEndX(visiblePane), 1600);
+      assertEquals(WindowUtil.getElementEndX(visiblePane), screenWidth);
       assertEquals(WindowUtil.getElementStartY(visiblePane), 0);
-      assertEquals(WindowUtil.getElementEndY(visiblePane), 870);
+      assertEquals(WindowUtil.getElementEndY(visiblePane), screenHeight);
       RobotUtil.clickOn("#maximize");
       FXTestUtils.awaitEvents();
 

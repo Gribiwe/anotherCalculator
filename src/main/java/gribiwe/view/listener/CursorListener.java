@@ -25,6 +25,16 @@ import java.text.DecimalFormat;
 public class CursorListener {
 
    /**
+    * number of monitor width
+    */
+   private int screenWidth;
+
+   /**
+    * number of monitor height
+    */
+   private int screenHeight;
+
+   /**
     * amount of pixels for Y border
     * it's needs for tracking a mouse for resize
     */
@@ -188,11 +198,15 @@ public class CursorListener {
     * @param area               visible root pane of calculator
     * @param maximizeButtonText pane of maximize button
     * @param keyListener        exemplar of key listener for blocking it
+    * @param screenHeight       height size of screen
+    * @param screenWidth        width size of screen
     */
-   public CursorListener(AnchorPane area, Label maximizeButtonText, KeyListener keyListener) {
+   public CursorListener(AnchorPane area, Label maximizeButtonText, KeyListener keyListener, int screenWidth, int screenHeight) {
       this.area = area;
       this.maximizeButtonText = maximizeButtonText;
       this.keyListener = keyListener;
+      this.screenWidth = screenWidth;
+      this.screenHeight = screenHeight;
    }
 
    /**
@@ -321,8 +335,8 @@ public class CursorListener {
          savedTopAnchor = AnchorPane.getTopAnchor(area);
          savedBottomAnchor = AnchorPane.getBottomAnchor(area);
 
-         AnchorPane.setBottomAnchor(area, 20.0);
-         AnchorPane.setTopAnchor(area, 10.0);
+         AnchorPane.setBottomAnchor(area, 0.0);
+         AnchorPane.setTopAnchor(area, 0.0);
          AnchorPane.setLeftAnchor(area, 0.0);
          AnchorPane.setRightAnchor(area, 0.0);
 
@@ -391,7 +405,7 @@ public class CursorListener {
             fullScreen();
          } else {
             double xDir = mouseEvent.getScreenX() + xOffset;
-            double yDir = mouseEvent.getScreenY() + yOffset + 10;
+            double yDir = mouseEvent.getScreenY() + yOffset;// + 10;
 
             AnchorPane.setLeftAnchor(area, startAnchorLeft + xDir);
             AnchorPane.setRightAnchor(area, startAnchorRight - xDir);
@@ -457,16 +471,16 @@ public class CursorListener {
       } else {
          pressedForDrag = (!onBorder && !onButton);
          if (isFull) {
-            double appWidth = 1600 - savedRightAnchor - savedLeftAnchor;
+            double appWidth = screenWidth - savedRightAnchor - savedLeftAnchor;
             if (mouseEvent.getScreenX() < appWidth + BORDER) {
                startAnchorLeft = 0 - BORDER;
                startAnchorRight = savedRightAnchor + savedLeftAnchor + BORDER;
-            } else if (mouseEvent.getScreenX() > (1600 - appWidth) + BORDER) {
+            } else if (mouseEvent.getScreenX() > (screenWidth - appWidth) + BORDER) {
                startAnchorRight = 0 - BORDER;
-               startAnchorLeft = 1600 - appWidth + BORDER;
+               startAnchorLeft = screenWidth - appWidth + BORDER;
             } else {
                startAnchorLeft = mouseEvent.getScreenX() - appWidth / 2 + BORDER;
-               startAnchorRight = 1600 - mouseEvent.getScreenX() - appWidth / 2 - BORDER;
+               startAnchorRight = screenWidth - mouseEvent.getScreenX() - appWidth / 2 - BORDER;
             }
             startAnchorTop = 0.0 + Y_BORDER;
             startAnchorBottom = savedBottomAnchor + savedTopAnchor - Y_BORDER;
@@ -509,7 +523,7 @@ public class CursorListener {
     */
    public void showMenu(AnchorPane button, AnchorPane root) {
       if (menu == null) {
-         menu = new MenuView(button, area, root, keyListener);
+         menu = new MenuView(button, area, root, screenWidth, screenHeight, keyListener);
       }
       menu.show();
    }
@@ -521,10 +535,10 @@ public class CursorListener {
       int appWidth = getRounded(area.localToScreen(area.getBoundsInLocal()).getWidth());
       int appHeight = getRounded(area.localToScreen(area.getBoundsInLocal()).getHeight());
 
-      topBeforeResizeY = mouseEvent.getY() - 6;
-      bottomBeforeResizeY = mouseEvent.getY() - appHeight + 6;
-      leftBeforeResizeX = -(mouseEvent.getX() - 8);
-      rightBeforeResizeX = mouseEvent.getX() - appWidth + 8;
+      topBeforeResizeY = mouseEvent.getY() - Y_BORDER;
+      bottomBeforeResizeY = mouseEvent.getY() - appHeight + Y_BORDER;
+      leftBeforeResizeX = -(mouseEvent.getX() - BORDER);
+      rightBeforeResizeX = mouseEvent.getX() - appWidth + BORDER;
    }
 
    /**
@@ -643,12 +657,12 @@ public class CursorListener {
    /**
     * method for showing bottom menu out
     *
-    * @param rootLayout  root pane of aplication
+    * @param rootLayout  root pane of application
     * @param callHistory if it's true - history will be shown. false is memory bottom menu
     */
    public void showBottomMenu(AnchorPane rootLayout, boolean callHistory) {
       if (bottomMenuView == null) {
-         bottomMenuView = new BottomMenuView(area, rootLayout, keyListener);
+         bottomMenuView = new BottomMenuView(area, rootLayout, screenWidth, screenHeight, keyListener);
       }
       bottomMenuView.show(callHistory);
    }

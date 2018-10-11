@@ -16,7 +16,7 @@ class ResizeTest extends UITest {
    /**
     * tests resizing with different offsets and directions
     */
-//   @Test
+   @Test
    void testResize() {
       resizeTestTemplateX(0);
       resizeTestTemplateX(600);
@@ -27,7 +27,7 @@ class ResizeTest extends UITest {
    /**
     * tests drag with different directions
     */
-//   @Test
+   @Test
    void testDrag() {
       dragTestTemplate(100, 50);
       dragTestTemplate(300, 150);
@@ -55,14 +55,11 @@ class ResizeTest extends UITest {
     * @param directionY value of final Y coordinate of mouse
     */
    private void resizeTestTemplateY(int directionY) {
-      ResizeUtil.testResizeTop(0, directionY);
       ResizeUtil.testResizeBottom(0, directionY);
       ResizeUtil.testResizeTop(1, directionY);
       ResizeUtil.testResizeBottom(1, directionY);
       ResizeUtil.testResizeTop(4, directionY);
       ResizeUtil.testResizeBottom(4, directionY);
-      ResizeUtil.testResizeTop(5, directionY);
-      ResizeUtil.testResizeBottom(5, directionY);
    }
 
    /**

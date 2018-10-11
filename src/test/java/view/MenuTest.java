@@ -32,7 +32,7 @@ class MenuTest extends UITest {
     * Testing the appearing of menu when
     * button for it was clicked
     */
-//   @Test
+   @Test
    void testMenuAppears() {
       assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertFalse(WindowUtil.isNodeExists("#menu"));
@@ -48,7 +48,7 @@ class MenuTest extends UITest {
     * Testing the disappearing of menu
     * with different cases
     */
-//   @Test
+   @Test
    void testDisappearing() {
       clickMenuButton();
       testDisappearingOnClickOnInvisibleArea();

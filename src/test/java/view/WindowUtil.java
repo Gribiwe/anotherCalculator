@@ -9,6 +9,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 /**
  * Class for getting information about nodes
@@ -25,10 +26,18 @@ class WindowUtil extends Assert {
     */
    private static Scene scene;
 
-   static private int getRounded(double amount) {
-      DecimalFormat df = new DecimalFormat("#");
+   static public int getRounded(double amount) {
+      DecimalFormat df = new DecimalFormat("0.#");
       df.setRoundingMode(RoundingMode.HALF_UP);
-      return Integer.parseInt(df.format(amount));
+      DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+      decimalFormatSymbols.setDecimalSeparator('.');
+      df.setDecimalFormatSymbols(decimalFormatSymbols);
+      String formatted = df.format(amount);
+      df = new DecimalFormat("0");
+      df.setRoundingMode(RoundingMode.HALF_UP);
+      formatted = df.format(Double.parseDouble(formatted));
+
+      return Integer.parseInt(formatted);
    }
 
    /**
