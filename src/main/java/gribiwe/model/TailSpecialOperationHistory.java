@@ -1,58 +1,69 @@
 package gribiwe.model;
 
 import gribiwe.model.dto.LastSpecialOperationHistoryDTO;
-import gribiwe.model.util.CalculatorMath;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-class TailSpecialOperationHistory {
-   private ArrayList<SpecialOperation> operations;
-   private BigDecimal number;
-   private boolean processing;
+/**
+ * interface of objects to represent
+ * tail of history for special operations in forming
+ *
+ * @author Gribiwe
+ * @see SpecialOperation
+ * @see TailSpecialOperationHistoryImpl
+ */
+public interface TailSpecialOperationHistory {
 
-   boolean isProcessing() {
-      return processing;
-   }
+   /**
+    * @return true if processing of new
+    * special operations
+    */
+   boolean isProcessing();
 
-   BigDecimal getNumber() {
-      return number;
-   }
+   /**
+    * @return start number
+    */
+   BigDecimal getNumber();
 
-   TailSpecialOperationHistory() {
-      number = null;
-      operations = new ArrayList<>();
-      processing = false;
-   }
+   /**
+    * adds special operation to list of special
+    * operations of current number
+    *
+    * @param operation operation to add
+    * @see SpecialOperation
+    */
+   void addOperation(SpecialOperation operation);
 
-   void addOperation(SpecialOperation operation) {
-      operations.add(operation);
-   }
+   /**
+    * initial of first number of new tail
+    *
+    * @param number number to start
+    */
+   void initNumber(BigDecimal number);
 
-   void initNumber(BigDecimal number) {
-      this.number = number;
-      processing = true;
-   }
+   /**
+    * clears tail - all of operations and number
+    */
+   void clear();
 
-   void clear() {
-      number = null;
-      operations = new ArrayList<>();
-      processing = false;
-   }
+   /**
+    * forms a dto for answering from model
+    * @return formed dto
+    */
+   LastSpecialOperationHistoryDTO getDTO();
 
-   LastSpecialOperationHistoryDTO getDTO() {
-      if (number == null) return null;
-      return new LastSpecialOperationHistoryDTO(operations, number);
-   }
+   /**
+    * calculates a special operations of this tail
+    * @return result of calculation
+    */
+   BigDecimal calculate();
 
-   BigDecimal calculate() {
-      BigDecimal result;
-      result = new CalculatorMath().calculateSpecialOperations(number, operations);
-      return result;
-   }
-
-   ArrayList<SpecialOperation> getOperations() {
-      return operations;
-   }
+   /**
+    * @return list of special operations
+    * @see SpecialOperation
+    * @see ArrayList
+    */
+   ArrayList<SpecialOperation> getOperations();
 }

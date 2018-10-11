@@ -1,114 +1,94 @@
 package gribiwe.model;
 
 import gribiwe.model.dto.HistoryLineDTO;
-import gribiwe.model.util.CalculatorMath;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-class HistoryLine {
+/**
+ * interface for class to represent a history line object
+ * with information of special operations, simple operations or numbers
+ * for it
+ *
+ * @author Gribiwe
+ * @see HistoryLineImpl
+ */
+public interface HistoryLine {
 
-   private ArrayList<BigDecimal> numbers;
-   private ArrayList<SimpleOperation> operations;
-   private ArrayList<ArrayList<SpecialOperation>> specialOperations;
+   /**
+    * uploads list of special operations to save it
+    * at history to last number
+    *
+    * @param specialOperations list of special operations
+    * @see SpecialOperation
+    * @see ArrayList
+    */
+   void uploadSpecialOperations(ArrayList<SpecialOperation> specialOperations);
 
-   private BigDecimal savedResult;
-   private SimpleOperation savedOperation;
+   /**
+    * adds number with provided operation
+    * to history
+    *
+    * @param number    number to add
+    * @param operation operation to add
+    * @param save      if true - saves last operation
+    *                  for some requirements
+    * @see SimpleOperation
+    */
+   void add(BigDecimal number, SimpleOperation operation, boolean save);
 
-   HistoryLine() {
-      numbers = new ArrayList<>();
-      operations = new ArrayList<>();
-      specialOperations = new ArrayList<>();
-   }
+   /**
+    * @return saved number
+    */
+   BigDecimal getSavedResult();
 
-   void uploadSpecialOperations(ArrayList<SpecialOperation> specialOperations) {
-      this.specialOperations.set(this.specialOperations.size() - 1, specialOperations);
-   }
+   /**
+    * @return saved operation
+    * @see SimpleOperation
+    */
+   SimpleOperation getSavedOperation();
 
-   void add(BigDecimal number, SimpleOperation operation, boolean save) {
-      numbers.add(number);
-      operations.add(operation);
-      if (save) {
-         savedOperation = operation;
-      }
-      this.specialOperations.add(null);
+   /**
+    * sets saved number
+    *
+    * @param savedResult number to save
+    */
+   void setSavedResult(BigDecimal savedResult);
 
-   }
+   /**
+    * forms dto for answering from model
+    *
+    * @return dto of history line
+    * @see HistoryLineDTO
+    */
+   HistoryLineDTO getHistoryLineDTO();
 
-   BigDecimal getSavedResult() {
-      return savedResult;
-   }
+   /**
+    * changing the last operation
+    *
+    * @param operation operation change to
+    * @see SimpleOperation
+    */
+   void changeLastOperation(SimpleOperation operation);
 
-   SimpleOperation getSavedOperation() {
-      return savedOperation;
-   }
+   /**
+    * @return last simple operation in history
+    * @see SimpleOperation
+    */
+   SimpleOperation getLastOperation();
 
-   void setSavedResult(BigDecimal savedResult) {
-      this.savedResult = savedResult;
-   }
+   /**
+    * clears the history. All of arrays become empty
+    */
+   void clearHistory();
 
-   HistoryLineDTO getHistoryLineDTO() {
-      return new HistoryLineDTO(numbers, operations, specialOperations);
-   }
-
-   void changeLastOperation(SimpleOperation operation) {
-      operations.set(operations.size() - 1, operation);
-      savedOperation = operation;
-   }
-
-   SimpleOperation getLastOperation() {
-      if (operations.size() == 0) {
-         return null;
-      } else {
-         return operations.get(operations.size()-1);
-      }
-   }
-
-
-   void clearHistory() {
-      operations = new ArrayList<>();
-      numbers = new ArrayList<>();
-      specialOperations = new ArrayList<>();
-   }
-
-   BigDecimal calculate() {
-      CalculatorMath calculatorMath = new CalculatorMath();
-      BigDecimal calculatingResult;
-
-      if (numbers.size() == 0) {
-         return BigDecimal.ZERO;
-      }
-
-      calculatingResult = numbers.get(0);
-
-      BigDecimal number;
-
-      if (specialOperations.get(0) != null) {
-         calculatingResult = calculatorMath.calculateSpecialOperations(numbers.get(0), specialOperations.get(0));
-      }
-
-      for (int i = 0; i < operations.size() && i < numbers.size() - 1; i++) {
-         number = numbers.get(i + 1);
-         if (specialOperations.get(i + 1) != null) {
-            number = calculatorMath.calculateSpecialOperations(numbers.get(i + 1), specialOperations.get(i + 1));
-         }
-         if (operations.get(i) == null) {
-            continue;
-         }
-         if (operations.get(i).equals(SimpleOperation.PLUS)) {
-            calculatingResult = calculatorMath.plus(calculatingResult, number);
-         } else if (operations.get(i).equals(SimpleOperation.SUBTRACT)) {
-            calculatingResult = calculatorMath.subtract(calculatingResult, number);
-         } else if (operations.get(i).equals(SimpleOperation.MULTIPLY)) {
-            calculatingResult = calculatorMath.multiply(calculatingResult, number);
-         } else if (operations.get(i).equals(SimpleOperation.DIVIDE)) {
-            calculatingResult = calculatorMath.divide(calculatingResult, number);
-         }
-      }
-
-      return calculatingResult;
-   }
-
+   /**
+    * calculating a numbers with
+    * operations in history
+    *
+    * @return result of calculation
+    */
+   BigDecimal calculate();
 }

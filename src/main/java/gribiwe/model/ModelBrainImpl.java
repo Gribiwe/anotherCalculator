@@ -33,14 +33,15 @@ public class ModelBrainImpl implements ModelBrain {
    /**
     * keeps last non-saved special operation progress
     *
-    * @see TailSpecialOperationHistory
+    * @see TailSpecialOperationHistoryImpl
     */
-   private TailSpecialOperationHistory tailSpecialOperationHistory;
+   private TailSpecialOperationHistoryImpl tailSpecialOperationHistory;
 
    /**
     * keeps history of numbers and operations
     * calculates it
     *
+    * @see HistoryLineImpl
     * @see HistoryLine
     */
    private HistoryLine historyLine;
@@ -80,8 +81,8 @@ public class ModelBrainImpl implements ModelBrain {
    public ModelBrainImpl() {
       buildingNumber = false;
       enteringNumber = new EnteringNumberImpl();
-      tailSpecialOperationHistory = new TailSpecialOperationHistory();
-      historyLine = new HistoryLine();
+      tailSpecialOperationHistory = new TailSpecialOperationHistoryImpl();
+      historyLine = new HistoryLineImpl();
       memory = new MemoryImpl();
       resultNumber = new ResultNumberImpl();
    }
@@ -106,8 +107,8 @@ public class ModelBrainImpl implements ModelBrain {
    public AnswerDTO deleteAllDigitsAndHistory() {
       buildingNumber = true;
       enteringNumber = new EnteringNumberImpl();
-      tailSpecialOperationHistory = new TailSpecialOperationHistory();
-      historyLine = new HistoryLine();
+      tailSpecialOperationHistory = new TailSpecialOperationHistoryImpl();
+      historyLine = new HistoryLineImpl();
       return formAnswer();
    }
 
