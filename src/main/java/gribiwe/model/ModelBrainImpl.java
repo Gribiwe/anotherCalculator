@@ -33,9 +33,10 @@ public class ModelBrainImpl implements ModelBrain {
    /**
     * keeps last non-saved special operation progress
     *
+    * @see TailSpecialOperationHistory
     * @see TailSpecialOperationHistoryImpl
     */
-   private TailSpecialOperationHistoryImpl tailSpecialOperationHistory;
+   private TailSpecialOperationHistory tailSpecialOperationHistory;
 
    /**
     * keeps history of numbers and operations
