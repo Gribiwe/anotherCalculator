@@ -21,7 +21,7 @@ class RobotUtil extends Assert {
    /**
     * Time for waiting an expected value of label.
     */
-   private static final int SECONDS_FOR_WAIT = 2;
+   private static final int SECONDS_FOR_WAIT = 4;
 
    /**
     * Clicks at buttons by mouse, moving mouse

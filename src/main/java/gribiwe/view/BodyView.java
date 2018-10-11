@@ -66,19 +66,14 @@ public class BodyView extends Application {
    private Controller controller;
 
    /**
-    * number of monitor width
+    * value of minimal width of calculator
     */
-   private int screenWidth;
+   private static final int MIN_WIDTH_OF_CALC = 330;
 
    /**
-    * number of monitor height
+    * value of maximal width of calculator
     */
-   private int screenHeight;
-
-   private static final int MIN_WIDTH_OF_CALC = 330;
    private static final int MIN_HEIGHT_OF_CALC = 501;
-   private static final int X_BORDER = 8;
-   private static final int Y_BORDER = 6;
 
    /**
     * the main method of application
@@ -108,8 +103,8 @@ public class BodyView extends Application {
     */
    private void initScreenSize() {
       Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-      screenHeight = (int) primaryScreenBounds.getHeight();
-      screenWidth = (int) primaryScreenBounds.getWidth();
+      Properties.setScreenHeight ((int) primaryScreenBounds.getHeight());
+      Properties.setScreenWidth ((int) primaryScreenBounds.getWidth());
    }
 
    /**
@@ -129,8 +124,8 @@ public class BodyView extends Application {
       rootLayout.setBackground(Background.EMPTY);
       rootLayout.setLayoutX(0);
       rootLayout.setLayoutY(0);
-      rootLayout.setMinWidth(screenWidth);
-      rootLayout.setMinHeight(screenHeight);
+      rootLayout.setMinWidth(Properties.getScreenWidth());
+      rootLayout.setMinHeight(Properties.getScreenHeight());
    }
 
    /**
@@ -155,10 +150,10 @@ public class BodyView extends Application {
       box = new VBox(rootLayout);
       box.setLayoutX(0);
       box.setLayoutY(0);
-      box.setMinWidth(screenWidth);
-      box.setMaxWidth(screenWidth);
-      box.setMinHeight(screenHeight);
-      box.setMaxHeight(screenHeight);
+      box.setMinWidth(Properties.getScreenWidth());
+      box.setMaxWidth(Properties.getScreenWidth());
+      box.setMinHeight(Properties.getScreenHeight());
+      box.setMaxHeight(Properties.getScreenHeight());
       box.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
    }
 
@@ -179,17 +174,17 @@ public class BodyView extends Application {
    /**
     * initial of {@link #borderedVisiblePane}
     */
-   public void initBorderedVisionPane() {
+   private void initBorderedVisionPane() {
       borderedVisiblePane = (Pane) scene.lookup("#borderedVisionPane");
       double requiredBottomAnchorPadding;
       double requiredTopAnchorPadding;
-      requiredTopAnchorPadding = (screenHeight - MIN_HEIGHT_OF_CALC) / 2D;
-      requiredBottomAnchorPadding = requiredTopAnchorPadding - Y_BORDER;
+      requiredTopAnchorPadding = (Properties.getScreenHeight() - MIN_HEIGHT_OF_CALC) / 2D;
+      requiredBottomAnchorPadding = requiredTopAnchorPadding - Properties.Y_BORDER;
       AnchorPane.setTopAnchor(borderedVisiblePane, requiredTopAnchorPadding);
       AnchorPane.setBottomAnchor(borderedVisiblePane, requiredBottomAnchorPadding);
 
       double requiredSideAnchorPadding;
-      requiredSideAnchorPadding = (screenWidth - MIN_WIDTH_OF_CALC - X_BORDER) / 2D;
+      requiredSideAnchorPadding = (Properties.getScreenWidth() - MIN_WIDTH_OF_CALC - Properties.X_BORDER) / 2D;
       AnchorPane.setLeftAnchor(borderedVisiblePane, requiredSideAnchorPadding);
       AnchorPane.setRightAnchor(borderedVisiblePane, requiredSideAnchorPadding);
    }
@@ -204,7 +199,7 @@ public class BodyView extends Application {
 
       Pane maximizeButton = (Pane) scene.lookup("#maximize");
       cursorListener = new CursorListener((AnchorPane) borderedVisiblePane,
-              (Label) maximizeButton.lookup("#maximizeText"), keyListener, screenWidth, screenHeight);
+              (Label) maximizeButton.lookup("#maximizeText"), keyListener);
       borderedVisiblePane.setOnMouseMoved((mouseEvent) -> cursorListener.updateCursor(mouseEvent));
       borderedVisiblePane.setOnMouseDragged((mouseEvent) -> cursorListener.resizeWindow(mouseEvent));
       borderedVisiblePane.setOnMousePressed((mouseEvent) -> cursorListener.beforeResizePress(mouseEvent));

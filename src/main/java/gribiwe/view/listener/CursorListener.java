@@ -2,6 +2,7 @@ package gribiwe.view.listener;
 
 import gribiwe.view.BottomMenuView;
 import gribiwe.view.MenuView;
+import gribiwe.view.Properties;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Cursor;
@@ -23,28 +24,6 @@ import java.text.DecimalFormat;
  * @author Gribiwe
  */
 public class CursorListener {
-
-   /**
-    * number of monitor width
-    */
-   private int screenWidth;
-
-   /**
-    * number of monitor height
-    */
-   private int screenHeight;
-
-   /**
-    * amount of pixels for Y border
-    * it's needs for tracking a mouse for resize
-    */
-   private final static double Y_BORDER = 6;
-
-   /**
-    * amount of pixels for X border
-    * it's needs for tracking a mouse for resize
-    */
-   private final static double BORDER = 8;
 
    /**
     * visible root pane of calculator
@@ -198,15 +177,11 @@ public class CursorListener {
     * @param area               visible root pane of calculator
     * @param maximizeButtonText pane of maximize button
     * @param keyListener        exemplar of key listener for blocking it
-    * @param screenHeight       height size of screen
-    * @param screenWidth        width size of screen
     */
-   public CursorListener(AnchorPane area, Label maximizeButtonText, KeyListener keyListener, int screenWidth, int screenHeight) {
+   public CursorListener(AnchorPane area, Label maximizeButtonText, KeyListener keyListener) {
       this.area = area;
       this.maximizeButtonText = maximizeButtonText;
       this.keyListener = keyListener;
-      this.screenWidth = screenWidth;
-      this.screenHeight = screenHeight;
    }
 
    /**
@@ -224,39 +199,39 @@ public class CursorListener {
          double mainPaneWidth = area.getWidth();
          double mainPaneHeight = area.getHeight();
 
-         double appLeftBorderX = BORDER;
-         double appRightBorderX = mainPaneWidth - BORDER;
+         double appLeftBorderX = Properties.X_BORDER;
+         double appRightBorderX = mainPaneWidth - Properties.X_BORDER;
 
          double appTopBorderY = 0;
-         double appBottomBorderY = mainPaneHeight - Y_BORDER;
+         double appBottomBorderY = mainPaneHeight - Properties.Y_BORDER;
 
 
-         boolean isLeftBorder = cursorX - 1 < appLeftBorderX && cursorX - 1 >= appLeftBorderX - BORDER &&
+         boolean isLeftBorder = cursorX - 1 < appLeftBorderX && cursorX - 1 >= appLeftBorderX - Properties.X_BORDER &&
                  cursorY > appTopBorderY && cursorY < appBottomBorderY;
 
-         boolean isRightBorder = cursorX + 1 > appRightBorderX && cursorX + 1 <= appRightBorderX + BORDER &&
+         boolean isRightBorder = cursorX + 1 > appRightBorderX && cursorX + 1 <= appRightBorderX + Properties.X_BORDER &&
                  cursorY > appTopBorderY && cursorY < appBottomBorderY;
 
-         boolean isBottomBorder = cursorY + 1 > appBottomBorderY && cursorY + 1 <= appBottomBorderY + Y_BORDER &&
-                 cursorX > appLeftBorderX - BORDER && cursorX < appRightBorderX + BORDER;
+         boolean isBottomBorder = cursorY + 1 > appBottomBorderY && cursorY + 1 <= appBottomBorderY + Properties.Y_BORDER &&
+                 cursorX > appLeftBorderX - Properties.X_BORDER && cursorX < appRightBorderX + Properties.X_BORDER;
 
-         boolean isTopBorder = cursorY + 1 < appTopBorderY + Y_BORDER && cursorY + 1 >= appTopBorderY &&
-                 cursorX > appLeftBorderX - BORDER && cursorX < appRightBorderX + BORDER;
+         boolean isTopBorder = cursorY + 1 < appTopBorderY + Properties.Y_BORDER && cursorY + 1 >= appTopBorderY &&
+                 cursorX > appLeftBorderX - Properties.X_BORDER && cursorX < appRightBorderX + Properties.X_BORDER;
 
-         boolean isBottomLeftBorder = cursorX > appLeftBorderX - BORDER && cursorX < appLeftBorderX + BORDER &&
-                 cursorY > appTopBorderY && cursorY < appBottomBorderY + BORDER;
+         boolean isBottomLeftBorder = cursorX > appLeftBorderX - Properties.X_BORDER && cursorX < appLeftBorderX + Properties.X_BORDER &&
+                 cursorY > appTopBorderY && cursorY < appBottomBorderY + Properties.X_BORDER;
 
-         boolean isBottomRightBorder = cursorX < appRightBorderX + BORDER && cursorX > appRightBorderX - BORDER &&
-                 cursorY > appTopBorderY && cursorY < appBottomBorderY + BORDER;
+         boolean isBottomRightBorder = cursorX < appRightBorderX + Properties.X_BORDER && cursorX > appRightBorderX - Properties.X_BORDER &&
+                 cursorY > appTopBorderY && cursorY < appBottomBorderY + Properties.X_BORDER;
 
-         boolean isTopDiagonalBorder = cursorY < appTopBorderY + BORDER && cursorY > appTopBorderY &&
-                 cursorX > appLeftBorderX - BORDER && cursorX < appRightBorderX + BORDER;
+         boolean isTopDiagonalBorder = cursorY < appTopBorderY + Properties.X_BORDER && cursorY > appTopBorderY &&
+                 cursorX > appLeftBorderX - Properties.X_BORDER && cursorX < appRightBorderX + Properties.X_BORDER;
 
 
          if (isTopDiagonal) {
-            isLeftBorder = cursorX < appLeftBorderX + BORDER && cursorX > appLeftBorderX - BORDER &&
+            isLeftBorder = cursorX < appLeftBorderX + Properties.X_BORDER && cursorX > appLeftBorderX - Properties.X_BORDER &&
                     cursorY > appTopBorderY && cursorY < appBottomBorderY;
-            isRightBorder = cursorX > appRightBorderX - BORDER && cursorX < appRightBorderX + BORDER &&
+            isRightBorder = cursorX > appRightBorderX - Properties.X_BORDER && cursorX < appRightBorderX + Properties.X_BORDER &&
                     cursorY > appTopBorderY && cursorY < appBottomBorderY;
          }
 
@@ -352,9 +327,9 @@ public class CursorListener {
          AnchorPane.setLeftAnchor(area, savedLeftAnchor);
          AnchorPane.setRightAnchor(area, savedRightAnchor);
 
-         AnchorPane.setLeftAnchor(visionPane, BORDER);
-         AnchorPane.setRightAnchor(visionPane, BORDER);
-         AnchorPane.setBottomAnchor(visionPane, Y_BORDER);
+         AnchorPane.setLeftAnchor(visionPane, Properties.X_BORDER);
+         AnchorPane.setRightAnchor(visionPane, Properties.X_BORDER);
+         AnchorPane.setBottomAnchor(visionPane, Properties.Y_BORDER);
          maximizeButtonText.setText("\uE003");
          isFull = false;
       }
@@ -405,7 +380,7 @@ public class CursorListener {
             fullScreen();
          } else {
             double xDir = mouseEvent.getScreenX() + xOffset;
-            double yDir = mouseEvent.getScreenY() + yOffset;// + 10;
+            double yDir = mouseEvent.getScreenY() + yOffset;
 
             AnchorPane.setLeftAnchor(area, startAnchorLeft + xDir);
             AnchorPane.setRightAnchor(area, startAnchorRight - xDir);
@@ -471,19 +446,20 @@ public class CursorListener {
       } else {
          pressedForDrag = (!onBorder && !onButton);
          if (isFull) {
+            int screenWidth = Properties.getScreenWidth();
             double appWidth = screenWidth - savedRightAnchor - savedLeftAnchor;
-            if (mouseEvent.getScreenX() < appWidth + BORDER) {
-               startAnchorLeft = 0 - BORDER;
-               startAnchorRight = savedRightAnchor + savedLeftAnchor + BORDER;
-            } else if (mouseEvent.getScreenX() > (screenWidth - appWidth) + BORDER) {
-               startAnchorRight = 0 - BORDER;
-               startAnchorLeft = screenWidth - appWidth + BORDER;
+            if (mouseEvent.getScreenX() < appWidth + Properties.X_BORDER) {
+               startAnchorLeft = 0 - Properties.X_BORDER;
+               startAnchorRight = savedRightAnchor + savedLeftAnchor + Properties.X_BORDER;
+            } else if (mouseEvent.getScreenX() > (screenWidth - appWidth) + Properties.X_BORDER) {
+               startAnchorRight = 0 - Properties.X_BORDER;
+               startAnchorLeft = screenWidth - appWidth + Properties.X_BORDER;
             } else {
-               startAnchorLeft = mouseEvent.getScreenX() - appWidth / 2 + BORDER;
-               startAnchorRight = screenWidth - mouseEvent.getScreenX() - appWidth / 2 - BORDER;
+               startAnchorLeft = mouseEvent.getScreenX() - appWidth / 2 + Properties.X_BORDER;
+               startAnchorRight = screenWidth - mouseEvent.getScreenX() - appWidth / 2 - Properties.X_BORDER;
             }
-            startAnchorTop = 0.0 + Y_BORDER;
-            startAnchorBottom = savedBottomAnchor + savedTopAnchor - Y_BORDER;
+            startAnchorTop = 0.0 + Properties.Y_BORDER;
+            startAnchorBottom = savedBottomAnchor + savedTopAnchor - Properties.Y_BORDER;
          } else {
             startAnchorLeft = AnchorPane.getLeftAnchor(area);
             startAnchorRight = AnchorPane.getRightAnchor(area);
@@ -523,7 +499,7 @@ public class CursorListener {
     */
    public void showMenu(AnchorPane button, AnchorPane root) {
       if (menu == null) {
-         menu = new MenuView(button, area, root, screenWidth, screenHeight, keyListener);
+         menu = new MenuView(button, area, root, keyListener);
       }
       menu.show();
    }
@@ -535,19 +511,19 @@ public class CursorListener {
       int appWidth = getRounded(area.localToScreen(area.getBoundsInLocal()).getWidth());
       int appHeight = getRounded(area.localToScreen(area.getBoundsInLocal()).getHeight());
 
-      topBeforeResizeY = mouseEvent.getY() - Y_BORDER;
-      bottomBeforeResizeY = mouseEvent.getY() - appHeight + Y_BORDER;
-      leftBeforeResizeX = -(mouseEvent.getX() - BORDER);
-      rightBeforeResizeX = mouseEvent.getX() - appWidth + BORDER;
+      topBeforeResizeY = mouseEvent.getY() - Properties.Y_BORDER;
+      bottomBeforeResizeY = mouseEvent.getY() - appHeight + Properties.Y_BORDER;
+      leftBeforeResizeX = -(mouseEvent.getX() - Properties.X_BORDER);
+      rightBeforeResizeX = mouseEvent.getX() - appWidth + Properties.X_BORDER;
    }
 
    /**
     * resizing a right border
     */
    private void doResizeE(MouseEvent mouseEvent) {
-      if (mouseEvent.getX() + BORDER - rightBeforeResizeX >= 338) {
-         AnchorPane.setRightAnchor(area, localScreenWidth - mouseEvent.getSceneX() - BORDER + rightBeforeResizeX);
-      } else if (mouseEvent.getX() + BORDER - rightBeforeResizeX < 338) {
+      if (mouseEvent.getX() + Properties.X_BORDER - rightBeforeResizeX >= 338) {
+         AnchorPane.setRightAnchor(area, localScreenWidth - mouseEvent.getSceneX() - Properties.X_BORDER + rightBeforeResizeX);
+      } else if (mouseEvent.getX() + Properties.X_BORDER - rightBeforeResizeX < 338) {
          AnchorPane.setRightAnchor(area, localScreenWidth - (AnchorPane.getLeftAnchor(area) + 338));
       }
    }
@@ -560,11 +536,11 @@ public class CursorListener {
       if (area.localToScreen(area.getBoundsInLocal()).getMinX() <= -7.9) {
          mouseX += 2;
       }
-      if (mouseX - BORDER + leftBeforeResizeX < 0) {
-         AnchorPane.setLeftAnchor(area, mouseEvent.getSceneX() - BORDER + leftBeforeResizeX);
-      } else if (mouseX - BORDER + leftBeforeResizeX > 0) {
-         if (localScreenWidth - AnchorPane.getRightAnchor(area) - AnchorPane.getLeftAnchor(area) - mouseX - BORDER - leftBeforeResizeX > 322) {
-            AnchorPane.setLeftAnchor(area, mouseEvent.getSceneX() - BORDER + leftBeforeResizeX);
+      if (mouseX - Properties.X_BORDER + leftBeforeResizeX < 0) {
+         AnchorPane.setLeftAnchor(area, mouseEvent.getSceneX() - Properties.X_BORDER + leftBeforeResizeX);
+      } else if (mouseX - Properties.X_BORDER + leftBeforeResizeX > 0) {
+         if (localScreenWidth - AnchorPane.getRightAnchor(area) - AnchorPane.getLeftAnchor(area) - mouseX - Properties.X_BORDER - leftBeforeResizeX > 322) {
+            AnchorPane.setLeftAnchor(area, mouseEvent.getSceneX() - Properties.X_BORDER + leftBeforeResizeX);
          } else {
             AnchorPane.setLeftAnchor(area, localScreenWidth - (AnchorPane.getRightAnchor(area) + 338));
          }
@@ -575,11 +551,11 @@ public class CursorListener {
     * resizing a top border
     */
    private void doResizeN(MouseEvent mouseEvent) {
-      if (mouseEvent.getY() - Y_BORDER - topBeforeResizeY < 0) {
-         AnchorPane.setTopAnchor(area, mouseEvent.getSceneY() - Y_BORDER - topBeforeResizeY);
-      } else if (mouseEvent.getY() - Y_BORDER - topBeforeResizeY > 0) {
-         if (localScreenHeight - AnchorPane.getBottomAnchor(area) - AnchorPane.getTopAnchor(area) - mouseEvent.getY() - Y_BORDER + topBeforeResizeY > 495) {
-            AnchorPane.setTopAnchor(area, mouseEvent.getSceneY() - Y_BORDER - topBeforeResizeY);
+      if (mouseEvent.getY() - Properties.Y_BORDER - topBeforeResizeY < 0) {
+         AnchorPane.setTopAnchor(area, mouseEvent.getSceneY() - Properties.Y_BORDER - topBeforeResizeY);
+      } else if (mouseEvent.getY() - Properties.Y_BORDER - topBeforeResizeY > 0) {
+         if (localScreenHeight - AnchorPane.getBottomAnchor(area) - AnchorPane.getTopAnchor(area) - mouseEvent.getY() - Properties.Y_BORDER + topBeforeResizeY > 495) {
+            AnchorPane.setTopAnchor(area, mouseEvent.getSceneY() - Properties.Y_BORDER - topBeforeResizeY);
          } else {
             AnchorPane.setTopAnchor(area, localScreenHeight - (AnchorPane.getBottomAnchor(area) + 507));
          }
@@ -590,8 +566,8 @@ public class CursorListener {
     * resizing a bottom border
     */
    private void doResizeS(MouseEvent mouseEvent) {
-      if (mouseEvent.getY() + Y_BORDER - bottomBeforeResizeY >= 507) {
-         AnchorPane.setBottomAnchor(area, localScreenHeight - mouseEvent.getSceneY() - Y_BORDER + bottomBeforeResizeY);
+      if (mouseEvent.getY() + Properties.Y_BORDER - bottomBeforeResizeY >= 507) {
+         AnchorPane.setBottomAnchor(area, localScreenHeight - mouseEvent.getSceneY() - Properties.Y_BORDER + bottomBeforeResizeY);
       } else {
          AnchorPane.setBottomAnchor(area, localScreenHeight - AnchorPane.getTopAnchor(area) - 507);
       }
@@ -662,7 +638,7 @@ public class CursorListener {
     */
    public void showBottomMenu(AnchorPane rootLayout, boolean callHistory) {
       if (bottomMenuView == null) {
-         bottomMenuView = new BottomMenuView(area, rootLayout, screenWidth, screenHeight, keyListener);
+         bottomMenuView = new BottomMenuView(area, rootLayout, keyListener);
       }
       bottomMenuView.show(callHistory);
    }

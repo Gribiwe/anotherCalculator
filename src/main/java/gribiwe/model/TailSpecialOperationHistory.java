@@ -30,10 +30,6 @@ class TailSpecialOperationHistory {
       operations.add(operation);
    }
 
-   void clearOperations() {
-      operations = new ArrayList<>();
-   }
-
    void initNumber(BigDecimal number) {
       this.number = number;
       processing = true;

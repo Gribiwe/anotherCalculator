@@ -83,16 +83,6 @@ public class BottomMenuView {
    private double startHistoryAnchorLeft;
 
    /**
-    * number of monitor width
-    */
-   private int screenWidth;
-
-   /**
-    * number of monitor height
-    */
-   private int screenHeight;
-
-   /**
     * right anchor padding value of
     * mainPane for dragging before dragging
     */
@@ -166,15 +156,11 @@ public class BottomMenuView {
     * @param mainPane     root visible pane
     * @param root         root invisible pane
     * @param keyListener  key listener which will blocked
-    * @param screenHeight height size of screen
-    * @param screenWidth  width size of screen
     */
-   public BottomMenuView(AnchorPane mainPane, AnchorPane root, int screenWidth, int screenHeight, KeyListener keyListener) {
+   public BottomMenuView(AnchorPane mainPane, AnchorPane root, KeyListener keyListener) {
       this.mainPane = mainPane;
       this.root = root;
       this.keyListener = keyListener;
-      this.screenHeight = screenHeight;
-      this.screenWidth = screenWidth;
    }
 
    /**
@@ -210,8 +196,8 @@ public class BottomMenuView {
 
       AnchorPane.setLeftAnchor(invisibleArea, mainPaneScreenBounds.getMinX() + X_BORDER  + 1);
       AnchorPane.setTopAnchor(invisibleArea, mainPaneScreenBounds.getMinY() + 35);
-      AnchorPane.setBottomAnchor(invisibleArea, screenHeight - mainPaneScreenBounds.getMaxY() + Y_BORDER + 1);
-      AnchorPane.setRightAnchor(invisibleArea, screenWidth - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
+      AnchorPane.setBottomAnchor(invisibleArea, Properties.getScreenHeight() - mainPaneScreenBounds.getMaxY() + Y_BORDER + 1);
+      AnchorPane.setRightAnchor(invisibleArea, Properties.getScreenWidth() - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
 
       invisibleArea.setStyle("-fx-background-color: #c6c6c6");
       invisibleArea.setOpacity(0.01);
@@ -269,9 +255,9 @@ public class BottomMenuView {
       root.getChildren().add(visibleArea);
       visibleArea.setId("visibleArea");
 
-      AnchorPane.setBottomAnchor(visibleArea, screenHeight - mainPaneScreenBounds.getMaxY() + Y_BORDER);
+      AnchorPane.setBottomAnchor(visibleArea, Properties.getScreenHeight() - mainPaneScreenBounds.getMaxY() + Y_BORDER);
       AnchorPane.setLeftAnchor(visibleArea, mainPaneScreenBounds.getMinX() + X_BORDER + 1);
-      AnchorPane.setRightAnchor(visibleArea, screenWidth - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
+      AnchorPane.setRightAnchor(visibleArea, Properties.getScreenWidth() - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
 
       double maxTopAnchor = percentButtonScreenBounds.getMinY();
 

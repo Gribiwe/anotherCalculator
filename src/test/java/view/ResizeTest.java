@@ -45,8 +45,6 @@ class ResizeTest extends UITest {
       ResizeUtil.testResizeLeft(1, directionX);
       ResizeUtil.testResizeRight(6, directionX);
       ResizeUtil.testResizeLeft(6, directionX);
-      ResizeUtil.testResizeRight(7, directionX);
-      ResizeUtil.testResizeLeft(7, directionX);
    }
 
    /**

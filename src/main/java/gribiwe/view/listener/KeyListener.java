@@ -19,7 +19,7 @@ public class KeyListener {
    private boolean enable;
 
    /**
-    * exemplar of aplication controller
+    * exemplar of application controller
     */
    private Controller controller;
 

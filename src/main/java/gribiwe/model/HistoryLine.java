@@ -2,7 +2,6 @@ package gribiwe.model;
 
 import gribiwe.model.dto.HistoryLineDTO;
 import gribiwe.model.util.CalculatorMath;
-import gribiwe.model.util.Operation;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
 
@@ -50,10 +49,6 @@ class HistoryLine {
       this.savedResult = savedResult;
    }
 
-   public void setSavedOperation(SimpleOperation savedOperation) {
-      this.savedOperation = savedOperation;
-   }
-
    HistoryLineDTO getHistoryLineDTO() {
       return new HistoryLineDTO(numbers, operations, specialOperations);
    }
@@ -61,22 +56,6 @@ class HistoryLine {
    void changeLastOperation(SimpleOperation operation) {
       operations.set(operations.size() - 1, operation);
       savedOperation = operation;
-   }
-
-   BigDecimal getLastNumber() {
-      if (numbers.size() == 0) {
-         return null;
-      } else {
-         return numbers.get(numbers.size()-1);
-      }
-   }
-
-   BigDecimal getPreLastNumber() {
-      if (numbers.size() < 2) {
-         return null;
-      } else {
-         return numbers.get(numbers.size()-2);
-      }
    }
 
    SimpleOperation getLastOperation() {
@@ -87,13 +66,6 @@ class HistoryLine {
       }
    }
 
-   SimpleOperation getPreLastOperation() {
-      if (operations.size() < 2) {
-         return null;
-      } else {
-         return operations.get(operations.size()-2);
-      }
-   }
 
    void clearHistory() {
       operations = new ArrayList<>();
@@ -119,15 +91,12 @@ class HistoryLine {
 
       for (int i = 0; i < operations.size() && i < numbers.size() - 1; i++) {
          number = numbers.get(i + 1);
-
          if (specialOperations.get(i + 1) != null) {
             number = calculatorMath.calculateSpecialOperations(numbers.get(i + 1), specialOperations.get(i + 1));
          }
-
          if (operations.get(i) == null) {
             continue;
          }
-
          if (operations.get(i).equals(SimpleOperation.PLUS)) {
             calculatingResult = calculatorMath.plus(calculatingResult, number);
          } else if (operations.get(i).equals(SimpleOperation.SUBTRACT)) {

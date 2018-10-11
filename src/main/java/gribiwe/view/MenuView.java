@@ -37,11 +37,6 @@ public class MenuView {
    private AnchorPane button;
 
    /**
-    * width of left side menu
-    */
-   private static final double WIDTH = 255.0;
-
-   /**
     * value that represents is bottom menu shows
     */
    private boolean shows;
@@ -83,20 +78,6 @@ public class MenuView {
    private Font fontForLabels;
 
    /**
-    * number of monitor width
-    */
-   private int screenWidth;
-
-   private final static double Y_BORDER = 6;
-
-   private final static double BORDER = 8;
-
-   /**
-    * number of monitor height
-    */
-   private int screenHeight;
-
-   /**
     * key listener for blocking it
     * while menu is shows
     */
@@ -110,16 +91,12 @@ public class MenuView {
     * @param root        invisible root pane of calculator
     * @param keyListener key listener for blocking it while
     *                    menu is shows
-    * @param screenHeight       height size of screen
-    * @param screenWidth        width size of screen
     */
-   public MenuView(AnchorPane button, AnchorPane mainPane, AnchorPane root, int screenWidth, int screenHeight, KeyListener keyListener) {
+   public MenuView(AnchorPane button, AnchorPane mainPane, AnchorPane root, KeyListener keyListener) {
       this.button = button;
       this.mainPane = mainPane;
       this.root = root;
       this.keyListener = keyListener;
-      this.screenHeight = screenHeight;
-      this.screenWidth = screenWidth;
       shows = false;
    }
 
@@ -149,8 +126,7 @@ public class MenuView {
       invisibleMenu = new AnchorPane();
       root.getChildren().add(invisibleMenu);
       invisibleMenu.setId("invisibleMenuArea");
-      double border = 8;
-      invisibleMenu.setMinSize(mainPane.getWidth() - border * 2 - 2, bottomYOfButton - topYOfButton - BORDER - 1);
+      invisibleMenu.setMinSize(mainPane.getWidth() - Properties.X_BORDER * 2 - 2, bottomYOfButton - topYOfButton - Properties.X_BORDER - 1);
       invisibleMenu.setLayoutX(button.localToScreen(button.getBoundsInLocal()).getMinX());
       invisibleMenu.setLayoutY(topYOfButton);
       invisibleMenu.setStyle("-fx-background-color: #c6c6c6");
@@ -165,22 +141,22 @@ public class MenuView {
       menu = new AnchorPane();
       root.getChildren().add(menu);
       menu.setId("menu");
-      menu.setMinHeight(bottomYOfButton - topYOfButton - BORDER - 1);
+      menu.setMinHeight(bottomYOfButton - topYOfButton - Properties.X_BORDER - 1);
       Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
-         private double i = WIDTH;
+         private double i = Properties.SIDE_MENU_WIDTH;
 
          @Override
          public void handle(ActionEvent event) {
             i -= 2;
-            menu.setMinWidth(WIDTH - i);
-            menu.setMaxWidth(WIDTH - i);
+            menu.setMinWidth(Properties.SIDE_MENU_WIDTH - i);
+            menu.setMaxWidth(Properties.SIDE_MENU_WIDTH - i);
          }
       }));
       timeline.setOnFinished((event -> {
-         menu.setMinWidth(WIDTH);
-         menu.setMaxWidth(WIDTH);
+         menu.setMinWidth(Properties.SIDE_MENU_WIDTH);
+         menu.setMaxWidth(Properties.SIDE_MENU_WIDTH);
       }));
-      timeline.setCycleCount((int) WIDTH / 2);
+      timeline.setCycleCount((int) Properties.SIDE_MENU_WIDTH / 2);
       timeline.play();
       menu.setLayoutX(button.localToScreen(button.getBoundsInLocal()).getMinX());
       menu.setLayoutY(topYOfButton);
@@ -491,8 +467,8 @@ public class MenuView {
          @Override
          public void handle(ActionEvent event) {
             i += 4;
-            menu.setMinWidth(WIDTH - i);
-            menu.setMaxWidth(WIDTH - i);
+            menu.setMinWidth(Properties.SIDE_MENU_WIDTH - i);
+            menu.setMaxWidth(Properties.SIDE_MENU_WIDTH - i);
          }
       }));
       timeline.setOnFinished((event -> {
@@ -501,7 +477,7 @@ public class MenuView {
          shows = false;
          keyListener.setEnable(true);
       }));
-      timeline.setCycleCount((int) WIDTH / 4 - 2);
+      timeline.setCycleCount((int) Properties.SIDE_MENU_WIDTH / 4 - 2);
       timeline.play();
    }
 

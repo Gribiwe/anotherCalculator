@@ -8,18 +8,72 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+/**
+ * implementation of interface for model brain
+ * for working with calculator
+ *
+ * @author Gribiwe
+ * @see ModelBrain
+ */
 public class ModelBrainImpl implements ModelBrain {
 
+   /**
+    * shows that {@link #enteringNumber} builds a number
+    */
    private boolean buildingNumber;
+
+   /**
+    * needs for building a new number
+    *
+    * @see EnteringNumber
+    */
    private EnteringNumber enteringNumber;
+
+   /**
+    * keeps last non-saved special operation progress
+    *
+    * @see TailSpecialOperationHistory
+    */
    private TailSpecialOperationHistory tailSpecialOperationHistory;
+
+   /**
+    * keeps history of numbers and operations
+    * calculates it
+    *
+    * @see HistoryLine
+    */
    private HistoryLine historyLine;
+
+   /**
+    * keeps number saved to memory
+    *
+    * @see Memory
+    */
    private Memory memory;
+
+   /**
+    * keeps number to send in answer
+    * is {@link #buildingNumber} is false
+    * and status of number
+    *
+    * @see ResultNumber
+    */
    private ResultNumber resultNumber;
 
+   /**
+    * exception message for digit which is null
+    */
    private static final String DIGIT_IS_NULL_EXCEPTION_TEXT = "Digit is formAnswer(). I cant make calculations with formAnswer()";
+
+   /**
+    * exception message for operation which is null
+    */
    private static final String OPERATION_IS_NULL_EXCEPTION_TEXT = "Operation is formAnswer(). I cant make calculations using formAnswer() as operation";
 
+   /**
+    * creation of new exemplar of this class
+    * sets default values
+    */
    public ModelBrainImpl() {
       buildingNumber = false;
       enteringNumber = new EnteringNumberImpl();
@@ -76,14 +130,14 @@ public class ModelBrainImpl implements ModelBrain {
       if (tailSpecialOperationHistory.isProcessing()) {
          doOperationAfterSpecialOperation(operation);
       } else if (buildingNumber || resultNumber.getStatus().equals(ResultNumberStatus.EQUALS_RESULT)) {
-         doOperationWithBuiltOrEqualsNumber(operation);
+         doOperationWithBuiltOrEqualsOrMemoryNumber(operation);
       } else if (resultNumber.getStatus().equals(ResultNumberStatus.HISTORY_RESULT)) {
          historyLine.changeLastOperation(operation);
       } else if (resultNumber.getStatus().equals(ResultNumberStatus.LOADED_FROM_MEMORY)) {
-         doOperationWithBuiltOrEqualsNumber(operation);
+         doOperationWithBuiltOrEqualsOrMemoryNumber(operation);
       } else if (resultNumber.getStatus().equals(ResultNumberStatus.BLOCKED_BY_MEMORY)) {
          if (historyLine.getLastOperation() == null) {
-            doOperationWithBuiltOrEqualsNumber(operation);
+            doOperationWithBuiltOrEqualsOrMemoryNumber(operation);
          } else {
             historyLine.changeLastOperation(operation);
          }
@@ -189,6 +243,13 @@ public class ModelBrainImpl implements ModelBrain {
       return formAnswer();
    }
 
+   /**
+    * takes current number
+    * if number is building, built number will be returned
+    * in another case - number from {@link #resultNumber}
+    *
+    * @return current number for operations
+    */
    private BigDecimal getNumberFromBuildingOrResultNumber() {
       if (buildingNumber) {
          return stopBuildingAndGetNumber();
@@ -197,6 +258,11 @@ public class ModelBrainImpl implements ModelBrain {
       }
    }
 
+   /**
+    * stops building of new number and returns this
+    *
+    * @return built number
+    */
    private BigDecimal stopBuildingAndGetNumber() {
       buildingNumber = false;
       BigDecimal builtNumber;
@@ -205,6 +271,9 @@ public class ModelBrainImpl implements ModelBrain {
       return builtNumber;
    }
 
+   /**
+    * starts building a new number
+    */
    private void startBuildingNumber() {
       if (!buildingNumber) {
          tailSpecialOperationHistory.clear();
@@ -212,7 +281,17 @@ public class ModelBrainImpl implements ModelBrain {
       }
    }
 
-   private void doOperationWithBuiltOrEqualsNumber(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException {
+   /**
+    * method for processing new simple operation while
+    * current number is on building or it's {@link #enteringNumber} with
+    * status EQUALS or number from {@link #memory}
+    *
+    * @param operation new operation to process
+    * @throws ZeroDivideZeroException if tries to
+    *                                 divide zero by zero
+    * @throws ZeroDivideException     if tries to divide any number (not zero) by zero
+    */
+   private void doOperationWithBuiltOrEqualsOrMemoryNumber(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException {
       BigDecimal numberToHistory;
       if (buildingNumber) {
          numberToHistory = stopBuildingAndGetNumber();
@@ -227,6 +306,15 @@ public class ModelBrainImpl implements ModelBrain {
       resultNumber.loadAsHistoryResult(historyResult);
    }
 
+   /**
+    * method for processing a new simple operation
+    * while {@link #tailSpecialOperationHistory} is
+    * on process. Shortly, it saves number and
+    * special operations from tail to history, clears
+    * {@link #tailSpecialOperationHistory} and adds new operation
+    *
+    * @param operation new operation to process
+    */
    private void doOperationAfterSpecialOperation(SimpleOperation operation) {
       historyLine.add(tailSpecialOperationHistory.getNumber(), operation, true);
       ArrayList<SpecialOperation> tailSpecialOperations;
@@ -238,6 +326,13 @@ public class ModelBrainImpl implements ModelBrain {
       resultNumber.loadAsHistoryResult(historyResult);
    }
 
+   /**
+    * method for calculation equals value, while
+    * {@link #enteringNumber} have a status EQUALS.
+    * Adds to history last saved result and operation,
+    * calculates it, clears history and loads result
+    * as new equals result.
+    */
    private void doEqualsAfterEquals() {
       historyLine.add(resultNumber.getNumber(), historyLine.getSavedOperation(), false);
       historyLine.add(historyLine.getSavedResult(), SimpleOperation.NOTHING, false);
@@ -247,9 +342,16 @@ public class ModelBrainImpl implements ModelBrain {
       resultNumber.loadAsEqualsResult(equalsResult);
    }
 
+   /**
+    * adds current number to history, calculates history
+    * and loads history result as equals number
+    *
+    * @throws ZeroDivideZeroException if tries to
+    *                                 divide zero by zero
+    * @throws ZeroDivideException     if tries to divide any number (not zero) by zero
+    */
    private void doEqualsWithHistoryAndBuiltNumber() throws ZeroDivideZeroException, ZeroDivideException {
       BigDecimal numberToCalculate;
-
       if (buildingNumber) {
          numberToCalculate = stopBuildingAndGetNumber();
          verifyZeroDividingByZero(numberToCalculate);
@@ -267,6 +369,10 @@ public class ModelBrainImpl implements ModelBrain {
       historyLine.clearHistory();
    }
 
+   /**
+    * saves processing special operations and number
+    * to history. Calculates it. Loads it as equals result
+    */
    private void doEqualsAfterSpecialOperation() {
       BigDecimal specialOperationsResult;
       specialOperationsResult = tailSpecialOperationHistory.calculate();
@@ -284,12 +390,28 @@ public class ModelBrainImpl implements ModelBrain {
       resultNumber.loadAsEqualsResult(equalsResult);
    }
 
+   /**
+    * adds a new special operations to processing
+    * special operations
+    *
+    * @param operation new special operation to process
+    * @throws ZeroDivideException      if tries to divide any number (not zero) by zero
+    * @throws UncorrectedDataException if tries to calculate root with negated value
+    */
    private void doNextSpecialOperation(SpecialOperation operation) throws ZeroDivideException, UncorrectedDataException {
       verifyOneDivX(operation);
       verifyRootOfNegatedNumberInNextSpecialOperation(operation);
       tailSpecialOperationHistory.addOperation(operation);
    }
 
+   /**
+    * starts new processing of special operations
+    *
+    * @param operation first special operation to
+    *                  start new processing
+    * @throws ZeroDivideException      if tries to divide any number (not zero) by zero
+    * @throws UncorrectedDataException if tries to calculate root with negated value
+    */
    private void doFirstSpecialOperation(SpecialOperation operation) throws UncorrectedDataException, ZeroDivideException {
       BigDecimal numberForSpecialOperations;
       if (buildingNumber) {
@@ -304,24 +426,57 @@ public class ModelBrainImpl implements ModelBrain {
       tailSpecialOperationHistory.addOperation(operation);
    }
 
+   /**
+    * verifies is there is an overflow exception
+    *
+    * @throws OverflowException if rounded number bigger then 9999999999999999e+9999
+    *                           or less then -9999999999999999e+9999
+    *                           or less then 1e-9999 when bigger then zero
+    */
    private void verifyOverflow() throws OverflowException {
       String pattern = "0.###############E0";
       DecimalFormat myFormatter = new DecimalFormat(pattern);
       String output = myFormatter.format(resultNumber.getNumber());
-      long eshka = Long.parseLong(output.substring(output.indexOf("E") + 1));
-      if (eshka >= 10000 || eshka <= -10000) {
+      long exponent = Long.parseLong(output.substring(output.indexOf("E") + 1));
+      if (exponent >= 10000 || exponent <= -10000) {
          throw new OverflowException(formAnswer());
       }
    }
 
+   /**
+    * verifies is current history will be
+    * divided by zero when history is zero too
+    *
+    * @param divisor number to divide by
+    * @throws ZeroDivideZeroException if tries to
+    *                                 divide zero by zero
+    */
    private void verifyZeroDividingByZero(BigDecimal divisor) throws ZeroDivideZeroException {
       verifyZeroDividingByZero(divisor, null);
    }
 
+   /**
+    * verifies is current history will be
+    * divided by zero
+    *
+    * @param divisor number to divide by
+    * @throws ZeroDivideException if tries to
+    *                             divide any number
+    *                             (not zero) by zero
+    */
    private void verifyDividingByZero(BigDecimal divisor) throws ZeroDivideException {
       verifyDividingByZero(divisor, null);
    }
 
+   /**
+    * verifies is current history with new operation will be
+    * divided by zero when history is zero too
+    *
+    * @param divisor   number to divide by
+    * @param operation operation to add
+    * @throws ZeroDivideZeroException if tries to
+    *                                 divide zero by zero
+    */
    private void verifyZeroDividingByZero(BigDecimal divisor, SimpleOperation operation) throws ZeroDivideZeroException {
       BigDecimal dividend = historyLine.calculate();
       SimpleOperation lastOperation = historyLine.getLastOperation();
@@ -335,6 +490,16 @@ public class ModelBrainImpl implements ModelBrain {
       }
    }
 
+   /**
+    * verifies is current history with new
+    * operation will be divided by zero
+    *
+    * @param divisor   number to divide by
+    * @param operation operation to add
+    * @throws ZeroDivideException if tries to
+    *                             divide any number
+    *                             (not zero) by zero
+    */
    private void verifyDividingByZero(BigDecimal divisor, SimpleOperation operation) throws ZeroDivideException {
       SimpleOperation lastOperation = historyLine.getLastOperation();
 
@@ -346,12 +511,26 @@ public class ModelBrainImpl implements ModelBrain {
       }
    }
 
+   /**
+    * verifies is added object is null
+    *
+    * @param object  object to check
+    * @param message exception message
+    * @throws CalculatorException if object is null
+    */
    private void verifyNull(Object object, String message) throws CalculatorException {
       if (object == formAnswer()) {
          throw new CalculatorException(message, formAnswer());
       }
    }
 
+   /**
+    * verifies is special operation
+    * "one divide by x" will divide by zero
+    *
+    * @param operation special operation to process
+    * @throws ZeroDivideException if tries to divide by zero
+    */
    private void verifyOneDivX(SpecialOperation operation) throws ZeroDivideException {
       if (isZero(tailSpecialOperationHistory.calculate()) && operation.equals(SpecialOperation.ONEDIVX)) {
          tailSpecialOperationHistory.addOperation(operation);
@@ -359,6 +538,14 @@ public class ModelBrainImpl implements ModelBrain {
       }
    }
 
+   /**
+    * verifies is there trying to find root value
+    * of negated number while processing
+    * special operations tail
+    *
+    * @param operation operation to process
+    * @throws UncorrectedDataException if tries to root negate number
+    */
    private void verifyRootOfNegatedNumberInNextSpecialOperation(SpecialOperation operation) throws UncorrectedDataException {
       if (isLessThenZero(tailSpecialOperationHistory.calculate()) && operation.equals(SpecialOperation.ROOT)) {
          tailSpecialOperationHistory.addOperation(operation);
@@ -366,6 +553,14 @@ public class ModelBrainImpl implements ModelBrain {
       }
    }
 
+   /**
+    * verifies is there trying to find root value
+    * of negated number before starting processing
+    * a special operations tail
+    *
+    * @param operation operation to process
+    * @throws UncorrectedDataException if tries to root negate number
+    */
    private void verifyRootOfNegatedNumberInFirstSpecialOperation(BigDecimal number, SpecialOperation operation) throws UncorrectedDataException {
       if (isLessThenZero(number) && operation.equals(SpecialOperation.ROOT)) {
          tailSpecialOperationHistory.initNumber(number);
@@ -374,14 +569,32 @@ public class ModelBrainImpl implements ModelBrain {
       }
    }
 
+   /**
+    * checks number is zero
+    *
+    * @param number number to check
+    * @return true if number equals to zero
+    */
    private boolean isZero(BigDecimal number) {
       return number.compareTo(BigDecimal.ZERO) == 0;
    }
 
+   /**
+    * checks is number less then zero
+    *
+    * @param number number to check
+    * @return true if number less to zero
+    */
    private boolean isLessThenZero(BigDecimal number) {
       return number.compareTo(BigDecimal.ZERO) < 0;
    }
 
+   /**
+    * forms AnswerDTO answer with information of current history,
+    * result number, memory or history tail
+    *
+    * @return formed answerDTO with needed components
+    */
    private AnswerDTO formAnswer() {
       if (buildingNumber) {
          return new AnswerDTO(enteringNumber.getNumberDTO(), historyLine.getHistoryLineDTO(), tailSpecialOperationHistory.getDTO(), memory.getDTO());
