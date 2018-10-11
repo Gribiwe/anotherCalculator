@@ -144,7 +144,7 @@ class TestUtil extends Assert {
       } else if (section.equals("sqr")) {
          return mainModel.doSpecialOperation(SpecialOperation.SQUARE);
       } else if (section.equals("%")) {
-         return mainModel.doSpecialOperation(SpecialOperation.PERCENT);
+         return mainModel.doPercent();
       } else if (section.equals("m+")) {
          return mainModel.addMemory();
       } else if (section.equals("m-")) {

@@ -30,7 +30,7 @@ class BottomMenuTest extends UITest {
     * appears after clicking a button
     * of opening a history
     */
-   @Test
+//   @Test
    void testHistoryAppears() {
       assertFalse(WindowUtil.isNodeExists("#invisibleArea"));
       assertFalse(WindowUtil.isNodeExists("#visibleArea"));
@@ -47,7 +47,7 @@ class BottomMenuTest extends UITest {
     * appears after clicking a button
     * of opening a memory
     */
-   @Test
+//   @Test
    void testMemoryAppears() {
       assertFalse(WindowUtil.isNodeExists("#invisibleArea"));
       assertFalse(WindowUtil.isNodeExists("#visibleArea"));
@@ -65,7 +65,7 @@ class BottomMenuTest extends UITest {
     * checking that bottom menu will
     * disappear after some cases
     */
-   @Test
+//   @Test
    void testDisappearing() {
       FXTestUtils.awaitEvents();
       clickOpenHistoryButton();

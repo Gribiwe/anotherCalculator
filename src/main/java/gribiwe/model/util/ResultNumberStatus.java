@@ -5,5 +5,7 @@ package gribiwe.model.util;
  */
 public enum ResultNumberStatus {
    EQUALS_RESULT,
-   HISTORY_RESULT
+   HISTORY_RESULT,
+   BLOCKED_BY_MEMORY,
+   LOADED_FROM_MEMORY
 }

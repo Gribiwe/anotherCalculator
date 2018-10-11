@@ -7,6 +7,5 @@ public enum SpecialOperation implements Operation {
    SQUARE,
    ROOT,
    ONEDIVX,
-   NEGATE,
-   PERCENT,
+   NEGATE
 }

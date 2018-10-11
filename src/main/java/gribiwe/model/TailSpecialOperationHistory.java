@@ -7,10 +7,9 @@ import gribiwe.model.util.SpecialOperation;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-class LastSpecialOperationHistory {
+class TailSpecialOperationHistory {
    private ArrayList<SpecialOperation> operations;
    private BigDecimal number;
-   private BigDecimal prevNumber;
    private boolean processing;
 
    boolean isProcessing() {
@@ -21,8 +20,7 @@ class LastSpecialOperationHistory {
       return number;
    }
 
-   LastSpecialOperationHistory() {
-      prevNumber = null;
+   TailSpecialOperationHistory() {
       number = null;
       operations = new ArrayList<>();
       processing = false;
@@ -36,8 +34,7 @@ class LastSpecialOperationHistory {
       operations = new ArrayList<>();
    }
 
-   void initNumber(BigDecimal prevNumber, BigDecimal number) {
-      this.prevNumber = prevNumber;
+   void initNumber(BigDecimal number) {
       this.number = number;
       processing = true;
    }
@@ -46,7 +43,6 @@ class LastSpecialOperationHistory {
       number = null;
       operations = new ArrayList<>();
       processing = false;
-      prevNumber = null;
    }
 
    LastSpecialOperationHistoryDTO getDTO() {
@@ -55,8 +51,9 @@ class LastSpecialOperationHistory {
    }
 
    BigDecimal calculate() {
-      number = new CalculatorMath().calculateSpecialOperations(prevNumber, number, operations);
-      return number;
+      BigDecimal result;
+      result = new CalculatorMath().calculateSpecialOperations(number, operations);
+      return result;
    }
 
    ArrayList<SpecialOperation> getOperations() {

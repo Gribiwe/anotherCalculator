@@ -1,6 +1,5 @@
 package gribiwe.model.dto;
 
-import gribiwe.model.util.Operation;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;

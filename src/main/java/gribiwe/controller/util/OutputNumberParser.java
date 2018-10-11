@@ -84,7 +84,6 @@ public class OutputNumberParser {
       }
 
       String result = formatResult(value.abs());
-
       if (needSpaces) {
          result = addSpaces(result);
       }
@@ -99,6 +98,7 @@ public class OutputNumberParser {
     * @return parsed number
     */
    private String formatResult(BigDecimal value) {
+
       if (value.compareTo(BigDecimal.ZERO) == 0) {
          return "0";
       }

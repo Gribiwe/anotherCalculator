@@ -45,6 +45,7 @@ public class DifferentOperationsTest {
       testUtil.doTest("25 + √ + 25 = =", "80", "");
       testUtil.doTest("25 + √ 25 =", "50", "");
       testUtil.doTest("25 + √ 25 = =", "75", "");
+      testUtil.doTest("1234567899876543 n n n % n % n =", "0", "");
    }
 
    /**
@@ -145,18 +146,17 @@ public class DifferentOperationsTest {
       testUtil.doTest("111531 + 2 + 3 ce", "0", "111531   +   2   +   ");
       testUtil.doTest("111531 + ce ce 3 + ce ce 3 ce ce", "0", "111531   +   3   +   ");
       testUtil.doTest("1 + 2 ce + 3 ce + 4 ce + 5 ce + 6 ce + 7 ce + 8 ce + 9 ce +", "1", "1   +   0   +   0   +   0   +   0   +   0   +   0   +   0   +   0   +   ");
-      testUtil.doTest("+ ce +", "0", "0   +   ");
+      testUtil.doTest("+ ce +", "0", "0   +   0   +   ");
       testUtil.doTest("111531 - 2 - 3 ce", "0", "111531   -   2   -   ");
       testUtil.doTest("111531 - ce ce 3 - ce ce 3 ce ce", "0", "111531   -   3   -   ");
       testUtil.doTest("1 - 2 ce - 3 ce - 4 ce - 5 ce - 6 ce - 7 ce - 8 ce - 9 ce -", "1", "1   -   0   -   0   -   0   -   0   -   0   -   0   -   0   -   0   -   ");
-      testUtil.doTest("- ce -", "0", "0   -   ");
+      testUtil.doTest("- ce -", "0", "0   -   0   -   ");
       testUtil.doTest("111531 * 2 * 3 ce", "0", "111531   ×   2   ×   ");
       testUtil.doTest("111531 * ce ce 3 * ce ce 3 ce ce", "0", "111531   ×   3   ×   ");
       testUtil.doTest("1 * 2 ce * 3 ce * 4 ce * 5 ce * 6 ce * 7 ce * 8 ce * 9 ce *", "0", "1   ×   0   ×   0   ×   0   ×   0   ×   0   ×   0   ×   0   ×   0   ×   ");
-      testUtil.doTest("* ce *", "0", "0   ×   ");
+      testUtil.doTest("* ce *", "0", "0   ×   0   ×   ");
       testUtil.doTest("111531 / 2 / 3 ce", "0", "111531   ÷   2   ÷   ");
       testUtil.doTest("111531 / ce ce 3 / ce ce 3 ce ce", "0", "111531   ÷   3   ÷   ");
-      testUtil.doTest("/ ce /", "0", "0   ÷   ");
    }
 
    /**

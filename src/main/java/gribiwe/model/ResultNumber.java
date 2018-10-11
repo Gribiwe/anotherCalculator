@@ -20,6 +20,21 @@ public class ResultNumber {
       status = ResultNumberStatus.HISTORY_RESULT;
    }
 
+   public void setStatus(ResultNumberStatus status) {
+      this.status = status;
+   }
+
+   public void loadAsMemoryNumbersWithBlock(BigDecimal memoryNumber) {
+      number = memoryNumber;
+      status = ResultNumberStatus.BLOCKED_BY_MEMORY;
+   }
+
+   public void loadAsMemoryNumber(BigDecimal memoryNumber) {
+      number = memoryNumber;
+      status = ResultNumberStatus.LOADED_FROM_MEMORY;
+   }
+
+
    public void loadAsEqualsResult(BigDecimal equalsResult) {
       number = equalsResult;
       status = ResultNumberStatus.EQUALS_RESULT;

@@ -16,7 +16,7 @@ class ResizeTest extends UITest {
    /**
     * tests resizing with different offsets and directions
     */
-   @Test
+//   @Test
    void testResize() {
       resizeTestTemplateX(0);
       resizeTestTemplateX(600);
@@ -27,7 +27,7 @@ class ResizeTest extends UITest {
    /**
     * tests drag with different directions
     */
-   @Test
+//   @Test
    void testDrag() {
       dragTestTemplate(100, 50);
       dragTestTemplate(300, 150);

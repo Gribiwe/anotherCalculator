@@ -13,6 +13,10 @@ class Memory {
       number = BigDecimal.ZERO;
    }
 
+   public BigDecimal getNumber() {
+      return number;
+   }
+
    void setEnable(boolean enable) {
       this.enable = enable;
    }

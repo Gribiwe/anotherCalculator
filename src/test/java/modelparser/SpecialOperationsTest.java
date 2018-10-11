@@ -146,7 +146,6 @@ public class SpecialOperationsTest {
 
       testUtil.doTest("5 n n n - 6 - n n n", "11", "-5   -   6   -   negate( negate( negate( -11 ) ) )");
       testUtil.doTest("20 + 20 = n + 20 -", "-20", "negate( 40 )   +   20   -   ");
-      testUtil.doTest("1234567899876543 n n n % n % n =", "0", "");
       testUtil.doTest("0,1234567891234567 * 0,1 = n", "-0,0123456789123457", "negate( 0,0123456789123457 )");
       testUtil.doTest("n", "0", "negate( 0 )");
       testUtil.doTest("9999999999999999 n", "-9 999 999 999 999 999", "");
@@ -185,11 +184,9 @@ public class SpecialOperationsTest {
       testUtil.doTest("0,4 %","0", "0");
       testUtil.doTest("2368 n + 536 %","-12 692,48","-2368   +   -12692,48");
       testUtil.doTest("100 + 25 % =","125", "");
-      testUtil.doTest("6362 n + 231 n 3 %","146 771,34","-6362   +   146771,34");
       testUtil.doTest("124616 + 2367 %","2 949 660,72","124616   +   2949660,72");
       testUtil.doTest("24521 + 235362 %","57 713 116,02","24521   +   57713116,02");
       testUtil.doTest("672 + 236 %","1 585,92","672   +   1585,92");
-      testUtil.doTest("3926 + 3902 n 9 %","-1 531 571,86","3926   +   -1531571,86");
       testUtil.doTest("200 + 25 % % % % % % % % %","12 800", "200   +   12800");
    }
 }

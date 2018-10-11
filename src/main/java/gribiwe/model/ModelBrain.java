@@ -14,6 +14,8 @@ public interface ModelBrain {
 
    AnswerDTO doOperation(SimpleOperation operation) throws CalculatorException;
 
+   AnswerDTO doPercent() throws CalculatorException;
+
    AnswerDTO doEquals() throws CalculatorException;
 
    AnswerDTO doSpecialOperation(SpecialOperation operation) throws CalculatorException;
@@ -33,6 +35,4 @@ public interface ModelBrain {
    AnswerDTO loadFromMemory();
 
    AnswerDTO clearMemory();
-
-   AnswerDTO doAddOrRemoveMemory(boolean add);
 }

@@ -301,7 +301,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doPercent() {
-      updateView(() -> mainModel.doSpecialOperation(SpecialOperation.PERCENT));
+      updateView(() -> mainModel.doPercent());
    }
 
    /**

@@ -72,7 +72,7 @@ public class EnteringNumberImpl implements EnteringNumber {
 
    @Override
    public void removeAllSymbols() {
-      numberString = "0";
+      numberString = "";
       needNegate = false;
    }
 

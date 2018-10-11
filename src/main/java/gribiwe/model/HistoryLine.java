@@ -50,6 +50,10 @@ class HistoryLine {
       this.savedResult = savedResult;
    }
 
+   public void setSavedOperation(SimpleOperation savedOperation) {
+      this.savedOperation = savedOperation;
+   }
+
    HistoryLineDTO getHistoryLineDTO() {
       return new HistoryLineDTO(numbers, operations, specialOperations);
    }
@@ -110,14 +114,14 @@ class HistoryLine {
       BigDecimal number;
 
       if (specialOperations.get(0) != null) {
-         calculatingResult = calculatorMath.calculateSpecialOperations(null, numbers.get(0), specialOperations.get(0));
+         calculatingResult = calculatorMath.calculateSpecialOperations(numbers.get(0), specialOperations.get(0));
       }
 
       for (int i = 0; i < operations.size() && i < numbers.size() - 1; i++) {
          number = numbers.get(i + 1);
 
          if (specialOperations.get(i + 1) != null) {
-            number = calculatorMath.calculateSpecialOperations(null, numbers.get(i + 1), specialOperations.get(i + 1));
+            number = calculatorMath.calculateSpecialOperations(numbers.get(i + 1), specialOperations.get(i + 1));
          }
 
          if (operations.get(i) == null) {

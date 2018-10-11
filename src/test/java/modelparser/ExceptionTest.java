@@ -49,6 +49,7 @@ public class ExceptionTest extends Assert {
    public void testUncertainException() {
       testUncertainException("0 / 0 =");
       testUncertainException("0 / 0 /");
+      testUncertainException("/ ce /");
    }
 
    /**

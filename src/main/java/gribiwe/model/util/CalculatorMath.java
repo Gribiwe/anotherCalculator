@@ -151,12 +151,13 @@ public class CalculatorMath {
     * method for calculation a special operations
     * provided by number and array of special operations for this number
     *
-    * @param previousNumber number for calculation percent
+//    * @param previousNumber number for calculation percent
     * @param number         number to make calculations
     * @param operations     operations to do
     * @return processed number by operations
     */
-   public BigDecimal calculateSpecialOperations(BigDecimal previousNumber, BigDecimal number, ArrayList<SpecialOperation> operations) {
+//   public BigDecimal calculateSpecialOperations(BigDecimal previousNumber, BigDecimal number, ArrayList<SpecialOperation> operations) {
+   public BigDecimal calculateSpecialOperations(BigDecimal number, ArrayList<SpecialOperation> operations) {
       BigDecimal result = number;
       for (Operation operation : operations) {
          if (operation.equals(SpecialOperation.SQUARE)) {
@@ -167,9 +168,10 @@ public class CalculatorMath {
             result = root(result);
          } else if (operation.equals(SpecialOperation.NEGATE)) {
             result = result.negate();
-         } else if (previousNumber != null && operation.equals(SpecialOperation.PERCENT)) {
-            result = percent(previousNumber, result);
          }
+//         else if (previousNumber != null && operation.equals(SpecialOperation.PERCENT)) {
+//            result = percent(previousNumber, result);
+//         }
       }
       return result;
    }
