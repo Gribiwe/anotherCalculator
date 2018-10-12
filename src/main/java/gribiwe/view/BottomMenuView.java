@@ -255,14 +255,12 @@ public class BottomMenuView {
       root.getChildren().add(visibleArea);
       visibleArea.setId("visibleArea");
 
-      AnchorPane.setBottomAnchor(visibleArea, Properties.getScreenHeight() - mainPaneScreenBounds.getMaxY() + Y_BORDER);
+      AnchorPane.setBottomAnchor(visibleArea, Properties.getScreenHeight() - mainPaneScreenBounds.getMaxY() + Y_BORDER +1);
       AnchorPane.setLeftAnchor(visibleArea, mainPaneScreenBounds.getMinX() + X_BORDER + 1);
       AnchorPane.setRightAnchor(visibleArea, Properties.getScreenWidth() - mainPaneScreenBounds.getMaxX() + X_BORDER + 1);
 
       double maxTopAnchor = percentButtonScreenBounds.getMinY();
-
-      neededHeight = percentButtonScreenBounds.getMinY() - mainPaneScreenBounds.getMinY();
-
+      neededHeight = percentButtonScreenBounds.getMinY() - mainPaneScreenBounds.getMinY() + 1;
 
       Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2), new EventHandler<ActionEvent>() {
          private double i = maxTopAnchor + neededHeight;

@@ -4,12 +4,9 @@ import com.sun.javafx.robot.impl.FXRobotHelper;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
-import org.junit.runners.MethodSorters;
 import org.loadui.testfx.utils.FXTestUtils;
 import org.testfx.api.FxToolkit;
 
@@ -19,14 +16,14 @@ import org.testfx.api.FxToolkit;
  *
  * @author Gribiwe
  */
-@FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
-public class WindowBarButtonsTest extends UITest {
+
+class WindowBarButtonsTest extends UITest {
 
    /**
     * tests maximize (and unMaximize) button
     */
    @Test
-   public void maximizeTest() {
+   void maximizeTest() {
       Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
       int screenHeight = (int) primaryScreenBounds.getHeight();
       int screenWidth = (int) primaryScreenBounds.getWidth();
@@ -61,7 +58,7 @@ public class WindowBarButtonsTest extends UITest {
     * tests minimize button
     */
    @Test
-   public void minimizeTest() {
+   void minimizeTest() {
       FXTestUtils.awaitEvents();
       Stage stage = FXRobotHelper.getStages().get(0);
       assertFalse("App already iconified", stage.isIconified());

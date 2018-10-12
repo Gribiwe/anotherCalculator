@@ -338,7 +338,7 @@
                                 </graphic>
                             </Label>
                         </AnchorPane>
-                        <AnchorPane fx:id="button_onedix" minHeight="44.0" onMouseClicked="#doOneDivX" prefHeight="40.0" prefWidth="72.0" styleClass="operationButton" GridPane.columnIndex="3">
+                        <AnchorPane fx:id="button_onedivx" minHeight="44.0" onMouseClicked="#doOneDivX" prefHeight="40.0" prefWidth="72.0" styleClass="operationButton" GridPane.columnIndex="3">
                             <GridPane.margin>
                                 <Insets left="1.0" right="1.0" top="2.0" />
                             </GridPane.margin>

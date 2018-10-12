@@ -83,9 +83,7 @@ class TailSpecialOperationHistoryImpl implements TailSpecialOperationHistory {
 
    @Override
    public BigDecimal calculate() {
-      BigDecimal result;
-      result = new CalculatorMath().calculateSpecialOperations(number, operations);
-      return result;
+      return new CalculatorMath().calculateSpecialOperations(number, operations);
    }
 
    @Override

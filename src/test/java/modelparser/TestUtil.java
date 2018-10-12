@@ -140,7 +140,7 @@ class TestUtil extends Assert {
       } else if (section.equals("√")) {
          return mainModel.doSpecialOperation(SpecialOperation.ROOT);
       } else if (section.equals("1/x")) {
-         return mainModel.doSpecialOperation(SpecialOperation.ONEDIVX);
+         return mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X);
       } else if (section.equals("sqr")) {
          return mainModel.doSpecialOperation(SpecialOperation.SQUARE);
       } else if (section.equals("%")) {

@@ -17,8 +17,8 @@ class MemoryTest extends UITest {
    @Test
    void testEnableAfterAddOrRemoveNumber() {
       FXTestUtils.awaitEvents();
-      testEnableAfterAddOrRemoveMemory("5 m+ 2 mr", "5", "", "5");
-      testEnableAfterAddOrRemoveMemory("5 m- 2 mr", "-5", "", "-5");
+      testEnableAfterAddOrRemoveMemory("5 m+ 2 mr", "5", "5");
+      testEnableAfterAddOrRemoveMemory("5 m- 2 mr", "-5", "-5");
    }
 
    /**
@@ -39,9 +39,9 @@ class MemoryTest extends UITest {
     * after adding or removing a number
     * to memory
     */
-   private void testEnableAfterAddOrRemoveMemory(String actionSequence, String expectedOut, String expectedHistory, String expectedMemory) {
+   private void testEnableAfterAddOrRemoveMemory(String actionSequence, String expectedOut, String expectedMemory) {
       checkDisable(true);
-      RobotUtil.enterCase(actionSequence, expectedOut, expectedHistory, false);
+      RobotUtil.enterCase(actionSequence, expectedOut, "", false);
       RobotUtil.isNeededText("#memoryText", expectedMemory);
       checkDisable(false);
       clearAllActions();

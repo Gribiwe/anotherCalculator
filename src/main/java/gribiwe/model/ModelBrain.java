@@ -8,6 +8,8 @@ import gribiwe.model.util.SpecialOperation;
 
 /**
  * some class for logic of calculator
+ * // todo write doc
+ * // todo document throws block
  *
  * @author Gribiwe
  * @see ModelBrainImpl

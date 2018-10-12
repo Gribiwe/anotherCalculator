@@ -14,35 +14,13 @@ import java.math.BigDecimal;
  */
 public interface ResultNumber {
    /**
-    * method for loading number as history
-    * calculation result
+    * method for loading number with
+    * provided status
     *
-    * @param historyResult number to load
+    * @param result      number to load
+    * @param resultNumberStatus status of number
     */
-   void loadAsHistoryResult(BigDecimal historyResult);
-
-   /**
-    * method for loading number as memory number
-    * with blocking a number for some operations with it
-    *
-    * @param memoryNumber number to load
-    */
-   void loadAsMemoryNumbersWithBlock(BigDecimal memoryNumber);
-
-   /**
-    * method for loading number as memory number
-    *
-    * @param memoryNumber number to load
-    */
-   void loadAsMemoryNumber(BigDecimal memoryNumber);
-
-   /**
-    * method for loading number as history
-    * calculation result after calling of equals
-    *
-    * @param equalsResult number to load
-    */
-   void loadAsEqualsResult(BigDecimal equalsResult);
+   void loadResult(BigDecimal result, ResultNumberStatus resultNumberStatus);
 
    /**
     * forms new OutputNumberDTO object with

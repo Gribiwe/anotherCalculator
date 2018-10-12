@@ -36,18 +36,15 @@ class MemoryImpl implements Memory {
    }
 
    @Override
-   public void enable() {
-      this.enable = true;
-   }
-
-   @Override
    public void add(BigDecimal num) {
       number = number.add(num);
+      enable = true;
    }
 
    @Override
    public void remove(BigDecimal num) {
       number  = number.subtract(num);
+      enable = true;
    }
 
    @Override

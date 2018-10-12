@@ -5,7 +5,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.junit.Assert;
-import org.testfx.util.WaitForAsyncUtils;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -26,7 +25,7 @@ class WindowUtil extends Assert {
     */
    private static Scene scene;
 
-   static public int getRounded(double amount) {
+   static int getRounded(double amount) {
       DecimalFormat df = new DecimalFormat("0.#");
       df.setRoundingMode(RoundingMode.HALF_UP);
       DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();

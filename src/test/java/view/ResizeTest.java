@@ -64,8 +64,8 @@ class ResizeTest extends UITest {
     * test method for drag which contains different cases with provided
     * {@code xDirection} and {@code yDirection} values
     *
-    * @param xDirection
-    * @param yDirection
+    * @param xDirection number of pixel to drag on X coordinate
+    * @param yDirection number of pixel to drag on Y coordinate
     */
    private void dragTestTemplate(int xDirection, int yDirection) {
       dragTest(xDirection, 0);
@@ -91,7 +91,7 @@ class ResizeTest extends UITest {
     * @param xDirection value of final X coordinate of mouse
     * @param yDirection value of final Y coordinate of mouse
     */
-   void dragTest(int xDirection, int yDirection) {
+   private void dragTest(int xDirection, int yDirection) {
       int oldTopBorderY = WindowUtil.getElementStartY(borderedVisionPaneNode);
       int oldRightBorderX = WindowUtil.getElementEndX(borderedVisionPaneNode);
       int oldLeftBorderX = WindowUtil.getElementStartX(borderedVisionPaneNode);

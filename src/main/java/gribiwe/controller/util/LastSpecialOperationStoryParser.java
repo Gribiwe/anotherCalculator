@@ -1,12 +1,10 @@
 package gribiwe.controller.util;
 
 import gribiwe.model.dto.LastSpecialOperationHistoryDTO;
-import gribiwe.model.dto.OutputNumberDTO;
 import gribiwe.model.util.Operation;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +31,7 @@ public class LastSpecialOperationStoryParser {
       for (Operation operation : operations) {
          if (operation.equals(SpecialOperation.SQUARE)) {
             result = "sqr( " + result + " )";
-         } else if (operation.equals(SpecialOperation.ONEDIVX)) {
+         } else if (operation.equals(SpecialOperation.ONE_DIV_X)) {
             result = "1/( " + result + " )";
          } else if (operation.equals(SpecialOperation.ROOT)) {
             result = "√( " + result + " )";

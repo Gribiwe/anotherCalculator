@@ -7,6 +7,7 @@ import gribiwe.model.ModelBrain;
 import gribiwe.model.ModelBrainImpl;
 import gribiwe.model.dto.*;
 import gribiwe.model.exception.CalculatorException;
+import gribiwe.model.exception.OverflowException;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
@@ -16,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 /**
@@ -30,6 +32,21 @@ public class Controller implements Initializable {
     * label for viewing a current number
     */
    public Label inputFieldNumber;
+
+   /**
+    * value of max possible exponent
+    */
+   private final static int MAX_EXPONENT = 9999;
+
+   /**
+    * value of min possible exponent
+    */
+   private final static int MIN_EXPONENT = -9999;
+
+   /**
+    * string patter for checking overflow
+    */
+   private final static String CHECK_OVERFLOW_NUMBER_PATTERN = "0.###############E0";
 
    /**
     * label for viewing a history line
@@ -93,7 +110,7 @@ public class Controller implements Initializable {
    /**
     * operation one divide by x button
     */
-   public AnchorPane button_onedix;
+   public AnchorPane button_onedivx;
 
    /**
     * operation divide button
@@ -153,6 +170,7 @@ public class Controller implements Initializable {
     * blocked (by exception)
     */
    private boolean enabled = true;
+
 
    /**
     * initial method. Calls by loading application
@@ -399,7 +417,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doOneDivX() {
-      updateView(() -> mainModel.doSpecialOperation(SpecialOperation.ONEDIVX));
+      updateView(() -> mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X));
    }
 
    /**
@@ -487,6 +505,24 @@ public class Controller implements Initializable {
    }
 
    /**
+    * verifies is there is an overflow exception
+    *
+    * @param answerDTO dto from model to parse at updating view
+    *                  with exception
+    */
+   private boolean verifyOverflow(AnswerDTO answerDTO) {
+      String output = new DecimalFormat(CHECK_OVERFLOW_NUMBER_PATTERN).format(answerDTO.getOutputNumberDTO().getValue());
+      long exponent = Long.parseLong(output.substring(output.indexOf("E") + 1));
+
+      if (exponent > MAX_EXPONENT || exponent < MIN_EXPONENT) {
+         updateError(new OverflowException(answerDTO));
+         return false;
+      }
+
+      return true;
+   }
+
+   /**
     * method which processes an {@code AnswerDTO}
     * by parsers. Than sends a string values to view
     *
@@ -504,8 +540,7 @@ public class Controller implements Initializable {
          updateError(e);
          return;
       }
-      if (answerDTO != null) {
-
+      if (answerDTO != null && verifyOverflow(answerDTO)) {
          String outputNumber;
          OutputNumberDTO outputNumberDTO = answerDTO.getOutputNumberDTO();
          if (outputNumberDTO.getClass().equals(EnteredNumberDTO.class)) {
@@ -565,7 +600,7 @@ public class Controller implements Initializable {
       button_percent.setDisable(disable);
       button_root.setDisable(disable);
       button_square.setDisable(disable);
-      button_onedix.setDisable(disable);
+      button_onedivx.setDisable(disable);
       button_divide.setDisable(disable);
       button_multiple.setDisable(disable);
       button_subtract.setDisable(disable);

@@ -35,27 +35,9 @@ public class ResultNumberImpl implements ResultNumber {
    }
 
    @Override
-   public void loadAsHistoryResult(BigDecimal historyResult) {
-      number = historyResult;
-      status = ResultNumberStatus.HISTORY_RESULT;
-   }
-
-   @Override
-   public void loadAsMemoryNumbersWithBlock(BigDecimal memoryNumber) {
-      number = memoryNumber;
-      status = ResultNumberStatus.BLOCKED_BY_MEMORY;
-   }
-
-   @Override
-   public void loadAsMemoryNumber(BigDecimal memoryNumber) {
-      number = memoryNumber;
-      status = ResultNumberStatus.LOADED_FROM_MEMORY;
-   }
-
-   @Override
-   public void loadAsEqualsResult(BigDecimal equalsResult) {
-      number = equalsResult;
-      status = ResultNumberStatus.EQUALS_RESULT;
+   public void loadResult(BigDecimal result, ResultNumberStatus resultNumberStatus) {
+      number = result;
+      status = resultNumberStatus;
    }
 
    @Override

@@ -13,82 +13,70 @@ import org.testfx.util.WaitForAsyncUtils;
 class ExceptionTest extends UITest {
 
    /**
-    * open memory button
-    */
-   public static AnchorPane button_ms;
-
-   /**
     * subtract from memory button
     */
-   public static AnchorPane button_msub;
-
-   /**
-    * add to memory button
-    */
-   public static AnchorPane button_mp;
+   private static AnchorPane button_msub;
 
    /**
     * percent operation button
     */
-   public static AnchorPane button_percent;
+   private static AnchorPane button_percent;
 
    /**
     * root operation button
     */
-   public static AnchorPane button_root;
+   private static AnchorPane button_root;
 
    /**
     * square operation button
     */
-   public static AnchorPane button_square;
+   private static AnchorPane button_square;
 
    /**
     * one divide by x operation button
     */
-   public static AnchorPane button_onedix;
+   private static AnchorPane button_onedivx;
 
    /**
     * divide operation button
     */
-   public static AnchorPane button_divide;
+   private  static AnchorPane button_divide;
 
    /**
     * multiple operation button
     */
-   public static AnchorPane button_multiple;
+   private  static AnchorPane button_multiple;
 
    /**
     * subtract operation button
     */
-   public static AnchorPane button_subtract;
+   private  static AnchorPane button_subtract;
 
    /**
     * plus operation button
     */
-   public static AnchorPane button_plus;
+   private  static AnchorPane button_plus;
 
    /**
     * negate operation button
     */
-   public static AnchorPane button_negate;
+   private  static AnchorPane button_negate;
 
    /**
     * add point button
     */
-   public static AnchorPane button_point;
+   private  static AnchorPane button_point;
 
    /**
     * default constructor for initialization
     * of buttons
     */
-   public ExceptionTest() {
-      button_ms = (AnchorPane) WindowUtil.getNode("#button_ms");
+   ExceptionTest() {
       button_msub = (AnchorPane) WindowUtil.getNode("#button_msub");
-      button_mp = (AnchorPane) WindowUtil.getNode("#button_mp");
       button_percent = (AnchorPane) WindowUtil.getNode("#button_percent");
       button_root = (AnchorPane) WindowUtil.getNode("#button_root");
       button_square = (AnchorPane) WindowUtil.getNode("#button_square");
-      button_onedix = (AnchorPane) WindowUtil.getNode("#button_onedix");
+      button_onedivx = (AnchorPane) WindowUtil.getNode("#button_onedivx");
       button_divide = (AnchorPane) WindowUtil.getNode("#button_divide");
       button_multiple = (AnchorPane) WindowUtil.getNode("#button_multiple");
       button_subtract = (AnchorPane) WindowUtil.getNode("#button_subtract");
@@ -103,7 +91,7 @@ class ExceptionTest extends UITest {
     * after it
     */
    @Test
-   public void testUncertainException() {
+   void testUncertainException() {
       testException("0 / 0 =", "Результат не определен", "0   ÷   ", "135");
       testException("0 / 0 =", "Результат не определен", "0   ÷   ", "=", "0");
       testException("0 / 0 =", "Результат не определен", "0   ÷   ", "backspace", "0");
@@ -117,7 +105,7 @@ class ExceptionTest extends UITest {
     * which appears after dividing by zero
     */
    @Test
-   public void testZeroDivideException() {
+   void testZeroDivideException() {
       testException("1 / 0 =", "Деление на ноль невозможно", "1   ÷   ", "135");
       testException("2 / 0 =", "Деление на ноль невозможно", "2   ÷   ", "=", "0");
       testException("10 / 0 =", "Деление на ноль невозможно", "10   ÷   ", "ce", "0");
@@ -131,12 +119,12 @@ class ExceptionTest extends UITest {
     * which appears after making root of negated value
     */
    @Test
-   public void testUncorrectedDataException() {
+   void testUncorrectedDataException() {
       testException("2 - 4 = √", "Введены неверные данные", "√( -2 )", "135");
       testException("2 - 4 - √", "Введены неверные данные", "2   -   4   -   √( -2 )", "135");
-      testException("4 n √", "Введены неверные данные", "√( -4 )", "135");
-      testException("4 n + 4 - 1 = √", "Введены неверные данные", "√( -1 )", "135");
-      testException("4 n + 4 - 1 - √", "Введены неверные данные", "-4   +   4   -   1   -   √( -1 )", "135");
+      testException("4 n √", "Введены неверные данные", "√( -4 )", "12");
+      testException("4 n + 4 - 1 = √", "Введены неверные данные", "√( -1 )", "152");
+      testException("4 n + 4 - 1 - √", "Введены неверные данные", "-4   +   4   -   1   -   √( -1 )", "1 222");
    }
 
    /**
@@ -145,7 +133,7 @@ class ExceptionTest extends UITest {
     * bigger than 9999999999999999,e+9999
     */
    @Test
-   public void testOverflowException() {
+   void testOverflowException() {
       FXTestUtils.awaitEvents();
       testException("9999999999999999 sqr sqr sqr sqr sqr sqr sqr sqr sqr sqr", "Переполнение", "sqr( sqr( sqr( sqr( sqr( sqr( sqr( sqr( sqr( sqr( 9999999999999999 ) ) ) ) ) ) ) ) ) )", "135");
       testException("0,0000000000000001 sqr sqr sqr sqr sqr sqr sqr sqr sqr sqr", "Переполнение", "sqr( sqr( sqr( sqr( sqr( sqr( sqr( sqr( sqr( sqr( 0,0000000000000001 ) ) ) ) ) ) ) ) ) )", "135");
@@ -202,7 +190,7 @@ class ExceptionTest extends UITest {
       assertEquals(disabled, button_percent.isDisable());
       assertEquals(disabled, button_root.isDisable());
       assertEquals(disabled, button_square.isDisable());
-      assertEquals(disabled, button_onedix.isDisable());
+      assertEquals(disabled, button_onedivx.isDisable());
       assertEquals(disabled, button_divide.isDisable());
       assertEquals(disabled, button_multiple.isDisable());
       assertEquals(disabled, button_subtract.isDisable());

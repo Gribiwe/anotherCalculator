@@ -57,7 +57,7 @@ class RobotUtil extends Assert {
     * Clicks button of calculator by mouse
     * which clears input line, history and memory.
     */
-   static void clickClear() {
+   private static void clickClear() {
       RobotUtil.clickOn("#button_clear");
       RobotUtil.clickOn("#button_mc");
       isNeededText("#inputFieldNumber", "0");
@@ -99,7 +99,7 @@ class RobotUtil extends Assert {
     * Clicks button of calculator by key on keyboard
     * which clears input line and history.
     */
-   static void tapClear() {
+   private static void tapClear() {
       tap(KeyEvent.VK_ESCAPE);
       isNeededText("#inputFieldNumber", "0");
    }
@@ -109,7 +109,7 @@ class RobotUtil extends Assert {
     *
     * @param number needed number to type
     */
-   static void enterNumberByKey(String number) {
+   private static void enterNumberByKey(String number) {
       char character;
       for (int i = 0; i < number.length(); i++) {
          character = number.charAt(i);
@@ -199,7 +199,7 @@ class RobotUtil extends Assert {
     *
     * @param number needed number to type
     */
-   static void enterNumber(String number) {
+   private static void enterNumber(String number) {
       char character;
       for (int i = 0; i < number.length(); i++) {
          character = number.charAt(i);
@@ -255,7 +255,7 @@ class RobotUtil extends Assert {
          } else if (section.equals("√")) {
             clickOn("#button_root");
          } else if (section.equals("1/x")) {
-            clickOn("#button_onedix");
+            clickOn("#button_onedivx");
          } else if (section.equals("sqr")) {
             clickOn("#button_square");
          } else if (section.equals("%")) {

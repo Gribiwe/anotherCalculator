@@ -3,7 +3,9 @@ package view;
 import gribiwe.view.BodyView;
 import javafx.scene.Node;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.runners.MethodSorters;
 import org.loadui.testfx.utils.FXTestUtils;
 import org.testfx.api.FxToolkit;
 
@@ -25,6 +27,7 @@ import java.util.concurrent.Executors;
  * @see WindowUtil
  * @see ExecutorService
  */
+@FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 class UITest extends Assert {
 
    private static final String[] args = {null};

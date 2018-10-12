@@ -9,7 +9,7 @@ import java.awt.event.InputEvent;
  *
  * @author Gribiwe
  */
-public class ResizeUtil extends UITest {
+class ResizeUtil extends UITest {
 
    /**
     * resize a window from left border, checks is it resized

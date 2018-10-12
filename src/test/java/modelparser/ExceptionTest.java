@@ -68,20 +68,6 @@ public class ExceptionTest extends Assert {
    }
 
    /**
-    * testing exception issued
-    * by getting value more than 9999999999999999,e+9999,
-    * less 9999999999999999,e+9999 or more accurate than 0,0000000000000001e-9999
-    */
-   @Test
-   public void testOverflowException() {
-      testOverflowException("0,0000000000000001 sqr sqr sqr sqr sqr sqr sqr sqr sqr sqr");
-      testOverflowException("0,0000000000000001 * = * = * = * = * = * = * = * = * = * =");
-      testOverflowException("9999999999999999 sqr sqr sqr sqr sqr sqr sqr sqr sqr sqr ");
-      testOverflowException("9999999999999999 * = * = * = * = * = * = * = * = * = * =");
-      testOverflowException("9999999999999999 1/x sqr 1/x sqr 1/x sqr 1/x sqr 1/x sqr 1/x sqr 1/x sqr 1/x sqr 1/x sqr 1/x sqr");
-   }
-
-   /**
     * method for testing is emulated
     * action sequence provides ZeroDivideException
     *
@@ -110,15 +96,4 @@ public class ExceptionTest extends Assert {
    private void testUncertainException(String sequence) {
       testUtil.doExceptionTest(sequence, ZeroDivideZeroException.class);
    }
-
-   /**
-    * method for testing is emulated
-    * action sequence provides OverflowException
-    *
-    * @param sequence string value of actions which will be emulated
-    */
-   private void testOverflowException(String sequence) {
-      testUtil.doExceptionTest(sequence, OverflowException.class);
-   }
-
 }

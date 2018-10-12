@@ -154,11 +154,15 @@ public class CalculatorMath {
     * @return processed number by operations
     */
    public BigDecimal calculateSpecialOperations(BigDecimal number, List<SpecialOperation> operations) {
+      if (operations == null) {
+         return number;
+      }
+
       BigDecimal result = number;
       for (Operation operation : operations) {
          if (operation.equals(SpecialOperation.SQUARE)) {
             result = square(result);
-         } else if (operation.equals(SpecialOperation.ONEDIVX)) {
+         } else if (operation.equals(SpecialOperation.ONE_DIV_X)) {
             result = oneDivX(result);
          } else if (operation.equals(SpecialOperation.ROOT)) {
             result = root(result);

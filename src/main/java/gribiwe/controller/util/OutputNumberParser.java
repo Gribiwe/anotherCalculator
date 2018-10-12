@@ -56,7 +56,8 @@ public class OutputNumberParser {
       if (dto.isPointed()) {
          pattern.append(".");
       }
-      for (int i = 0; i < dto.getRightNumbersLength(); i++) {
+      for (int i = 0; i < value.scale(); i++) {
+//      for (int i = 0; i < dto.getRightNumbersLength(); i++) {
          pattern.append("0");
       }
       DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();

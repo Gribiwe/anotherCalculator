@@ -2,6 +2,7 @@ package view;
 
 import javafx.scene.layout.AnchorPane;
 import org.junit.jupiter.api.Test;
+import org.loadui.testfx.utils.FXTestUtils;
 
 /**
  * Class for testing menu button
@@ -33,14 +34,14 @@ class MenuTest extends UITest {
     * button for it was clicked
     */
    @Test
-   void testMenuAppears() {
+   void testAppearsMenu() {
       assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertFalse(WindowUtil.isNodeExists("#menu"));
       clickMenuButton();
       AnchorPane invisibleMenuArea = (AnchorPane) WindowUtil.getNode("#invisibleMenuArea");
-      assertEquals(INVISIBLE_PANE_WIDTH, invisibleMenuArea.getWidth() , 0);
+      assertEquals(INVISIBLE_PANE_WIDTH, invisibleMenuArea.getWidth(), 0);
       AnchorPane menu = (AnchorPane) WindowUtil.getNode("#menu");
-      assertEquals(MENU_WIDTH, menu.getWidth() , 0);
+      assertEquals(MENU_WIDTH, menu.getWidth(), 0);
       clickMenuButton();
    }
 
@@ -49,7 +50,7 @@ class MenuTest extends UITest {
     * with different cases
     */
    @Test
-   void testDisappearing() {
+   void testTheDisappearing() {
       clickMenuButton();
       testDisappearingOnClickOnInvisibleArea();
       clickMenuButton();
@@ -77,7 +78,7 @@ class MenuTest extends UITest {
 
    /**
     * Method for testing the disappearing
-    * of menu whan mouse was clicked
+    * of menu when mouse was clicked
     * on the open (or close) button of
     * menu
     */
@@ -95,32 +96,24 @@ class MenuTest extends UITest {
     * are resizing
     */
    private void testDisappearingOnResize() {
-      assertTrue(WindowUtil.isNodeExists("#invisibleMenuArea"));
-      assertTrue(WindowUtil.isNodeExists("#menu"));
+      checkExists(true);
       ResizeUtil.testResizeLeft(2, 50);
-      assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
-      assertFalse(WindowUtil.isNodeExists("#menu"));
+      checkExists(false);
       clickMenuButton();
 
-      assertTrue(WindowUtil.isNodeExists("#invisibleMenuArea"));
-      assertTrue(WindowUtil.isNodeExists("#menu"));
+      checkExists(true);
       ResizeUtil.testResizeRight(2, 50);
-      assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
-      assertFalse(WindowUtil.isNodeExists("#menu"));
+      checkExists(false);
       clickMenuButton();
-
-      assertTrue(WindowUtil.isNodeExists("#invisibleMenuArea"));
-      assertTrue(WindowUtil.isNodeExists("#menu"));
+      FXTestUtils.awaitEvents();
+      checkExists(true);
       ResizeUtil.testResizeBottom(2, 50);
-      assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
-      assertFalse(WindowUtil.isNodeExists("#menu"));
+      checkExists(false);
       clickMenuButton();
 
-      assertTrue(WindowUtil.isNodeExists("#invisibleMenuArea"));
-      assertTrue(WindowUtil.isNodeExists("#menu"));
+      checkExists(true);
       ResizeUtil.testResizeTop(2, 50);
-      assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
-      assertFalse(WindowUtil.isNodeExists("#menu"));
+      checkExists(false);
       clickMenuButton();
    }
 
@@ -130,5 +123,27 @@ class MenuTest extends UITest {
    private void clickMenuButton() {
       RobotUtil.clickOn("#menuButton");
       RobotUtil.sleep(TIME_FOR_APPEARING);
+   }
+
+   /**
+    * Time for waiting an existing of node per retry.
+    */
+   private static final int MILLISECONDS_FOR_RETRY = 20;
+
+   /**
+    * Amount of retries for checking an existing of node per retry.
+    */
+   private static final int RETRY_COUNT = 20;
+
+   private void checkExists(boolean shouldBeExist) {
+      for (int retry = 0; retry < RETRY_COUNT && WindowUtil.isNodeExists("#invisibleMenuArea") != shouldBeExist; retry++) {
+         RobotUtil.sleep(MILLISECONDS_FOR_RETRY);
+      }
+
+      for (int retry = 0; retry < RETRY_COUNT && WindowUtil.isNodeExists("#menu") != shouldBeExist; retry++) {
+         RobotUtil.sleep(MILLISECONDS_FOR_RETRY);
+      }
+      assertEquals(shouldBeExist, WindowUtil.isNodeExists("#invisibleMenuArea"));
+      assertEquals(shouldBeExist, WindowUtil.isNodeExists("#menu"));
    }
 }

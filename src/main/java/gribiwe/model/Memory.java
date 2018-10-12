@@ -20,11 +20,6 @@ public interface Memory {
    BigDecimal getNumber();
 
    /**
-    * sets memory as enabled
-    */
-   void enable();
-
-   /**
     * making add operation to current number
     *
     * @param num number to add

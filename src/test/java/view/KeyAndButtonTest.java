@@ -16,7 +16,7 @@ class KeyAndButtonTest extends UITest {
     * and smallest number, which bigger than zero
     */
    @Test
-   public void testTheBiggestAndSmallestValues() {
+   void testTheBiggestAndSmallestValues() {
       FXTestUtils.awaitEvents();
 
       //testing the biggest value
@@ -147,7 +147,7 @@ class KeyAndButtonTest extends UITest {
     * Works via emulating a pressing of keyboard keys
     */
    @Test
-   public void testKeys() {
+   void testKeys() {
       FXTestUtils.awaitEvents();
       RobotUtil.enterCaseByKey("1", "1", "");
       RobotUtil.enterCaseByKey("2", "2", "");

@@ -6,6 +6,6 @@ package gribiwe.model.util;
 public enum SpecialOperation implements Operation {
    SQUARE,
    ROOT,
-   ONEDIVX,
+   ONE_DIV_X,
    NEGATE
 }

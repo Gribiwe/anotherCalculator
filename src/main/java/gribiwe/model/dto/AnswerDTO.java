@@ -2,10 +2,12 @@ package gribiwe.model.dto;
 
 public class AnswerDTO {
 
-   private OutputNumberDTO outputNumberDTO;
-   private HistoryLineDTO historyLineDTO;
-   private LastSpecialOperationHistoryDTO lastSpecialOperationHistoryDTO;
-   private MemoryDTO memoryDTO;
+   private final OutputNumberDTO outputNumberDTO;
+   private final HistoryLineDTO historyLineDTO;
+   private final LastSpecialOperationHistoryDTO lastSpecialOperationHistoryDTO;
+   private final MemoryDTO memoryDTO;
+   // todo do reading on final
+   // todo make final fields whenever possible
 
    public AnswerDTO(OutputNumberDTO outputNumberDTO, HistoryLineDTO historyLineDTO, LastSpecialOperationHistoryDTO lastSpecialOperationHistoryDTO, MemoryDTO memoryDTO) {
       this.outputNumberDTO = outputNumberDTO;
