@@ -5,7 +5,7 @@ import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * interface for class to represent a history line object
@@ -23,9 +23,9 @@ public interface HistoryLine {
     *
     * @param specialOperations list of special operations
     * @see SpecialOperation
-    * @see ArrayList
+    * @see List
     */
-   void uploadSpecialOperations(ArrayList<SpecialOperation> specialOperations);
+   void uploadSpecialOperations(List<SpecialOperation> specialOperations);
 
    /**
     * adds number with provided operation

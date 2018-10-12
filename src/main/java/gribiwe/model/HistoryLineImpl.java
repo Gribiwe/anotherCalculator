@@ -7,6 +7,7 @@ import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * implementation of HistoryLine interface
@@ -21,7 +22,7 @@ class HistoryLineImpl implements HistoryLine{
    /**
     * list of numbers at history
     */
-   private ArrayList<BigDecimal> numbers;
+   private List<BigDecimal> numbers;
 
    /**
     * list of simple operations between numbers
@@ -29,7 +30,7 @@ class HistoryLineImpl implements HistoryLine{
     *
     * @see SimpleOperation
     */
-   private ArrayList<SimpleOperation> operations;
+   private List<SimpleOperation> operations;
 
    /**
     * list of lists of special operations of
@@ -37,7 +38,7 @@ class HistoryLineImpl implements HistoryLine{
     * operations at index 2 will be accepted to
     * number at index 2 of {@link #numbers}
     */
-   private ArrayList<ArrayList<SpecialOperation>> specialOperations;
+   private List<List<SpecialOperation>> specialOperations;
 
    /**
     * saved number
@@ -59,7 +60,7 @@ class HistoryLineImpl implements HistoryLine{
    }
 
    @Override
-   public void uploadSpecialOperations(ArrayList<SpecialOperation> specialOperations) {
+   public void uploadSpecialOperations(List<SpecialOperation> specialOperations) {
       this.specialOperations.set(this.specialOperations.size() - 1, specialOperations);
    }
 
@@ -111,9 +112,9 @@ class HistoryLineImpl implements HistoryLine{
 
    @Override
    public void clearHistory() {
-      operations = new ArrayList<>();
-      numbers = new ArrayList<>();
-      specialOperations = new ArrayList<>();
+      operations.clear();
+      numbers.clear();
+      specialOperations.clear();
    }
 
    @Override

@@ -3,7 +3,7 @@ package gribiwe.model.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * class for calculation
@@ -153,7 +153,7 @@ public class CalculatorMath {
     * @param operations     operations to do
     * @return processed number by operations
     */
-   public BigDecimal calculateSpecialOperations(BigDecimal number, ArrayList<SpecialOperation> operations) {
+   public BigDecimal calculateSpecialOperations(BigDecimal number, List<SpecialOperation> operations) {
       BigDecimal result = number;
       for (Operation operation : operations) {
          if (operation.equals(SpecialOperation.SQUARE)) {

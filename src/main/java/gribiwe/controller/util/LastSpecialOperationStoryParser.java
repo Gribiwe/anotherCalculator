@@ -7,6 +7,7 @@ import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * class for parsing a part of history
@@ -26,7 +27,7 @@ public class LastSpecialOperationStoryParser {
     * @param operations special operations of number
     * @return string value of parsed number with operations
     */
-   String parse(BigDecimal number, ArrayList<SpecialOperation> operations) {
+   String parse(BigDecimal number, List<SpecialOperation> operations) {
       String result;
       result = new OutputNumberParser().formatResult(number, false);
       for (Operation operation : operations) {

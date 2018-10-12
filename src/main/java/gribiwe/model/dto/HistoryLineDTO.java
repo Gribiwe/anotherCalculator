@@ -4,29 +4,29 @@ import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryLineDTO {
 
-   private ArrayList<BigDecimal> numbers;
-   private ArrayList<SimpleOperation> operations;
-   private ArrayList<ArrayList<SpecialOperation>> specialOperations;
+   private List<BigDecimal> numbers;
+   private List<SimpleOperation> operations;
+   private List<List<SpecialOperation>> specialOperations;
 
-   public HistoryLineDTO(ArrayList<BigDecimal> numbers, ArrayList<SimpleOperation> operations, ArrayList<ArrayList<SpecialOperation>> specialOperations) {
+   public HistoryLineDTO(List<BigDecimal> numbers, List<SimpleOperation> operations, List<List<SpecialOperation>> specialOperations) {
       this.numbers = numbers;
       this.operations = operations;
       this.specialOperations = specialOperations;
    }
 
-   public ArrayList<ArrayList<SpecialOperation>> getSpecialOperations() {
+   public List<List<SpecialOperation>> getSpecialOperations() {
       return specialOperations;
    }
 
-   public ArrayList<BigDecimal> getNumbers() {
+   public List<BigDecimal> getNumbers() {
       return numbers;
    }
 
-   public ArrayList<SimpleOperation> getOperations() {
+   public List<SimpleOperation> getOperations() {
       return operations;
    }
 }

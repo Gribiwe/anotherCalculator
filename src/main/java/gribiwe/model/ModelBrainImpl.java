@@ -6,7 +6,7 @@ import gribiwe.model.util.*;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * implementation of interface for model brain
@@ -322,7 +322,7 @@ public class ModelBrainImpl implements ModelBrain {
     */
    private void doOperationAfterSpecialOperation(SimpleOperation operation) {
       historyLine.add(tailSpecialOperationHistory.getNumber(), operation, true);
-      ArrayList<SpecialOperation> tailSpecialOperations;
+      List<SpecialOperation> tailSpecialOperations;
       tailSpecialOperations = tailSpecialOperationHistory.getOperations();
       historyLine.uploadSpecialOperations(tailSpecialOperations);
       tailSpecialOperationHistory.clear();
@@ -384,7 +384,7 @@ public class ModelBrainImpl implements ModelBrain {
       historyLine.add(tailSpecialOperationHistory.getNumber(), SimpleOperation.NOTHING, false);
       historyLine.setSavedResult(specialOperationsResult);
 
-      ArrayList<SpecialOperation> tailSpecialOperations;
+      List<SpecialOperation> tailSpecialOperations;
       tailSpecialOperations = tailSpecialOperationHistory.getOperations();
       historyLine.uploadSpecialOperations(tailSpecialOperations);
 
