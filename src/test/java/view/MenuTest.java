@@ -97,28 +97,28 @@ class MenuTest extends UITest {
    private void testDisappearingOnResize() {
       assertTrue(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertTrue(WindowUtil.isNodeExists("#menu"));
-      ResizeUtil.testResizeLeft(3, 50);
+      ResizeUtil.testResizeLeft(2, 50);
       assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertFalse(WindowUtil.isNodeExists("#menu"));
       clickMenuButton();
 
       assertTrue(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertTrue(WindowUtil.isNodeExists("#menu"));
-      ResizeUtil.testResizeRight(3, 50);
+      ResizeUtil.testResizeRight(2, 50);
       assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertFalse(WindowUtil.isNodeExists("#menu"));
       clickMenuButton();
 
       assertTrue(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertTrue(WindowUtil.isNodeExists("#menu"));
-      ResizeUtil.testResizeBottom(3, 50);
+      ResizeUtil.testResizeBottom(2, 50);
       assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertFalse(WindowUtil.isNodeExists("#menu"));
       clickMenuButton();
 
       assertTrue(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertTrue(WindowUtil.isNodeExists("#menu"));
-      ResizeUtil.testResizeTop(3, 50);
+      ResizeUtil.testResizeTop(2, 50);
       assertFalse(WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertFalse(WindowUtil.isNodeExists("#menu"));
       clickMenuButton();

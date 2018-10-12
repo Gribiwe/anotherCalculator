@@ -1,8 +1,9 @@
 package gribiwe.controller.util;
 
 import gribiwe.model.dto.HistoryLineDTO;
-import gribiwe.model.dto.OutputNumberDTO;
 import gribiwe.model.util.SimpleOperation;
+
+import static gribiwe.model.util.SimpleOperation.*;
 
 /**
  * class for parsing a history line value to string
@@ -40,13 +41,13 @@ public class HistoryLineParser {
             number = parser.formatResult((historyLineDTO.getNumbers().get(i)), false);
          }
 
-         if (historyLineDTO.getOperations().get(i).equals(SimpleOperation.PLUS)) {
+         if (historyLineDTO.getOperations().get(i).equals(PLUS)) {
             stringBuilder.append(number).append("   +   ");
-         } else if (historyLineDTO.getOperations().get(i).equals(SimpleOperation.SUBTRACT)) {
+         } else if (historyLineDTO.getOperations().get(i).equals(SUBTRACT)) {
             stringBuilder.append(number).append("   -   ");
-         } else if (historyLineDTO.getOperations().get(i).equals(SimpleOperation.MULTIPLY)) {
+         } else if (historyLineDTO.getOperations().get(i).equals(MULTIPLY)) {
             stringBuilder.append(number).append("   ×   ");
-         } else if (historyLineDTO.getOperations().get(i).equals(SimpleOperation.DIVIDE)) {
+         } else if (historyLineDTO.getOperations().get(i).equals(DIVIDE)) {
             stringBuilder.append(number).append("   ÷   ");
          }
       }

@@ -3,19 +3,19 @@ package gribiwe.model.dto;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 
 public class LastSpecialOperationHistoryDTO {
 
-   private ArrayList<SpecialOperation> operations;
+   private List<SpecialOperation> operations;
    private BigDecimal number;
 
-   public LastSpecialOperationHistoryDTO(ArrayList<SpecialOperation> operations, BigDecimal number) {
+   public LastSpecialOperationHistoryDTO(List<SpecialOperation> operations, BigDecimal number) {
       this.operations = operations;
       this.number = number;
    }
 
-   public ArrayList<SpecialOperation> getOperations() {
+   public List<SpecialOperation> getOperations() {
       return operations;
    }
 

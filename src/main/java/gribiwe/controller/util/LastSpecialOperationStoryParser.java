@@ -55,7 +55,7 @@ public class LastSpecialOperationStoryParser {
          return "";
       }
       BigDecimal number = lastSpecialOperationHistoryDTO.getNumber();
-      ArrayList<SpecialOperation> operations = lastSpecialOperationHistoryDTO.getOperations();
+      List<SpecialOperation> operations = lastSpecialOperationHistoryDTO.getOperations();
       return parse(number, operations);
    }
 

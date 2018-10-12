@@ -6,6 +6,7 @@ import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * implementation of interface designed
@@ -24,7 +25,7 @@ class TailSpecialOperationHistoryImpl implements TailSpecialOperationHistory {
     * @see SpecialOperation
     * @see ArrayList
     */
-   private ArrayList<SpecialOperation> operations;
+   private List<SpecialOperation> operations;
 
    /**
     * current start number of tail
@@ -88,7 +89,7 @@ class TailSpecialOperationHistoryImpl implements TailSpecialOperationHistory {
    }
 
    @Override
-   public ArrayList<SpecialOperation> getOperations() {
+   public List<SpecialOperation> getOperations() {
       return operations;
    }
 }

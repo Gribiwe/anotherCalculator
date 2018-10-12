@@ -4,7 +4,7 @@ import gribiwe.model.dto.LastSpecialOperationHistoryDTO;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * interface of objects to represent
@@ -63,7 +63,7 @@ public interface TailSpecialOperationHistory {
    /**
     * @return list of special operations
     * @see SpecialOperation
-    * @see ArrayList
+    * @see List
     */
-   ArrayList<SpecialOperation> getOperations();
+   List<SpecialOperation> getOperations();
 }
