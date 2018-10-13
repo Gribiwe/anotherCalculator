@@ -10,6 +10,6 @@ import gribiwe.model.exception.CalculatorException;
  * @author Gribiwe
  */
 @FunctionalInterface
-public interface Action {
+public interface CalculatorAction {
    AnswerDTO doAction() throws CalculatorException;
 }

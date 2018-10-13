@@ -20,6 +20,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
+import static gribiwe.model.util.MemoryOperation.*;
+
 /**
  * class of controller for connecting view part of calculator
  * with logic (model) part
@@ -310,12 +312,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation percent
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doPercent() {
@@ -324,12 +326,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation negate
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doNegate() {
@@ -338,12 +340,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation plus
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doPlus() {
@@ -352,12 +354,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation subtract
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doSubtract() {
@@ -366,12 +368,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation multiply
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doMultiply() {
@@ -380,12 +382,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation divide
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doDivide() {
@@ -394,12 +396,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation square
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doSquare() {
@@ -408,12 +410,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation one divide by x
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doOneDivX() {
@@ -422,12 +424,12 @@ public class Controller implements Initializable {
 
    /**
     * method of operation root
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doRoot() {
@@ -436,12 +438,12 @@ public class Controller implements Initializable {
 
    /**
     * method of equals calling
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doEquals() {
@@ -450,40 +452,40 @@ public class Controller implements Initializable {
 
    /**
     * method of adding number to memory
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doAddMemory() {
-      updateView(() -> mainModel.addMemory());
+      updateView(() -> mainModel.operateMemory(ADD));
    }
 
    /**
     * method of removing number from memory
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doRemoveMemory() {
-      updateView(() -> mainModel.removeMemory());
+      updateView(() -> mainModel.operateMemory(SUBTRACT));
    }
 
    /**
     * method of clearing memory
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void doClearMemory() {
@@ -492,12 +494,12 @@ public class Controller implements Initializable {
 
    /**
     * method of loading memory number
-    * forming {@code Action} object
+    * forming {@code CalculatorAction} object
     * with provided operations for model
     * which returns Answer from model
-    * and sends it to method {@link #updateView(Action)}
+    * and sends it to method {@link #updateView(CalculatorAction)}
     *
-    * @see Action
+    * @see CalculatorAction
     */
    @FXML
    public void loadFromMemory() {
@@ -526,16 +528,16 @@ public class Controller implements Initializable {
     * method which processes an {@code AnswerDTO}
     * by parsers. Than sends a string values to view
     *
-    * @see Action
+    * @see CalculatorAction
     * @see AnswerDTO
     * @see OutputNumberParser
     * @see HistoryLineParser
     * @see LastSpecialOperationStoryParser
     */
-   private void updateView(Action action) {
+   private void updateView(CalculatorAction calculatorAction) {
       AnswerDTO answerDTO;
       try {
-         answerDTO = action.doAction();
+         answerDTO = calculatorAction.doAction();
       } catch (CalculatorException e) {
          updateError(e);
          return;

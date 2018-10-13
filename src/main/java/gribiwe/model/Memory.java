@@ -1,6 +1,7 @@
 package gribiwe.model;
 
 import gribiwe.model.dto.MemoryDTO;
+import gribiwe.model.util.MemoryOperation;
 
 import java.math.BigDecimal;
 
@@ -20,18 +21,13 @@ public interface Memory {
    BigDecimal getNumber();
 
    /**
-    * making add operation to current number
+    * making operation to current number with new one
     *
-    * @param num number to add
+    * @param num number to operate
+    * @param operation to process
+    * @see MemoryOperation
     */
-   void add(BigDecimal num);
-
-   /**
-    * making subtract operation from current number
-    *
-    * @param num number to subtract
-    */
-   void remove(BigDecimal num);
+   void doOperation(BigDecimal num, MemoryOperation operation);
 
    /**
     * clears memory

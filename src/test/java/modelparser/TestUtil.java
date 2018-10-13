@@ -15,6 +15,8 @@ import gribiwe.model.util.SpecialOperation;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 
+import static gribiwe.model.util.MemoryOperation.*;
+
 /**
  * Util class for testing parsed model values
  *
@@ -146,9 +148,9 @@ class TestUtil extends Assert {
       } else if (section.equals("%")) {
          return mainModel.doPercent();
       } else if (section.equals("m+")) {
-         return mainModel.addMemory();
+         return mainModel.operateMemory(ADD);
       } else if (section.equals("m-")) {
-         return mainModel.removeMemory();
+         return mainModel.operateMemory(SUBTRACT);
       } else if (section.equals("mr")) {
          return mainModel.loadFromMemory();
       } else if (section.equals("mc")) {

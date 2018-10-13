@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * @author Gribiwe
  * @see ResultNumber
  */
-public class ResultNumberImpl implements ResultNumber {
+class ResultNumberImpl implements ResultNumber {
 
    /**
     * current number

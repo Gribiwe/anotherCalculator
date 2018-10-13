@@ -83,8 +83,6 @@ public class ModelBrainImpl implements ModelBrain {
     */
    private static final String OPERATION_IS_NULL_EXCEPTION_TEXT = "Operation is formAnswer(). I cant make calculations using formAnswer() as operation";
 
-   //TODO exceptions to lower level
-
    /**
     * creation of new exemplar of this class
     * sets default values
@@ -176,7 +174,7 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO doEquals() throws CalculatorException {
+   public AnswerDTO doEquals() throws ZeroDivideZeroException, ZeroDivideException {
       if (tailSpecialOperationHistory.isProcessing()) {
          doEqualsAfterSpecialOperation();
       } else {
@@ -192,6 +190,7 @@ public class ModelBrainImpl implements ModelBrain {
 
    @Override
    public AnswerDTO doSpecialOperation(SpecialOperation operation) throws CalculatorException {
+      verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
       if (tailSpecialOperationHistory.isProcessing()) {
          doNextSpecialOperation(operation);
       } else {
@@ -202,28 +201,25 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO doNegate() throws CalculatorException {
+   public AnswerDTO doNegate() {
       if (buildingNumber) {
          enteringNumber.negate();
       } else {
-         doSpecialOperation(NEGATE);
+         try {
+            doSpecialOperation(NEGATE);
+         } catch (CalculatorException e) {
+            e.printStackTrace();
+         }
       }
       return formAnswer();
    }
 
    @Override
-   public AnswerDTO addMemory() {// TODO: 12.10.2018 Consider adding ENUM for memory operations
-      BigDecimal numberToMemory = getNumberFromBuildingOrResultNumber();
-      memory.add(numberToMemory);
-      resultNumber.loadResult(numberToMemory, BLOCKED_BY_MEMORY);
-      return formAnswer();
-   }
-
-   @Override
-   public AnswerDTO removeMemory() {
-      BigDecimal numberToMemory = getNumberFromBuildingOrResultNumber();
-      memory.remove(numberToMemory);
-      resultNumber.loadResult(numberToMemory, BLOCKED_BY_MEMORY);
+   public AnswerDTO operateMemory(MemoryOperation operation) throws CalculatorException {
+      verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
+      BigDecimal numberToOperate = getNumberFromBuildingOrResultNumber();
+      memory.doOperation(numberToOperate, operation);
+      resultNumber.loadResult(numberToOperate, BLOCKED_BY_MEMORY);
       return formAnswer();
    }
 

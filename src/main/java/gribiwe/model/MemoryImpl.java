@@ -1,8 +1,11 @@
 package gribiwe.model;
 
 import gribiwe.model.dto.MemoryDTO;
+import gribiwe.model.util.MemoryOperation;
 
 import java.math.BigDecimal;
+
+import static gribiwe.model.util.MemoryOperation.ADD;
 
 /**
  * implementation of Memory
@@ -36,14 +39,12 @@ class MemoryImpl implements Memory {
    }
 
    @Override
-   public void add(BigDecimal num) {
-      number = number.add(num);
-      enable = true;
-   }
-
-   @Override
-   public void remove(BigDecimal num) {
-      number  = number.subtract(num);
+   public void doOperation(BigDecimal num, MemoryOperation operation) {
+      if (operation == ADD) {
+         number = number.add(num);
+      } else {
+         number = number.subtract(num);
+      }
       enable = true;
    }
 
