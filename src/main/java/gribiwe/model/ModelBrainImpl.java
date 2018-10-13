@@ -108,8 +108,11 @@ public class ModelBrainImpl implements ModelBrain {
 
    @Override
    public AnswerDTO deleteAllDigits() {
-      startBuildingNumber();
-      enteringNumber.removeAllSymbols();
+      if (buildingNumber) {
+         enteringNumber.removeAllSymbols();
+      } else {
+         startBuildingNumber();
+      }
       return formAnswer();
    }
 

@@ -78,7 +78,7 @@ class EnteringNumberTest extends Assert {
       assertEquals("1 234 567 890", outputNumberParser.formatInput(enteringNumber.getNumberDTO()));
       assertEquals(0, BigDecimal.valueOf(1234567890).compareTo(enteringNumber.getNumber()));
 
-      enteringNumber.removeAllSymbols();
+      enteringNumber = new EnteringNumberImpl();
       assertEquals("0", outputNumberParser.formatInput(enteringNumber.getNumberDTO()));
       assertEquals(0, BigDecimal.valueOf(0).compareTo(enteringNumber.getNumber()));
 
@@ -86,7 +86,7 @@ class EnteringNumberTest extends Assert {
       assertEquals("0", outputNumberParser.formatInput(enteringNumber.getNumberDTO()));
       assertEquals(0, BigDecimal.valueOf(0).compareTo(enteringNumber.getNumber()));
 
-      enteringNumber.removeAllSymbols();
+      enteringNumber = new EnteringNumberImpl();
 
       enteringNumber.addDigit(Digit.ONE);
       enteringNumber.addDigit(Digit.ONE);
@@ -144,7 +144,7 @@ class EnteringNumberTest extends Assert {
       assertEquals("-0,112", outputNumberParser.formatInput(enteringNumber.getNumberDTO()));
       assertEquals(0, BigDecimal.valueOf(-0.112D).compareTo(enteringNumber.getNumber()));
 
-      enteringNumber.removeAllSymbols();
+      enteringNumber = new EnteringNumberImpl();
       enteringNumber.addPoint();
       enteringNumber.negate();
       enteringNumber.addDigit(Digit.ONE);
