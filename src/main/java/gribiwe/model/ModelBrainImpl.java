@@ -437,7 +437,7 @@ public class ModelBrainImpl implements ModelBrain {
             historyLine.add(divisor, operation, false);
          }
 
-         throw new ZeroDivideZeroException(formAnswer());
+         throw new ZeroDivideZeroException("Cant divide zero by zero! Uncertain is answer", formAnswer());
       }
    }
 
@@ -457,7 +457,7 @@ public class ModelBrainImpl implements ModelBrain {
             historyLine.add(divisor, operation, false);
          }
 
-         throw new ZeroDivideException(formAnswer());
+         throw new ZeroDivideException("Divisor is zero! Can't divide by zero", formAnswer());
       }
    }
 
@@ -485,7 +485,7 @@ public class ModelBrainImpl implements ModelBrain {
       BigDecimal tailCalculationResult = tailSpecialOperationHistory.calculate();
       if (isZero(tailCalculationResult) && operation == ONE_DIV_X) {
          tailSpecialOperationHistory.addOperation(operation);
-         throw new ZeroDivideException(formAnswer());
+         throw new ZeroDivideException("Cant divide one by zero!", formAnswer());
       }
    }
 
@@ -501,7 +501,7 @@ public class ModelBrainImpl implements ModelBrain {
       BigDecimal tailCalculationResult = tailSpecialOperationHistory.calculate();
       if (isLessThenZero(tailCalculationResult) && operation == ROOT) {
          tailSpecialOperationHistory.addOperation(operation);
-         throw new UncorrectedDataException(formAnswer());
+         throw new UncorrectedDataException("You tried to find root of negated value. Not possible to calculate it.", formAnswer());
       }
    }
 
@@ -518,7 +518,7 @@ public class ModelBrainImpl implements ModelBrain {
          tailSpecialOperationHistory.initNumber(number);
          tailSpecialOperationHistory.addOperation(operation);
 
-         throw new UncorrectedDataException(formAnswer());
+         throw new UncorrectedDataException("You tried to find root of negated value. Not possible to calculate it.", formAnswer());
       }
    }
 

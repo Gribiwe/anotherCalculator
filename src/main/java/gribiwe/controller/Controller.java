@@ -7,7 +7,9 @@ import gribiwe.model.ModelBrain;
 import gribiwe.model.ModelBrainImpl;
 import gribiwe.model.dto.*;
 import gribiwe.model.exception.CalculatorException;
-import gribiwe.model.exception.OverflowException;
+import gribiwe.model.exception.UncorrectedDataException;
+import gribiwe.model.exception.ZeroDivideException;
+import gribiwe.model.exception.ZeroDivideZeroException;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
@@ -29,6 +31,32 @@ import static gribiwe.model.util.MemoryOperation.*;
  * @author Gribiwe
  */
 public class Controller implements Initializable {
+
+   /**
+    * message of divide by zero exception
+    *
+    * @see gribiwe.model.exception.ZeroDivideException
+    */
+   private static final String DIVIDE_BY_ZERO_EXCEPTION_TEXT = "Деление на ноль невозможно";
+
+   /**
+    * message of zero divide by zero exception
+    *
+    * @see gribiwe.model.exception.ZeroDivideZeroException
+    */
+   private static final String ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT = "Результат не определен";
+
+   /**
+    * message of incorrect data exception
+    *
+    * @see gribiwe.model.exception.UncorrectedDataException
+    */
+   private static final String INCORRECT_DATA_EXCEPTION_TEXT = "Введены неверные данные";
+
+   /**
+    * message of overflow
+    */
+   private static final String OVERFLOW_EXCEPTION_TEXT = "Переполнение";
 
    /**
     * label for viewing a current number
@@ -171,7 +199,7 @@ public class Controller implements Initializable {
     * shows is buttons of calculator
     * blocked (by exception)
     */
-   private boolean enabled = true;
+   private boolean enabledOperationButtons = true;
 
 
    /**
@@ -312,10 +340,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation percent
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -326,10 +350,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation negate
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -340,10 +360,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation plus
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -354,10 +370,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation subtract
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -368,10 +380,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation multiply
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -382,10 +390,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation divide
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -396,10 +400,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation square
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -410,10 +410,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation one divide by x
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -424,10 +420,6 @@ public class Controller implements Initializable {
 
    /**
     * method of operation root
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -438,10 +430,6 @@ public class Controller implements Initializable {
 
    /**
     * method of equals calling
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -452,10 +440,6 @@ public class Controller implements Initializable {
 
    /**
     * method of adding number to memory
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -466,10 +450,6 @@ public class Controller implements Initializable {
 
    /**
     * method of removing number from memory
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -480,10 +460,6 @@ public class Controller implements Initializable {
 
    /**
     * method of clearing memory
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -494,10 +470,6 @@ public class Controller implements Initializable {
 
    /**
     * method of loading memory number
-    * forming {@code CalculatorAction} object
-    * with provided operations for model
-    * which returns Answer from model
-    * and sends it to method {@link #updateView(CalculatorAction)}
     *
     * @see CalculatorAction
     */
@@ -517,7 +489,7 @@ public class Controller implements Initializable {
       long exponent = Long.parseLong(output.substring(output.indexOf("E") + 1));
 
       if (exponent > MAX_EXPONENT || exponent < MIN_EXPONENT) {
-         updateError(new OverflowException(answerDTO));
+         updateError(OVERFLOW_EXCEPTION_TEXT, answerDTO);
          return false;
       }
 
@@ -539,9 +511,10 @@ public class Controller implements Initializable {
       try {
          answerDTO = calculatorAction.doAction();
       } catch (CalculatorException e) {
-         updateError(e);
+         processException(e);
          return;
       }
+
       if (answerDTO != null && verifyOverflow(answerDTO)) {
          String outputNumber;
          OutputNumberDTO outputNumberDTO = answerDTO.getOutputNumberDTO();
@@ -550,42 +523,61 @@ public class Controller implements Initializable {
          } else {
             outputNumber = outputNumberParser.formatResult(outputNumberDTO.getValue(), true);
          }
-
          inputFieldNumber.setText(outputNumber);
 
          String historyLineText = historyLineParser.parse(answerDTO.getHistoryLineDTO());
          historyLineText += lastSpecialOperationStoryParser.parse(answerDTO.getTailSpecialOperationHistoryDTO());
          historyLine.setText(historyLineText);
 
-         if (answerDTO.getMemoryDTO().isEnable()) {
-            String memoryString = outputNumberParser.formatResult(answerDTO.getMemoryDTO().getMemoryNumber(), true);
+         MemoryDTO memoryDTO = answerDTO.getMemoryDTO();
+         if (memoryDTO.isEnable()) {
+            String memoryString = outputNumberParser.formatResult(memoryDTO.getMemoryNumber(), true);
             memoryText.setText(memoryString);
          } else {
             memoryText.setText("");
          }
-         if (!enabled) {
-            setDisable(false);
+         if (!enabledOperationButtons) {
+            setOperationButtonsDisable(false);
          }
       }
    }
 
    /**
-    * method for proceeding an exception
+    * method for sending info about exception
+    * to view of calculator
     *
-    * @param e exception, which was thrown by actions
-    *          in the model
+    * @param messageToOutput message to show in result
+    * @param answerDTO       dto to view
     */
-   private void updateError(CalculatorException e) {
-      setDisable(true);
+   private void updateError(String messageToOutput, AnswerDTO answerDTO) {
+      setOperationButtonsDisable(true);
       mainModel = new ModelBrainImpl();
-      inputFieldNumber.setText(e.getMessage());
+      inputFieldNumber.setText(messageToOutput);
 
-      HistoryLineDTO historyLineDTO = e.getAnswerDTO().getHistoryLineDTO();
-      TailSpecialOperationHistoryDTO lastSpecialOperationStory = e.getAnswerDTO().getTailSpecialOperationHistoryDTO();
+      HistoryLineDTO historyLineDTO = answerDTO.getHistoryLineDTO();
+      TailSpecialOperationHistoryDTO lastSpecialOperationStory = answerDTO.getTailSpecialOperationHistoryDTO();
 
       String historyLineText = historyLineParser.parse(historyLineDTO);
       historyLineText += lastSpecialOperationStoryParser.parse(lastSpecialOperationStory);
       historyLine.setText(historyLineText);
+   }
+
+   /**
+    * method for processing an exception
+    *
+    * @param e exception to process
+    */
+   private void processException(CalculatorException e) {
+      Class exceptionClass = e.getClass();
+      AnswerDTO answerDTO = e.getAnswerDTO();
+
+      if (exceptionClass.equals(UncorrectedDataException.class)) {
+         updateError(INCORRECT_DATA_EXCEPTION_TEXT, answerDTO);
+      } else if (exceptionClass.equals(ZeroDivideException.class)) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDTO);
+      } else if (exceptionClass.equals(ZeroDivideZeroException.class)) {
+         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDTO);
+      }
    }
 
    /**
@@ -594,8 +586,8 @@ public class Controller implements Initializable {
     *
     * @param disable if true - buttons will be blocked. False - unblocked
     */
-   private void setDisable(boolean disable) {
-      enabled = false;
+   private void setOperationButtonsDisable(boolean disable) {
+      enabledOperationButtons = false;
       button_ms.setDisable(disable);
       button_msub.setDisable(disable);
       button_mp.setDisable(disable);

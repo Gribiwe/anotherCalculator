@@ -1,6 +1,7 @@
 package gribiwe.controller.util;
 
 import gribiwe.model.dto.EnteredNumberDTO;
+import gribiwe.model.dto.OutputNumberDTO;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -57,7 +58,6 @@ public class OutputNumberParser {
          pattern.append(".");
       }
       for (int i = 0; i < value.scale(); i++) {
-//      for (int i = 0; i < dto.getRightNumbersLength(); i++) {
          pattern.append("0");
       }
       DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();

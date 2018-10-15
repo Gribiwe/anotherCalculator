@@ -10,8 +10,7 @@ import gribiwe.model.dto.AnswerDTO;
  * @see Exception
  */
 public class CalculatorException extends Exception {
-   //todo kill another exceptions
-   //todo consider about exception structure
+
    /**
     * answer for checking
     * current values of model

@@ -13,7 +13,6 @@ import java.util.List;
  * @author Gribiwe
  */
 public class HistoryLineDTO {
-   //todo consider about keeping info in some history unit object (for killing list of lists and making less history dependency of dto)
    /**
     * list of numbers at history
     */

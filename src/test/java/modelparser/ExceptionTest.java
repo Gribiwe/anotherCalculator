@@ -1,6 +1,5 @@
 package modelparser;
 
-import gribiwe.model.exception.OverflowException;
 import gribiwe.model.exception.UncorrectedDataException;
 import gribiwe.model.exception.ZeroDivideException;
 import gribiwe.model.exception.ZeroDivideZeroException;

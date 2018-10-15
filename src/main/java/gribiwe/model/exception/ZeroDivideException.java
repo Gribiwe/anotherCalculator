@@ -11,16 +11,12 @@ import gribiwe.model.dto.AnswerDTO;
  */
 public class ZeroDivideException extends CalculatorException {
 
-   /**
-    * message of this exception
-    */
-   private static final String DIVIDE_BY_ZERO_EXCEPTION_TEXT = "Деление на ноль невозможно";
 
    /**
     * creates exception with answerDTO inside
     * @param answerDTO current answer dto of model
     */
-   public ZeroDivideException(AnswerDTO answerDTO) {
-      super(DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDTO);
+   public ZeroDivideException(String message, AnswerDTO answerDTO) {
+      super(message, answerDTO);
    }
 }
