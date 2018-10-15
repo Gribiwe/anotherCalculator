@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.LastSpecialOperationHistoryDTO;
+import gribiwe.model.dto.TailSpecialOperationHistoryDTO;
 import gribiwe.model.util.CalculatorMath;
 import gribiwe.model.util.SpecialOperation;
 
@@ -76,9 +76,9 @@ class TailSpecialOperationHistoryImpl implements TailSpecialOperationHistory {
    }
 
    @Override
-   public LastSpecialOperationHistoryDTO getDTO() {
+   public TailSpecialOperationHistoryDTO getDTO() {
       if (number == null) return null;
-      return new LastSpecialOperationHistoryDTO(operations, number);
+      return new TailSpecialOperationHistoryDTO(operations, number);
    }
 
    @Override

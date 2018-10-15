@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.LastSpecialOperationHistoryDTO;
+import gribiwe.model.dto.TailSpecialOperationHistoryDTO;
 import gribiwe.model.util.SpecialOperation;
 
 import java.math.BigDecimal;
@@ -52,7 +52,7 @@ public interface TailSpecialOperationHistory {
     * forms a dto for answering from model
     * @return formed dto
     */
-   LastSpecialOperationHistoryDTO getDTO();
+   TailSpecialOperationHistoryDTO getDTO();
 
    /**
     * calculates a special operations of this tail

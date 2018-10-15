@@ -6,12 +6,37 @@ import gribiwe.model.util.SpecialOperation;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * DTO of history of calculations and numbers \
+ * of calculator
+ *
+ * @author Gribiwe
+ */
 public class HistoryLineDTO {
+   //todo consider about keeping info in some history unit object (for killing list of lists and making less history dependency of dto)
+   /**
+    * list of numbers at history
+    */
+   private final List<BigDecimal> numbers;
 
-   private List<BigDecimal> numbers;
-   private List<SimpleOperation> operations;
-   private List<List<SpecialOperation>> specialOperations;
+   /**
+    * list of operations in history
+    */
+   private final List<SimpleOperation> operations;
 
+   /**
+    * list of lists for special operations of numbers
+    * at history
+    */
+   private final List<List<SpecialOperation>> specialOperations;
+
+   /**
+    * initials of DTO
+    *
+    * @param numbers           numbers at history
+    * @param operations        operations in history
+    * @param specialOperations special operations of numbers at history
+    */
    public HistoryLineDTO(List<BigDecimal> numbers, List<SimpleOperation> operations, List<List<SpecialOperation>> specialOperations) {
       this.numbers = numbers;
       this.operations = operations;

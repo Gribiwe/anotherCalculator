@@ -109,7 +109,7 @@ class TestUtil extends Assert {
 
       String historyLineAtResult;
       historyLineAtResult = historyLineParser.parse(answerDTO.getHistoryLineDTO());
-      historyLineAtResult += lastSpecialOperationStoryParser.parse(answerDTO.getLastSpecialOperationHistoryDTO());
+      historyLineAtResult += lastSpecialOperationStoryParser.parse(answerDTO.getTailSpecialOperationHistoryDTO());
       assertEquals(expectedHistory, historyLineAtResult);
 
       String memoryNumberAtResult;

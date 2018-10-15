@@ -33,11 +33,11 @@ public interface HistoryLine {
     *
     * @param number    number to add
     * @param operation operation to add
-    * @param save      if true - saves last operation
+    * @param saveOperation      if true - saves last operation
     *                  for some requirements
     * @see SimpleOperation
     */
-   void add(BigDecimal number, SimpleOperation operation, boolean save);
+   void add(BigDecimal number, SimpleOperation operation, boolean saveOperation);
 
    /**
     * @return saved number

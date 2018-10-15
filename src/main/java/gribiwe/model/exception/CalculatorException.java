@@ -1,9 +1,6 @@
 package gribiwe.model.exception;
 
 import gribiwe.model.dto.AnswerDTO;
-import gribiwe.model.dto.LastSpecialOperationHistoryDTO;
-import gribiwe.model.dto.HistoryLineDTO;
-import gribiwe.model.dto.OutputNumberDTO;
 
 /**
  * exception class designed to be thrown
@@ -13,7 +10,8 @@ import gribiwe.model.dto.OutputNumberDTO;
  * @see Exception
  */
 public class CalculatorException extends Exception {
-
+   //todo kill another exceptions
+   //todo consider about exception structure
    /**
     * answer for checking
     * current values of model
@@ -22,7 +20,8 @@ public class CalculatorException extends Exception {
 
    /**
     * creates new Calculator exception
-    * @param message message of exception
+    *
+    * @param message   message of exception
     * @param answerDTO current answer dto of model
     */
    public CalculatorException(String message, AnswerDTO answerDTO) {

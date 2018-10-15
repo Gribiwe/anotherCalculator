@@ -67,10 +67,10 @@ class HistoryLineImpl implements HistoryLine {
    }
 
    @Override
-   public void add(BigDecimal number, SimpleOperation operation, boolean save) {
+   public void add(BigDecimal number, SimpleOperation operation, boolean saveOperation) {
       numbers.add(number);
       operations.add(operation);
-      if (save) {
+      if (saveOperation) {
          savedOperation = operation;
       }
       this.specialOperations.add(null);

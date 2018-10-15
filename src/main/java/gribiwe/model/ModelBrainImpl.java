@@ -280,8 +280,8 @@ public class ModelBrainImpl implements ModelBrain {
     *
     * @param operation new operation to process
     * @throws ZeroDivideZeroException if tries to
-    *                                 divide zero by zero
-    * @throws ZeroDivideException     if tries to divide any number (not zero) by zero
+    *                        deException     if tries to divide any n         divide zero by zero
+    *     * @throws ZeroDiviumber (not zero) by zero
     */
    private void doOperationWithBuiltOrEqualsOrMemoryNumber(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException {
       BigDecimal numberToHistory = getNumberFromBuildingOrResultNumber();
@@ -432,8 +432,7 @@ public class ModelBrainImpl implements ModelBrain {
     */
    private void verifyZeroDividingByZero(BigDecimal divisor, SimpleOperation operation) throws ZeroDivideZeroException {
       SimpleOperation lastOperation = historyLine.getLastOperation();
-      if (lastOperation != null && isZero(historyLine.calculate()) && // TODO: 12.10.2018 Make If() simple
-              lastOperation == DIVIDE && isZero(divisor)) {
+      if (lastOperation == DIVIDE && isZero(historyLine.calculate()) && isZero(divisor)) {
          if (operation != null) {
             historyLine.add(divisor, operation, false);
          }
@@ -483,7 +482,8 @@ public class ModelBrainImpl implements ModelBrain {
     * @throws ZeroDivideException if tries to divide by zero
     */
    private void verifyOneDivX(SpecialOperation operation) throws ZeroDivideException {
-      if (isZero(tailSpecialOperationHistory.calculate()) && operation == ONE_DIV_X) {
+      BigDecimal tailCalculationResult = tailSpecialOperationHistory.calculate();
+      if (isZero(tailCalculationResult) && operation == ONE_DIV_X) {
          tailSpecialOperationHistory.addOperation(operation);
          throw new ZeroDivideException(formAnswer());
       }
@@ -498,7 +498,8 @@ public class ModelBrainImpl implements ModelBrain {
     * @throws UncorrectedDataException if tries to root negate number
     */
    private void verifyRootOfNegatedNumberInNextSpecialOperation(SpecialOperation operation) throws UncorrectedDataException {
-      if (isLessThenZero(tailSpecialOperationHistory.calculate()) && operation == ROOT) {
+      BigDecimal tailCalculationResult = tailSpecialOperationHistory.calculate();
+      if (isLessThenZero(tailCalculationResult) && operation == ROOT) {
          tailSpecialOperationHistory.addOperation(operation);
          throw new UncorrectedDataException(formAnswer());
       }

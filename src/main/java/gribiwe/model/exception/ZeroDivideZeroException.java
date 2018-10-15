@@ -1,9 +1,6 @@
 package gribiwe.model.exception;
 
 import gribiwe.model.dto.AnswerDTO;
-import gribiwe.model.dto.LastSpecialOperationHistoryDTO;
-import gribiwe.model.dto.HistoryLineDTO;
-import gribiwe.model.dto.OutputNumberDTO;
 
 /**
  * CalculatorException class designed to be thrown

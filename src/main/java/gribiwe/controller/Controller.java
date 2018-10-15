@@ -554,7 +554,7 @@ public class Controller implements Initializable {
          inputFieldNumber.setText(outputNumber);
 
          String historyLineText = historyLineParser.parse(answerDTO.getHistoryLineDTO());
-         historyLineText += lastSpecialOperationStoryParser.parse(answerDTO.getLastSpecialOperationHistoryDTO());
+         historyLineText += lastSpecialOperationStoryParser.parse(answerDTO.getTailSpecialOperationHistoryDTO());
          historyLine.setText(historyLineText);
 
          if (answerDTO.getMemoryDTO().isEnable()) {
@@ -581,7 +581,7 @@ public class Controller implements Initializable {
       inputFieldNumber.setText(e.getMessage());
 
       HistoryLineDTO historyLineDTO = e.getAnswerDTO().getHistoryLineDTO();
-      LastSpecialOperationHistoryDTO lastSpecialOperationStory = e.getAnswerDTO().getLastSpecialOperationHistoryDTO();
+      TailSpecialOperationHistoryDTO lastSpecialOperationStory = e.getAnswerDTO().getTailSpecialOperationHistoryDTO();
 
       String historyLineText = historyLineParser.parse(historyLineDTO);
       historyLineText += lastSpecialOperationStoryParser.parse(lastSpecialOperationStory);
