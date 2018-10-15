@@ -52,6 +52,7 @@ public class LastSpecialOperationStoryParser {
       if (tailSpecialOperationHistoryDTO == null) {
          return "";
       }
+
       BigDecimal number = tailSpecialOperationHistoryDTO.getNumber();
       List<SpecialOperation> operations = tailSpecialOperationHistoryDTO.getOperations();
       return parse(number, operations);

@@ -1,7 +1,6 @@
 package gribiwe.controller.util;
 
 import gribiwe.model.dto.EnteredNumberDTO;
-import gribiwe.model.dto.OutputNumberDTO;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -17,24 +16,50 @@ import java.text.DecimalFormatSymbols;
 public class OutputNumberParser {
 
    /**
+    * decimal pattern for number with
+    * exponent and one symbol before point
+    */
+   private final static String PATTERN_POINTED_EXPONENT_VALUE = "0.###############E0";
+
+   /**
+    * decimal pattern for non-decimal number
+    * without exponent and point
+    */
+   private final static String PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE = "################";
+
+   /**
+    * decimal point for number with only
+    * one symbol after point
+    * without exponent
+    */
+   private final static String PATTERN_ONE_SYMBOL_AFTER_POINT_NOT_EXPONENT_VALUE = "###############.0";
+
+   /**
+    * decimal patter for number with
+    * one digit before point before point
+    * without exponent
+    */
+   private final static String PATTERN_POINTED_NOT_EXPONENT_VALUE = "#.################";
+
+   /**
     * method for adding spaces to parsed number
     *
-    * @param origin string value of parsed number
+    * @param original string value of parsed number
     * @return parsed number with spaces
     */
-   private String addSpaces(String origin) {
+   private String addSpaces(String original) {
       String leftOfPoint;
-      if (origin.contains(",")) {
-         leftOfPoint = origin.substring(0, origin.indexOf(","));
-         origin = origin.substring(origin.indexOf(","));
+      if (original.contains(",")) {
+         leftOfPoint = original.substring(0, original.indexOf(","));
+         original = original.substring(original.indexOf(","));
       } else {
-         leftOfPoint = origin;
-         origin = "";
+         leftOfPoint = original;
+         original = "";
       }
       for (int i = leftOfPoint.length() - 3; i > 0; i -= 3) {
          leftOfPoint = leftOfPoint.substring(0, i) + " " + leftOfPoint.substring(i);
       }
-      return leftOfPoint + origin;
+      return leftOfPoint + original;
    }
 
    /**
@@ -46,11 +71,9 @@ public class OutputNumberParser {
     */
    public String formatInput(EnteredNumberDTO dto) {
       String minus = "";
-
       if (dto.isNegated()) {
          minus = "-";
       }
-
       BigDecimal value = dto.getValue().abs();
       StringBuilder pattern;
       pattern = new StringBuilder("0");
@@ -60,12 +83,8 @@ public class OutputNumberParser {
       for (int i = 0; i < value.scale(); i++) {
          pattern.append("0");
       }
-      DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
-      decimalFormatSymbols.setGroupingSeparator(' ');
-      decimalFormatSymbols.setDecimalSeparator(',');
-      DecimalFormat myFormatter = new DecimalFormat(pattern.toString(), decimalFormatSymbols);
-      myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-      return minus + addSpaces(myFormatter.format(value));
+      String formatResult = formatWithFormatter(pattern.toString(), value);
+      return minus + addSpaces(formatResult);
    }
 
    /**
@@ -95,103 +114,125 @@ public class OutputNumberParser {
     * method for parsing a BigDecimal value
     * it's can be really big or small values with exponents
     *
-    * @param value number to parse
+    * @param value number to parse, must be not negated
     * @return parsed number
     */
    private String formatResult(BigDecimal value) {
-
+      String toReturn;
       if (value.compareTo(BigDecimal.ZERO) == 0) {
-         return "0";
-      }
-      long localLeftOfPoint;
-      String leftValue;
-      String rightValue;
-
-      if (value.toBigInteger().compareTo(BigInteger.ONE) >= 0) {
-         leftValue = value.toBigInteger().toString();
-         if (leftValue.length() > 16) {
-            String pattern = "0.###############E0";
-            DecimalFormat myFormatter = new DecimalFormat(pattern);
-            myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            String output = myFormatter.format(value);
-            if (output.contains(",")) {
-               output = output.replaceAll("E", "e+");
-            } else {
-               output = output.replaceAll("E", ",e+");
-            }
-            return output;
-         } else if (new BigDecimal(value.toBigInteger().toString()).subtract(cut(value)).compareTo(BigDecimal.ZERO) == 0) {
-            String pattern = "################";
-            DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
-            decimalFormatSymbols.setDecimalSeparator(',');
-            decimalFormatSymbols.setGroupingSeparator(' ');
-            DecimalFormat myFormatter = new DecimalFormat(pattern, decimalFormatSymbols);
-            myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            return myFormatter.format(value);
-         } else {
-            localLeftOfPoint = Long.parseLong(leftValue);
-            rightValue = value.toPlainString().substring(value.toPlainString().indexOf(".") + 1);
-            StringBuilder pattern = new StringBuilder("###############.0");
-            DecimalFormat myFormatter = new DecimalFormat(pattern.toString());
-            myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            String output = myFormatter.format(new BigDecimal(localLeftOfPoint + "." + rightValue));
-            int outputIntegerValueSize = output.substring(0, output.indexOf(",")).length();
-
-            pattern = new StringBuilder();
-            for (int i = 0; i < outputIntegerValueSize; i++) {
-               pattern.append("#");
-            }
-            pattern.append(".");
-            for (int i = 0; i < 16 - outputIntegerValueSize; i++) {
-               pattern.append("#");
-            }
-
-            myFormatter = new DecimalFormat(pattern.toString());
-            myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            return myFormatter.format(new BigDecimal(localLeftOfPoint + "." + rightValue));
-         }
+         toReturn = "0";
+      } else if (value.toBigInteger().compareTo(BigInteger.ONE) >= 0) {
+         toReturn = parseResultBiggerOrEqualsOne(value);
       } else {
-         String allValue = value.toPlainString();
-         allValue = allValue.substring(allValue.indexOf(".") + 1);
+         toReturn = parseResultLessOne(value);
+      }
+      return toReturn;
+   }
 
-         int indexOfNormNumber = -1;
-         for (int i = 0; i < allValue.length(); i++) {
-            if (allValue.charAt(i) != '0') {
-               indexOfNormNumber = i;
-               break;
-            }
+   /**
+    * method for parsing result value
+    * bigger or equals to one
+    *
+    * @param value parsing number
+    * @return parsed string value
+    */
+   private String parseResultBiggerOrEqualsOne(BigDecimal value) {
+      String leftValue = value.toBigInteger().toString();
+      String toReturn;
+      if (leftValue.length() > 16) {
+         toReturn = formatWithFormatter(PATTERN_POINTED_EXPONENT_VALUE, value);
+      } else if (new BigDecimal(value.toBigInteger().toString()).subtract(cut(value)).compareTo(BigDecimal.ZERO) == 0) {
+         toReturn = formatWithFormatter(PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE, value);
+      } else {
+         StringBuilder pattern = new StringBuilder(PATTERN_ONE_SYMBOL_AFTER_POINT_NOT_EXPONENT_VALUE);
+         String formattedValue = formatWithFormatter(pattern.toString(), value);
+         int outputIntegerValueSize = formattedValue.substring(0, formattedValue.indexOf(",")).length();
+
+         pattern = new StringBuilder();
+         for (int i = 0; i < outputIntegerValueSize; i++) {
+            pattern.append("#");
          }
-
-         int indexOfLastNormNumber = indexOfNormNumber;
-         int zeroCount = 0;
-         for (int i = indexOfNormNumber; i < allValue.length() && zeroCount < 15; i++) {
-            if (allValue.charAt(i) != '0') {
-               indexOfLastNormNumber = i;
-               zeroCount = 0;
-            } else {
-               zeroCount++;
-            }
+         pattern.append(".");
+         for (int i = 0; i < 16 - outputIntegerValueSize; i++) {
+            pattern.append("#");
          }
+         toReturn = formatWithFormatter(pattern.toString(), value);
+      }
+      return toReturn;
+   }
 
-         if ((indexOfNormNumber > 2 && indexOfLastNormNumber >= indexOfNormNumber + 16) ||
-                 indexOfNormNumber + 1 == 17 && indexOfLastNormNumber >= indexOfNormNumber ||
-                 indexOfNormNumber + 1 > 17) {
-            String pattern = "#.###############E0";
-            DecimalFormat myFormatter = new DecimalFormat(pattern);
-            myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            String output = myFormatter.format(value);
-            output = output.replaceAll("E", "e");
-            if (!output.contains(",")) {
-               output = output.replace("e", ",e");
-            }
-            return output;
-         } else {
-            String pattern = "#.################";
-            DecimalFormat myFormatter = new DecimalFormat(pattern);
-            myFormatter.setRoundingMode(RoundingMode.HALF_UP);
-            return myFormatter.format(value);
+   /**
+    * method for parsing result
+    * number less then one.
+    * finds non-zero digits at decimal
+    * number and moving them to start with
+    * negative exponent (if needs)
+    *
+    * @param value parsing number
+    * @return parsed string value
+    */
+   private String parseResultLessOne(BigDecimal value) {
+      String allValue = value.toPlainString();
+      allValue = allValue.substring(allValue.indexOf(".") + 1);
+
+      int indexOfNotZeroNumber = -1;
+      for (int i = 0; i < allValue.length(); i++) {
+         if (allValue.charAt(i) != '0') {
+            indexOfNotZeroNumber = i;
+            break;
          }
       }
+
+      int indexOfLastNormNumber = indexOfNotZeroNumber;
+      int zeroCount = 0;
+      for (int i = indexOfNotZeroNumber; i < allValue.length() && zeroCount < 15; i++) {
+         if (allValue.charAt(i) != '0') {
+            indexOfLastNormNumber = i;
+            zeroCount = 0;
+         } else {
+            zeroCount++;
+         }
+      }
+      String toReturn;
+      if ((indexOfNotZeroNumber > 2 && indexOfLastNormNumber >= indexOfNotZeroNumber + 16) ||
+              indexOfNotZeroNumber + 1 == 17 && indexOfLastNormNumber >= indexOfNotZeroNumber ||
+              indexOfNotZeroNumber + 1 > 17) {
+         toReturn = formatWithFormatter(PATTERN_POINTED_EXPONENT_VALUE, value);
+
+      } else {
+         toReturn = formatWithFormatter(PATTERN_POINTED_NOT_EXPONENT_VALUE, value);
+      }
+      return toReturn;
+   }
+
+   /**
+    * formats string value of decimal
+    * with formatter
+    *
+    * @param pattern formatting pattern
+    * @param value   number to format
+    * @return string of formatted number
+    */
+   private String formatWithFormatter(String pattern, BigDecimal value) {
+      DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+      decimalFormatSymbols.setDecimalSeparator(',');
+      decimalFormatSymbols.setGroupingSeparator(' ');
+      decimalFormatSymbols.setExponentSeparator("e");
+
+      DecimalFormat myFormatter = new DecimalFormat(pattern, decimalFormatSymbols);
+      myFormatter.setRoundingMode(RoundingMode.HALF_UP);
+
+      String output = myFormatter.format(value);
+      if (!output.contains("e-")) {
+         if (output.contains(",")) {
+            output = output.replaceAll("e", "e+");
+         } else {
+            output = output.replaceAll("e", ",e+");
+         }
+      } else if (!output.contains(",")) {
+         output = output.replaceAll("e", ",e");
+      }
+      return output;
    }
 
    /**

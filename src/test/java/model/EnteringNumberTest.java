@@ -70,8 +70,6 @@ class EnteringNumberTest extends Assert {
 
       enteringNumber.negate();
       assertEquals("-1 234 567 890", outputNumberParser.formatInput(enteringNumber.getNumberDTO()));
-      System.out.println(enteringNumber.getNumber());
-      System.out.println(-1234567890);
       assertEquals(0, BigDecimal.valueOf(-1234567890).compareTo(enteringNumber.getNumber()));
 
       enteringNumber.negate();
