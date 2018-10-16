@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.HistoryLineDTO;
+import gribiwe.model.dto.HistoryLineDto;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
 
@@ -61,9 +61,9 @@ public interface HistoryLine {
     * forms dto for answering from model
     *
     * @return dto of history line
-    * @see HistoryLineDTO
+    * @see HistoryLineDto
     */
-   HistoryLineDTO getHistoryLineDTO();
+   HistoryLineDto getHistoryLineDTO();
 
    /**
     * changing the last operation

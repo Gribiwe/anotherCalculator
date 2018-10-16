@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.EnteredNumberDTO;
+import gribiwe.model.dto.EnteredNumberDto;
 import gribiwe.model.util.Digit;
 
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ import java.math.RoundingMode;
  *
  * @author Gribiwe
  * @see EnteringNumber
- * @see EnteredNumberDTO
+ * @see EnteredNumberDto
  */
 public class EnteringNumberImpl implements EnteringNumber {
 
@@ -73,7 +73,8 @@ public class EnteringNumberImpl implements EnteringNumber {
          }
       }
    }
-
+//todo когда понадобится другая реализация.
+//todo сделать такую реализацию (с помощью инт-са) которой0
    @Override
    public void addPoint() {
       needPoint = true;
@@ -124,12 +125,12 @@ public class EnteringNumberImpl implements EnteringNumber {
    }
 
    @Override
-   public EnteredNumberDTO getNumberDTO() {
+   public EnteredNumberDto getNumberDTO() {
       BigDecimal numberToReturn = number;
       if (needNegate) {
          numberToReturn = numberToReturn.negate();
       }
-      return new EnteredNumberDTO(numberToReturn, needPoint, needNegate);
+      return new EnteredNumberDto(numberToReturn, needPoint, needNegate);
    }
 
    /**

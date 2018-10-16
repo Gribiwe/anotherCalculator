@@ -1,6 +1,6 @@
 package gribiwe.controller.util;
 
-import gribiwe.model.dto.EnteredNumberDTO;
+import gribiwe.model.dto.EnteredNumberDto;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -9,11 +9,64 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 /**
- * class for parsing {@code OutputNumberDTO} to string value
+ * class for parsing {@code OutputNumberDto} to string value
  *
  * @author Gribiwe
  */
 public class OutputNumberParser {
+
+   /**
+    * max scale size for cutting BigDecimal value
+    */
+   private static final int SCALE_SIZE = 10000;
+
+   /**
+    * method for parsing a value of {@code OutputNumberDto} which appeared
+    * by user's input
+    *
+    * @param dto {@code OutputNumberDto} to parse
+    * @return string value of {@code OutputNumberDto}
+    */
+   public String formatInput(EnteredNumberDto dto) {
+      String minus = "";
+      if (dto.isNegated()) {
+         minus = "-";
+      }
+      BigDecimal value = dto.getValue().abs();
+      StringBuilder pattern;
+      pattern = new StringBuilder("0");
+      if (dto.isPointed()) {
+         pattern.append(".");
+      }
+      for (int i = 0; i < value.scale(); i++) {
+         pattern.append("0");
+      }
+      String formatResult = formatWithFormatter(pattern.toString(), value);
+      return minus + addSpaces(formatResult);
+   }
+
+   /**
+    * method for parsing a BigDecimal value
+    * it's can be really big or small values with exponents
+    *
+    * @param value      number to parse
+    * @param needSpaces if true string will be
+    *                   with group separate spaces
+    * @return parsed number
+    */
+   public String formatResult(BigDecimal value, boolean needSpaces) {
+      String minus = "";
+
+      if (value.compareTo(BigDecimal.ZERO) < 0) {
+         minus = "-";
+      }
+
+      String result = formatResult(value.abs());
+      if (needSpaces) {
+         result = addSpaces(result);
+      }
+      return minus + result;
+   }
 
    /**
     * decimal pattern for number with
@@ -60,54 +113,6 @@ public class OutputNumberParser {
          leftOfPoint = leftOfPoint.substring(0, i) + " " + leftOfPoint.substring(i);
       }
       return leftOfPoint + original;
-   }
-
-   /**
-    * method for parsing a value of {@code OutputNumberDTO} which appeared
-    * by user's input
-    *
-    * @param dto {@code OutputNumberDTO} to parse
-    * @return string value of {@code OutputNumberDTO}
-    */
-   public String formatInput(EnteredNumberDTO dto) {
-      String minus = "";
-      if (dto.isNegated()) {
-         minus = "-";
-      }
-      BigDecimal value = dto.getValue().abs();
-      StringBuilder pattern;
-      pattern = new StringBuilder("0");
-      if (dto.isPointed()) {
-         pattern.append(".");
-      }
-      for (int i = 0; i < value.scale(); i++) {
-         pattern.append("0");
-      }
-      String formatResult = formatWithFormatter(pattern.toString(), value);
-      return minus + addSpaces(formatResult);
-   }
-
-   /**
-    * method for parsing a BigDecimal value
-    * it's can be really big or small values with exponents
-    *
-    * @param value      number to parse
-    * @param needSpaces if true string will be
-    *                   with group separate spaces
-    * @return parsed number
-    */
-   public String formatResult(BigDecimal value, boolean needSpaces) {
-      String minus = "";
-
-      if (value.compareTo(BigDecimal.ZERO) < 0) {
-         minus = "-";
-      }
-
-      String result = formatResult(value.abs());
-      if (needSpaces) {
-         result = addSpaces(result);
-      }
-      return minus + result;
    }
 
    /**
@@ -243,8 +248,8 @@ public class OutputNumberParser {
     */
    private BigDecimal cut(BigDecimal a) {
       String aStr = a.toPlainString();
-      if (aStr.length() > 10000) {
-         return new BigDecimal(aStr.substring(0, 10001));
+      if (aStr.length() > SCALE_SIZE) {
+         return new BigDecimal(aStr.substring(0, SCALE_SIZE));
       } else {
          return a;
       }

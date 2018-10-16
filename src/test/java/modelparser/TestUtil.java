@@ -1,13 +1,14 @@
 package modelparser;
 
-import gribiwe.controller.util.LastSpecialOperationStoryParser;
 import gribiwe.controller.util.HistoryLineParser;
+import gribiwe.controller.util.LastSpecialOperationStoryParser;
 import gribiwe.controller.util.OutputNumberParser;
+import gribiwe.model.EnteringNumberImpl;
 import gribiwe.model.ModelBrain;
 import gribiwe.model.ModelBrainImpl;
-import gribiwe.model.dto.AnswerDTO;
-import gribiwe.model.dto.EnteredNumberDTO;
-import gribiwe.model.dto.OutputNumberDTO;
+import gribiwe.model.dto.AnswerDto;
+import gribiwe.model.dto.EnteredNumberDto;
+import gribiwe.model.dto.OutputNumberDto;
 import gribiwe.model.exception.CalculatorException;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.SimpleOperation;
@@ -15,7 +16,8 @@ import gribiwe.model.util.SpecialOperation;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 
-import static gribiwe.model.util.MemoryOperation.*;
+import static gribiwe.model.util.MemoryOperation.ADD;
+import static gribiwe.model.util.MemoryOperation.SUBTRACT;
 
 /**
  * Util class for testing parsed model values
@@ -34,7 +36,7 @@ class TestUtil extends Assert {
     * makes initialization of main model
     */
    TestUtil() {
-      mainModel = new ModelBrainImpl();
+      mainModel = new ModelBrainImpl(new EnteringNumberImpl());
    }
 
    /**
@@ -61,7 +63,7 @@ class TestUtil extends Assert {
     * @param <T>            any throwable object
     */
    <T extends Throwable> void doExceptionTest(String actionSequence, Class<T> expected) {
-      mainModel = new ModelBrainImpl();
+      mainModel.clearModel();
       Assertions.assertThrows(expected, () -> {
          for (String command : actionSequence.split(" ")) {
             emulate(command);
@@ -80,40 +82,40 @@ class TestUtil extends Assert {
     * @param expectedMemory       value of expected memory value
     */
    void doTest(String actionSequence, String expectedOutputNumber, String expectedHistory, String expectedMemory) {
-      mainModel = new ModelBrainImpl();
-      AnswerDTO answerDTO = null;
+      mainModel = new ModelBrainImpl(new EnteringNumberImpl());
+      AnswerDto answerDto = null;
 
       HistoryLineParser historyLineParser = new HistoryLineParser();
       LastSpecialOperationStoryParser lastSpecialOperationStoryParser = new LastSpecialOperationStoryParser();
 
       for (String command : actionSequence.split(" ")) {
          try {
-            answerDTO = emulate(command);
+            answerDto = emulate(command);
          } catch (CalculatorException e) {
             fail("Unexpected exception in test: \n");
             e.printStackTrace();
          }
       }
 
-      assertNotNull("mistake at action sequence", answerDTO);
+      assertNotNull("mistake at action sequence", answerDto);
       OutputNumberParser outputNumberParser = new OutputNumberParser();
 
-      OutputNumberDTO outputNumberDTO = answerDTO.getOutputNumberDTO();
+      OutputNumberDto outputNumberDto = answerDto.getOutputNumberDto();
       String outputNumberAtResult;
-      if (outputNumberDTO.getClass().equals(EnteredNumberDTO.class)) {
-         outputNumberAtResult = outputNumberParser.formatInput((EnteredNumberDTO) answerDTO.getOutputNumberDTO());
+      if (outputNumberDto.getClass().equals(EnteredNumberDto.class)) {
+         outputNumberAtResult = outputNumberParser.formatInput((EnteredNumberDto) answerDto.getOutputNumberDto());
       } else {
-         outputNumberAtResult = outputNumberParser.formatResult(outputNumberDTO.getValue(), true);
+         outputNumberAtResult = outputNumberParser.formatResult(outputNumberDto.getValue(), true);
       }
       assertEquals(expectedOutputNumber, outputNumberAtResult);
 
       String historyLineAtResult;
-      historyLineAtResult = historyLineParser.parse(answerDTO.getHistoryLineDTO());
-      historyLineAtResult += lastSpecialOperationStoryParser.parse(answerDTO.getTailSpecialOperationHistoryDTO());
+      historyLineAtResult = historyLineParser.parse(answerDto.getHistoryLineDto());
+      historyLineAtResult += lastSpecialOperationStoryParser.parse(answerDto.getTailSpecialOperationHistoryDto());
       assertEquals(expectedHistory, historyLineAtResult);
 
       String memoryNumberAtResult;
-      memoryNumberAtResult = outputNumberParser.formatResult(answerDTO.getMemoryDTO().getMemoryNumber(), true);
+      memoryNumberAtResult = outputNumberParser.formatResult(answerDto.getMemoryDto().getMemoryNumber(), true);
       assertEquals(expectedMemory, memoryNumberAtResult);
    }
 
@@ -128,7 +130,7 @@ class TestUtil extends Assert {
     *                             of negative value, dividing by
     *                             zero or zero was divided by zero
     */
-   private AnswerDTO emulate(String section) throws CalculatorException {
+   private AnswerDto emulate(String section) throws CalculatorException {
       if (section.equals("/")) {
          return mainModel.doOperation(SimpleOperation.DIVIDE);
       } else if (section.equals("*")) {
@@ -179,7 +181,7 @@ class TestUtil extends Assert {
     *                             of negative value, dividing by
     *                             zero or zero was divided by zero
     */
-   private AnswerDTO emulate(Character character) throws CalculatorException {
+   private AnswerDto emulate(Character character) throws CalculatorException {
       if (character == ',') {
          return mainModel.addPoint();
       } else if (character == '0') {
@@ -216,7 +218,7 @@ class TestUtil extends Assert {
     *                             of negative value, dividing by
     *                             zero or zero was divided by zero
     */
-   private AnswerDTO enterNumber(String number) throws CalculatorException {
+   private AnswerDto enterNumber(String number) throws CalculatorException {
       for (int i = 0; i < number.length() - 1; i++) {
          char character = number.charAt(i);
          emulate(character);

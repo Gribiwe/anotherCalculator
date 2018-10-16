@@ -1,11 +1,13 @@
 package model;
 
+import gribiwe.model.EnteringNumberImpl;
 import gribiwe.model.ModelBrain;
 import gribiwe.model.ModelBrainImpl;
-import gribiwe.model.dto.AnswerDTO;
-import gribiwe.model.dto.OutputNumberDTO;
+import gribiwe.model.dto.AnswerDto;
+import gribiwe.model.dto.OutputNumberDto;
 import gribiwe.model.exception.CalculatorException;
 import gribiwe.model.util.Digit;
+import gribiwe.model.util.MemoryOperation;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
 import org.junit.Assert;
@@ -29,7 +31,7 @@ public class ModelTest extends Assert {
     */
    @BeforeAll
    static void setup() {
-      mainModel = new ModelBrainImpl();
+      mainModel = new ModelBrainImpl(new EnteringNumberImpl());
    }
 
    /**
@@ -38,7 +40,7 @@ public class ModelTest extends Assert {
     */
    @Test
    void testModel() {
-      AnswerDTO answerDTO;
+      AnswerDto answerDto;
       try {
          mainModel.addDigit(Digit.THREE);
          mainModel.doOperation(SimpleOperation.MULTIPLY);
@@ -51,13 +53,36 @@ public class ModelTest extends Assert {
          mainModel.doOperation(SimpleOperation.SUBTRACT);
          mainModel.addDigit(Digit.ONE);
          mainModel.doEquals();
-         answerDTO = mainModel.doSpecialOperation(SpecialOperation.ROOT);
+         answerDto = mainModel.doSpecialOperation(SpecialOperation.ROOT);
       } catch (CalculatorException e) {
          System.out.println(e.getMessage());
          return;
       }
-      OutputNumberDTO outputNumberDTO = answerDTO.getOutputNumberDTO();
-      assertEquals(0, outputNumberDTO.getValue().compareTo(BigDecimal.valueOf(3)));
+      OutputNumberDto outputNumberDto = answerDto.getOutputNumberDto();
+      assertEquals(0, outputNumberDto.getValue().compareTo(BigDecimal.valueOf(3)));
+   }
+
+   @Test
+   void testModel2() {
+      // TODO: 16.10.2018 work with memory
+      // TODO: sqr 100 times
+      AnswerDto answerDto;
+      try {
+         mainModel.addDigit(Digit.THREE);
+         mainModel.addDigit(Digit.TWO);
+         mainModel.addDigit(Digit.FIVE);
+         mainModel.addDigit(Digit.ONE);
+         mainModel.addDigit(Digit.ZERO);
+         answerDto = mainModel.operateMemory(MemoryOperation.ADD);
+         System.out.println("memory is "+ answerDto.getMemoryDto().getMemoryNumber());
+         answerDto = mainModel.operateMemory(MemoryOperation.SUBTRACT);
+         System.out.println("memory is "+ answerDto.getMemoryDto().getMemoryNumber());
+         answerDto = mainModel.operateMemory(MemoryOperation.SUBTRACT);
+         System.out.println("memory is "+ answerDto.getMemoryDto().getMemoryNumber());
+         mainModel.operateMemory(null);
+      } catch (NullPointerException e) {
+         System.out.println(e.getMessage());
+      }
    }
 
    /**
@@ -70,14 +95,14 @@ public class ModelTest extends Assert {
       Digit b = Digit.ZERO;
       SimpleOperation c = SimpleOperation.DIVIDE;
 
-      AnswerDTO answerDTO;
+      AnswerDto answerDto;
       try {
          mainModel.addDigit(a);
          mainModel.doOperation(c);
          mainModel.addDigit(b);
-         answerDTO = mainModel.doEquals();
-         OutputNumberDTO outputNumberDTO = answerDTO.getOutputNumberDTO();
-         System.out.println(outputNumberDTO.getValue());
+         answerDto = mainModel.doEquals();
+         OutputNumberDto outputNumberDto = answerDto.getOutputNumberDto();
+         System.out.println(outputNumberDto.getValue());
       } catch (CalculatorException e) {
          System.out.println(e.getMessage());
       }

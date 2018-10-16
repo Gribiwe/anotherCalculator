@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  *
  * @author Gribiwe
  */
-public class MemoryDTO {
+public class MemoryDto {
 
    /**
     * number of memory
@@ -25,7 +25,7 @@ public class MemoryDTO {
     * @param memoryNumber current number of memory
     * @param enable       is memory activated
     */
-   public MemoryDTO(BigDecimal memoryNumber, boolean enable) {
+   public MemoryDto(BigDecimal memoryNumber, boolean enable) {
       this.memoryNumber = memoryNumber;
       this.enable = enable;
    }

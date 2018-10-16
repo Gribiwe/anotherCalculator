@@ -138,10 +138,12 @@ class MenuTest extends UITest {
    private void checkExists(boolean shouldBeExist) {
       for (int retry = 0; retry < RETRY_COUNT && WindowUtil.isNodeExists("#invisibleMenuArea") != shouldBeExist; retry++) {
          RobotUtil.sleep(MILLISECONDS_FOR_RETRY);
+         System.out.println("deb "+retry);
       }
 
       for (int retry = 0; retry < RETRY_COUNT && WindowUtil.isNodeExists("#menu") != shouldBeExist; retry++) {
          RobotUtil.sleep(MILLISECONDS_FOR_RETRY);
+
       }
       assertEquals(shouldBeExist, WindowUtil.isNodeExists("#invisibleMenuArea"));
       assertEquals(shouldBeExist, WindowUtil.isNodeExists("#menu"));

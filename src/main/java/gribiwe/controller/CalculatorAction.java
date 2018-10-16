@@ -1,6 +1,6 @@
 package gribiwe.controller;
 
-import gribiwe.model.dto.AnswerDTO;
+import gribiwe.model.dto.AnswerDto;
 import gribiwe.model.exception.CalculatorException;
 
 /**
@@ -11,5 +11,5 @@ import gribiwe.model.exception.CalculatorException;
  */
 @FunctionalInterface
 public interface CalculatorAction {
-   AnswerDTO doAction() throws CalculatorException;
+   AnswerDto doAction() throws CalculatorException;
 }

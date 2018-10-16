@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  *
  * @author Gribiwe
  */
-public class OutputNumberDTO {
+public class OutputNumberDto {
 
    /**
     * number to show
@@ -19,7 +19,7 @@ public class OutputNumberDTO {
     *
     * @param value current number to show
     */
-   public OutputNumberDTO(BigDecimal value) {
+   public OutputNumberDto(BigDecimal value) {
       this.value = value;
    }
 

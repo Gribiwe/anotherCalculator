@@ -1,6 +1,6 @@
 package gribiwe.model.exception;
 
-import gribiwe.model.dto.AnswerDTO;
+import gribiwe.model.dto.AnswerDto;
 
 /**
  * CalculatorException class designed to be thrown
@@ -12,10 +12,10 @@ import gribiwe.model.dto.AnswerDTO;
 public class UncorrectedDataException extends CalculatorException {
 
    /**
-    * creates exception with answerDTO inside
-    * @param answerDTO current answer dto of model
+    * creates exception with answerDto inside
+    * @param answerDto current answer dto of model
     */
-   public UncorrectedDataException(String message, AnswerDTO answerDTO) {
-      super(message, answerDTO);
+   public UncorrectedDataException(String message, AnswerDto answerDto) {
+      super(message, answerDto);
    }
 }

@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.MemoryDTO;
+import gribiwe.model.dto.MemoryDto;
 import gribiwe.model.util.MemoryOperation;
 
 import java.math.BigDecimal;
@@ -55,8 +55,8 @@ class MemoryImpl implements Memory {
    }
 
    @Override
-   public MemoryDTO getDTO() {
-      return new MemoryDTO(number, enable);
+   public MemoryDto getDTO() {
+      return new MemoryDto(number, enable);
    }
 
 }

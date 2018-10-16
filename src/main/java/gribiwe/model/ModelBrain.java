@@ -1,9 +1,8 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.AnswerDTO;
+import gribiwe.model.dto.AnswerDto;
 import gribiwe.model.exception.CalculatorException;
-import gribiwe.model.exception.ZeroDivideException;
-import gribiwe.model.exception.ZeroDivideZeroException;
+import gribiwe.model.exception.OverflowException;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.MemoryOperation;
 import gribiwe.model.util.SimpleOperation;
@@ -25,27 +24,27 @@ public interface ModelBrain {
     * @return answer from model with
     * info about number at number field, history, memory.
     */
-   AnswerDTO deleteAllDigitsAndHistory();
+   AnswerDto deleteAllDigitsAndHistory();
 
    /**
     * method for addition new digit to input
     *
     * @return answer from model with
     * info about number at number field, history, memory.
-    * @throws CalculatorException if digit is null
+    * @throws NullPointerException if digit is null
     */
-   AnswerDTO addDigit(Digit digit) throws CalculatorException;
+   AnswerDto addDigit(Digit digit) throws NullPointerException;
 
    /**
     * method for adding new operation to history
     *
     * @return answer from model with
     * info about number at number field, history, memory.
-    * @throws CalculatorException if operation is null
-    *                             or was trying to divide number (not zero) by zero
-    *                             or was trying to divide zero by zero
+    * @throws CalculatorException  if was trying to divide number (not zero) by zero
+    *                              or was trying to divide zero by zero
+    * @throws NullPointerException if operation is null
     */
-   AnswerDTO doOperation(SimpleOperation operation) throws CalculatorException;
+   AnswerDto doOperation(SimpleOperation operation) throws CalculatorException, NullPointerException;
 
    /**
     * method for adding operation percent
@@ -53,7 +52,7 @@ public interface ModelBrain {
     * @return answer from model with
     * info about number at number field, history, memory.
     */
-   AnswerDTO doPercent();
+   AnswerDto doPercent() throws OverflowException;
 
    /**
     * method for calculation an equals result of calculator
@@ -63,18 +62,18 @@ public interface ModelBrain {
     * @throws CalculatorException if was trying to divide number (not zero) by zero
     *                             or was trying to divide zero by zero
     */
-   AnswerDTO doEquals() throws CalculatorException;
+   AnswerDto doEquals() throws CalculatorException;
 
    /**
     * method for addition new special operation
     *
     * @return answer from model with
     * info about number at number field, history, memory.
-    * @throws CalculatorException if operation is null
-    *                             or was trying to divide number (not zero) by zero
-    *                             or was trying to calculate root of negated value
+    * @throws CalculatorException  or was trying to divide number (not zero) by zero
+    *                              or was trying to calculate root of negated value
+    * @throws NullPointerException if operation is null
     */
-   AnswerDTO doSpecialOperation(SpecialOperation operation) throws CalculatorException;
+   AnswerDto doSpecialOperation(SpecialOperation operation) throws CalculatorException, NullPointerException;
 
    /**
     * method negating number
@@ -82,7 +81,7 @@ public interface ModelBrain {
     * @return for answer from model with
     * info about number at number field, history, memory.
     */
-   AnswerDTO doNegate();
+   AnswerDto doNegate();
 
    /**
     * method for adding point to input number
@@ -90,7 +89,7 @@ public interface ModelBrain {
     * @return answer from model with
     * info about number at number field, history, memory.
     */
-   AnswerDTO addPoint();
+   AnswerDto addPoint();
 
    /**
     * method for removing one digit or point from input
@@ -98,7 +97,7 @@ public interface ModelBrain {
     * @return answer from model with
     * info about number at number field, history, memory.
     */
-   AnswerDTO deleteDigit();
+   AnswerDto deleteDigit();
 
    /**
     * method for clearing number line
@@ -106,16 +105,16 @@ public interface ModelBrain {
     * @return answer from model with
     * info about number at number field, history, memory.
     */
-   AnswerDTO deleteAllDigits();
+   AnswerDto deleteAllDigits();
 
    /**
     * method for adding or subtracting memory number
     *
     * @return answer from model with
     * info about number at number field, history, memory.
-    * @throws CalculatorException if operation is null
+    * @throws NullPointerException if operation is null
     */
-   AnswerDTO operateMemory(MemoryOperation operation) throws CalculatorException;
+   AnswerDto operateMemory(MemoryOperation operation) throws NullPointerException;
 
    /**
     * method for loading memory number from memory
@@ -124,7 +123,7 @@ public interface ModelBrain {
     * @return answer from model with
     * info about number at number field, history, memory.
     */
-   AnswerDTO loadFromMemory();
+   AnswerDto loadFromMemory() throws OverflowException;
 
    /**
     * method for cleaning memory
@@ -132,5 +131,7 @@ public interface ModelBrain {
     * @return answer from model with
     * info about number at number field, history, memory.
     */
-   AnswerDTO clearMemory();
+   AnswerDto clearMemory();
+
+   AnswerDto clearModel();
 }

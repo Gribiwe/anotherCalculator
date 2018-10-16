@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Gribiwe
  */
-public class HistoryLineDTO {
+public class HistoryLineDto {
    /**
     * list of numbers at history
     */
@@ -36,7 +36,7 @@ public class HistoryLineDTO {
     * @param operations        operations in history
     * @param specialOperations special operations of numbers at history
     */
-   public HistoryLineDTO(List<BigDecimal> numbers, List<SimpleOperation> operations, List<List<SpecialOperation>> specialOperations) {
+   public HistoryLineDto(List<BigDecimal> numbers, List<SimpleOperation> operations, List<List<SpecialOperation>> specialOperations) {
       this.numbers = numbers;
       this.operations = operations;
       this.specialOperations = specialOperations;

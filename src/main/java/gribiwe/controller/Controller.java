@@ -1,15 +1,11 @@
 package gribiwe.controller;
 
-import gribiwe.controller.util.LastSpecialOperationStoryParser;
 import gribiwe.controller.util.HistoryLineParser;
+import gribiwe.controller.util.LastSpecialOperationStoryParser;
 import gribiwe.controller.util.OutputNumberParser;
 import gribiwe.model.ModelBrain;
-import gribiwe.model.ModelBrainImpl;
 import gribiwe.model.dto.*;
-import gribiwe.model.exception.CalculatorException;
-import gribiwe.model.exception.UncorrectedDataException;
-import gribiwe.model.exception.ZeroDivideException;
-import gribiwe.model.exception.ZeroDivideZeroException;
+import gribiwe.model.exception.*;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
@@ -19,10 +15,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
-import static gribiwe.model.util.MemoryOperation.*;
+import static gribiwe.model.util.MemoryOperation.ADD;
+import static gribiwe.model.util.MemoryOperation.SUBTRACT;
 
 /**
  * class of controller for connecting view part of calculator
@@ -62,21 +58,6 @@ public class Controller implements Initializable {
     * label for viewing a current number
     */
    public Label inputFieldNumber;
-
-   /**
-    * value of max possible exponent
-    */
-   private final static int MAX_EXPONENT = 9999;
-
-   /**
-    * value of min possible exponent
-    */
-   private final static int MIN_EXPONENT = -9999;
-
-   /**
-    * string patter for checking overflow
-    */
-   private final static String CHECK_OVERFLOW_NUMBER_PATTERN = "0.###############E0";
 
    /**
     * label for viewing a history line
@@ -201,13 +182,11 @@ public class Controller implements Initializable {
     */
    private boolean enabledOperationButtons = true;
 
-
    /**
     * initial method. Calls by loading application
     */
    @Override
    public void initialize(URL location, ResourceBundle resources) {
-      mainModel = new ModelBrainImpl();
       outputNumberParser = new OutputNumberParser();
       historyLineParser = new HistoryLineParser();
       lastSpecialOperationStoryParser = new LastSpecialOperationStoryParser();
@@ -479,59 +458,41 @@ public class Controller implements Initializable {
    }
 
    /**
-    * verifies is there is an overflow exception
-    *
-    * @param answerDTO dto from model to parse at updating view
-    *                  with exception
-    */
-   private boolean verifyOverflow(AnswerDTO answerDTO) {
-      String output = new DecimalFormat(CHECK_OVERFLOW_NUMBER_PATTERN).format(answerDTO.getOutputNumberDTO().getValue());
-      long exponent = Long.parseLong(output.substring(output.indexOf("E") + 1));
-
-      if (exponent > MAX_EXPONENT || exponent < MIN_EXPONENT) {
-         updateError(OVERFLOW_EXCEPTION_TEXT, answerDTO);
-         return false;
-      }
-
-      return true;
-   }
-
-   /**
-    * method which processes an {@code AnswerDTO}
+    * method which processes an {@code AnswerDto}
     * by parsers. Than sends a string values to view
     *
     * @see CalculatorAction
-    * @see AnswerDTO
+    * @see AnswerDto
     * @see OutputNumberParser
     * @see HistoryLineParser
     * @see LastSpecialOperationStoryParser
     */
    private void updateView(CalculatorAction calculatorAction) {
-      AnswerDTO answerDTO;
+      AnswerDto answerDto;
       try {
-         answerDTO = calculatorAction.doAction();
+         answerDto = calculatorAction.doAction();
       } catch (CalculatorException e) {
          processException(e);
          return;
       }
 
-      if (answerDTO != null && verifyOverflow(answerDTO)) {
+      if (answerDto != null) {
          String outputNumber;
-         OutputNumberDTO outputNumberDTO = answerDTO.getOutputNumberDTO();
-         if (outputNumberDTO.getClass().equals(EnteredNumberDTO.class)) {
-            outputNumber = outputNumberParser.formatInput((EnteredNumberDTO) outputNumberDTO);
+         OutputNumberDto outputNumberDto = answerDto.getOutputNumberDto();
+         if (outputNumberDto.getClass().equals(EnteredNumberDto.class)) {
+            outputNumber = outputNumberParser.formatInput((EnteredNumberDto) outputNumberDto);
          } else {
-            outputNumber = outputNumberParser.formatResult(outputNumberDTO.getValue(), true);
+            outputNumber = outputNumberParser.formatResult(outputNumberDto.getValue(), true);
          }
          inputFieldNumber.setText(outputNumber);
 
-         String historyLineText = historyLineParser.parse(answerDTO.getHistoryLineDTO());
-         historyLineText += lastSpecialOperationStoryParser.parse(answerDTO.getTailSpecialOperationHistoryDTO());
+         String historyLineText = historyLineParser.parse(answerDto.getHistoryLineDto());
+         historyLineText += lastSpecialOperationStoryParser.parse(answerDto.getTailSpecialOperationHistoryDto());
          historyLine.setText(historyLineText);
 
-         MemoryDTO memoryDTO = answerDTO.getMemoryDTO();
-         if (memoryDTO.isEnable()) {
-            String memoryString = outputNumberParser.formatResult(memoryDTO.getMemoryNumber(), true);
+         MemoryDto memoryDto = answerDto.getMemoryDto();
+         if (memoryDto.isEnable()) {
+            String memoryString = outputNumberParser.formatResult(memoryDto.getMemoryNumber(), true);
             memoryText.setText(memoryString);
          } else {
             memoryText.setText("");
@@ -547,19 +508,19 @@ public class Controller implements Initializable {
     * to view of calculator
     *
     * @param messageToOutput message to show in result
-    * @param answerDTO       dto to view
+    * @param answerDto       dto to view
     */
-   private void updateError(String messageToOutput, AnswerDTO answerDTO) {
+   private void updateError(String messageToOutput, AnswerDto answerDto) {
       setOperationButtonsDisable(true);
-      mainModel = new ModelBrainImpl();
       inputFieldNumber.setText(messageToOutput);
 
-      HistoryLineDTO historyLineDTO = answerDTO.getHistoryLineDTO();
-      TailSpecialOperationHistoryDTO lastSpecialOperationStory = answerDTO.getTailSpecialOperationHistoryDTO();
+      HistoryLineDto historyLineDto = answerDto.getHistoryLineDto();
+      TailSpecialOperationHistoryDto lastSpecialOperationStory = answerDto.getTailSpecialOperationHistoryDto();
 
-      String historyLineText = historyLineParser.parse(historyLineDTO);
+      String historyLineText = historyLineParser.parse(historyLineDto);
       historyLineText += lastSpecialOperationStoryParser.parse(lastSpecialOperationStory);
       historyLine.setText(historyLineText);
+      mainModel.clearModel();
    }
 
    /**
@@ -569,14 +530,16 @@ public class Controller implements Initializable {
     */
    private void processException(CalculatorException e) {
       Class exceptionClass = e.getClass();
-      AnswerDTO answerDTO = e.getAnswerDTO();
+      AnswerDto answerDto = e.getAnswerDto();
 
       if (exceptionClass.equals(UncorrectedDataException.class)) {
-         updateError(INCORRECT_DATA_EXCEPTION_TEXT, answerDTO);
+         updateError(INCORRECT_DATA_EXCEPTION_TEXT, answerDto);
       } else if (exceptionClass.equals(ZeroDivideException.class)) {
-         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDTO);
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDto);
       } else if (exceptionClass.equals(ZeroDivideZeroException.class)) {
-         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDTO);
+         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDto);
+      }  else if (exceptionClass.equals(OverflowException.class)) {
+         updateError(OVERFLOW_EXCEPTION_TEXT, answerDto);
       }
    }
 
@@ -601,5 +564,9 @@ public class Controller implements Initializable {
       button_plus.setDisable(disable);
       button_negate.setDisable(disable);
       button_point.setDisable(disable);
+   }
+
+   public void setModel(ModelBrain mainModel) {
+      this.mainModel = mainModel;
    }
 }

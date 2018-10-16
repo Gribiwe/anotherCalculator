@@ -1,6 +1,6 @@
 package gribiwe.controller.util;
 
-import gribiwe.model.dto.TailSpecialOperationHistoryDTO;
+import gribiwe.model.dto.TailSpecialOperationHistoryDto;
 import gribiwe.model.util.Operation;
 import gribiwe.model.util.SpecialOperation;
 
@@ -43,18 +43,18 @@ public class LastSpecialOperationStoryParser {
    }
 
    /**
-    * method for parsing {@code TailSpecialOperationHistoryDTO} value to string value
+    * method for parsing {@code TailSpecialOperationHistoryDto} value to string value
     *
-    * @param tailSpecialOperationHistoryDTO dto of fake history from model
+    * @param tailSpecialOperationHistoryDto dto of fake history from model
     * @return string value of parsed history
     */
-   public String parse(TailSpecialOperationHistoryDTO tailSpecialOperationHistoryDTO) {
-      if (tailSpecialOperationHistoryDTO == null) {
+   public String parse(TailSpecialOperationHistoryDto tailSpecialOperationHistoryDto) {
+      if (tailSpecialOperationHistoryDto == null) {
          return "";
       }
 
-      BigDecimal number = tailSpecialOperationHistoryDTO.getNumber();
-      List<SpecialOperation> operations = tailSpecialOperationHistoryDTO.getOperations();
+      BigDecimal number = tailSpecialOperationHistoryDto.getNumber();
+      List<SpecialOperation> operations = tailSpecialOperationHistoryDto.getOperations();
       return parse(number, operations);
    }
 

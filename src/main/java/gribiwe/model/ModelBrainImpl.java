@@ -1,14 +1,12 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.AnswerDTO;
-import gribiwe.model.dto.OutputNumberDTO;
-import gribiwe.model.exception.CalculatorException;
-import gribiwe.model.exception.UncorrectedDataException;
-import gribiwe.model.exception.ZeroDivideException;
-import gribiwe.model.exception.ZeroDivideZeroException;
+import gribiwe.model.dto.AnswerDto;
+import gribiwe.model.dto.OutputNumberDto;
+import gribiwe.model.exception.*;
 import gribiwe.model.util.*;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import static gribiwe.model.util.ResultNumberStatus.*;
@@ -74,22 +72,37 @@ public class ModelBrainImpl implements ModelBrain {
    private ResultNumber resultNumber;
 
    /**
+    * value of max possible exponent
+    */
+   private final static int MAX_EXPONENT = 9999;
+
+   /**
+    * value of min possible exponent
+    */
+   private final static int MIN_EXPONENT = -9999;
+
+   /**
+    * string patter for checking overflow
+    */
+   private final static String CHECK_OVERFLOW_NUMBER_PATTERN = "0.###############E0";
+
+   /**
     * exception message for digit which is null
     */
-   private static final String DIGIT_IS_NULL_EXCEPTION_TEXT = "Digit is formAnswer(). I cant make calculations with formAnswer()";
+   private static final String DIGIT_IS_NULL_EXCEPTION_TEXT = "Digit is null. I cant make calculations with null";
 
    /**
     * exception message for operation which is null
     */
-   private static final String OPERATION_IS_NULL_EXCEPTION_TEXT = "Operation is formAnswer(). I cant make calculations using formAnswer() as operation";
+   private static final String OPERATION_IS_NULL_EXCEPTION_TEXT = "Operation is null. I cant make calculations using null as operation";
 
    /**
     * creation of new exemplar of this class
     * sets default values
     */
-   public ModelBrainImpl() {
+   public ModelBrainImpl(EnteringNumber enteringNumber) {
       buildingNumber = false;
-      enteringNumber = new EnteringNumberImpl();
+      this.enteringNumber = enteringNumber;
       tailSpecialOperationHistory = new TailSpecialOperationHistoryImpl();
       historyLine = new HistoryLineImpl();
       memory = new MemoryImpl();
@@ -97,7 +110,7 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO deleteDigit() {
+   public AnswerDto deleteDigit() {
       if (buildingNumber) {
          enteringNumber.removeSymbol();
       }
@@ -105,7 +118,7 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO deleteAllDigits() {
+   public AnswerDto deleteAllDigits() {
       if (buildingNumber) {
          enteringNumber.removeAllSymbols();
       } else {
@@ -115,7 +128,7 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO deleteAllDigitsAndHistory() {
+   public AnswerDto deleteAllDigitsAndHistory() {
       deleteAllDigits();
       tailSpecialOperationHistory = new TailSpecialOperationHistoryImpl();
       historyLine = new HistoryLineImpl();
@@ -123,7 +136,7 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO addDigit(Digit digit) throws CalculatorException {
+   public AnswerDto addDigit(Digit digit) throws NullPointerException {
       verifyNull(digit, DIGIT_IS_NULL_EXCEPTION_TEXT);
       startBuildingNumber();
       enteringNumber.addDigit(digit);
@@ -131,14 +144,14 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO addPoint() {
+   public AnswerDto addPoint() {
       startBuildingNumber();
       enteringNumber.addPoint();
       return formAnswer();
    }
 
    @Override
-   public AnswerDTO doOperation(SimpleOperation operation) throws CalculatorException {
+   public AnswerDto doOperation(SimpleOperation operation) throws CalculatorException, NullPointerException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
 
       if (tailSpecialOperationHistory.isProcessing()) {
@@ -161,20 +174,22 @@ public class ModelBrainImpl implements ModelBrain {
             }
          }
       }
+      verifyOverflow();
       return formAnswer();
    }
 
    @Override
-   public AnswerDTO doPercent() {
+   public AnswerDto doPercent() throws OverflowException {
       BigDecimal result = new CalculatorMath().percent(historyLine.calculate(), getNumberFromBuildingOrResultNumber());
       resultNumber.loadResult(result, EQUALS_RESULT);
       tailSpecialOperationHistory.clear();
       tailSpecialOperationHistory.initNumber(result);
+      verifyOverflow();
       return formAnswer();
    }
 
    @Override
-   public AnswerDTO doEquals() throws ZeroDivideZeroException, ZeroDivideException {
+   public AnswerDto doEquals() throws ZeroDivideZeroException, ZeroDivideException, OverflowException {
       if (tailSpecialOperationHistory.isProcessing()) {
          doEqualsAfterSpecialOperation();
       } else {
@@ -185,11 +200,12 @@ public class ModelBrainImpl implements ModelBrain {
             doEqualsAfterEquals();
          }
       }
+      verifyOverflow();
       return formAnswer();
    }
 
    @Override
-   public AnswerDTO doSpecialOperation(SpecialOperation operation) throws CalculatorException {
+   public AnswerDto doSpecialOperation(SpecialOperation operation) throws CalculatorException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
       if (tailSpecialOperationHistory.isProcessing()) {
          doNextSpecialOperation(operation);
@@ -197,11 +213,12 @@ public class ModelBrainImpl implements ModelBrain {
          doFirstSpecialOperation(operation);
       }
       resultNumber.loadResult(tailSpecialOperationHistory.calculate(), EQUALS_RESULT);
+      verifyOverflow();
       return formAnswer();
    }
 
    @Override
-   public AnswerDTO doNegate() {
+   public AnswerDto doNegate() {
       if (buildingNumber) {
          enteringNumber.negate();
       } else {
@@ -215,7 +232,7 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO operateMemory(MemoryOperation operation) throws CalculatorException {
+   public AnswerDto operateMemory(MemoryOperation operation) throws NullPointerException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
       BigDecimal numberToOperate = getNumberFromBuildingOrResultNumber();
       memory.doOperation(numberToOperate, operation);
@@ -224,16 +241,28 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    @Override
-   public AnswerDTO loadFromMemory() {
+   public AnswerDto loadFromMemory() throws OverflowException {
       buildingNumber = false;
       resultNumber.loadResult(memory.getNumber(), LOADED_FROM_MEMORY);
+      verifyOverflow();
       return formAnswer();
    }
 
    @Override
-   public AnswerDTO clearMemory() {
+   public AnswerDto clearMemory() {
       memory.clear();
       resultNumber.loadResult(getNumberFromBuildingOrResultNumber(), BLOCKED_BY_MEMORY);
+      return formAnswer();
+   }
+
+   @Override
+   public AnswerDto clearModel() {
+      historyLine.clearHistory();
+      enteringNumber.removeAllSymbols();
+      memory.clear();
+      tailSpecialOperationHistory.clear();
+      resultNumber.clear();
+      buildingNumber = false;
       return formAnswer();
    }
 
@@ -267,7 +296,7 @@ public class ModelBrainImpl implements ModelBrain {
     */
    private void startBuildingNumber() {
       if (!buildingNumber) {
-         enteringNumber = new EnteringNumberImpl();
+         enteringNumber.removeAllSymbols();
          tailSpecialOperationHistory.clear();
          buildingNumber = true;
       }
@@ -280,8 +309,8 @@ public class ModelBrainImpl implements ModelBrain {
     *
     * @param operation new operation to process
     * @throws ZeroDivideZeroException if tries to
-    *                        deException     if tries to divide any n         divide zero by zero
-    *     * @throws ZeroDiviumber (not zero) by zero
+    *                                 deException     if tries to divide any n         divide zero by zero
+    *                                 * @throws ZeroDiviumber (not zero) by zero
     */
    private void doOperationWithBuiltOrEqualsOrMemoryNumber(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException {
       BigDecimal numberToHistory = getNumberFromBuildingOrResultNumber();
@@ -409,6 +438,19 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    /**
+    * verifies is there is an overflow exception
+    */
+   private void verifyOverflow() throws OverflowException {
+      BigDecimal value = resultNumber.getNumber();
+      String output = new DecimalFormat(CHECK_OVERFLOW_NUMBER_PATTERN).format(value);
+      long exponent = Long.parseLong(output.substring(output.indexOf("E") + 1));
+
+      if (exponent > MAX_EXPONENT || exponent < MIN_EXPONENT) {
+         throw new OverflowException("Value is overflow: " + value, formAnswer());
+      }
+   }
+
+   /**
     * verifies is current history will be
     * divided by zero
     *
@@ -466,11 +508,11 @@ public class ModelBrainImpl implements ModelBrain {
     *
     * @param object  object to check
     * @param message exception message
-    * @throws CalculatorException if object is null
+    * @throws NullPointerException if object is null
     */
-   private void verifyNull(Object object, String message) throws CalculatorException {
-      if (object == formAnswer()) {
-         throw new CalculatorException(message, formAnswer());
+   private void verifyNull(Object object, String message) throws NullPointerException {
+      if (object == null) {
+         throw new NullPointerException(message);
       }
    }
 
@@ -543,19 +585,19 @@ public class ModelBrainImpl implements ModelBrain {
    }
 
    /**
-    * forms AnswerDTO answer with information of current history,
+    * forms AnswerDto answer with information of current history,
     * result number, memory or history tail
     *
     * @return formed answerDTO with needed components
     */
-   private AnswerDTO formAnswer() {
-      OutputNumberDTO outputNumberDTO;
+   private AnswerDto formAnswer() {
+      OutputNumberDto outputNumberDto;
       if (buildingNumber) {
-         outputNumberDTO = enteringNumber.getNumberDTO();
+         outputNumberDto = enteringNumber.getNumberDTO();
       } else {
-         outputNumberDTO = resultNumber.getNumberDTO();
+         outputNumberDto = resultNumber.getNumberDTO();
       }
 
-      return new AnswerDTO(outputNumberDTO, historyLine.getHistoryLineDTO(), tailSpecialOperationHistory.getDTO(), memory.getDTO());
+      return new AnswerDto(outputNumberDto, historyLine.getHistoryLineDTO(), tailSpecialOperationHistory.getDTO(), memory.getDTO());
    }
 }

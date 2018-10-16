@@ -1,6 +1,11 @@
 package gribiwe.view;
 
+import com.sun.javafx.application.ParametersImpl;
 import gribiwe.controller.Controller;
+import gribiwe.model.EnteringNumber;
+import gribiwe.model.EnteringNumberImpl;
+import gribiwe.model.ModelBrain;
+import gribiwe.model.ModelBrainImpl;
 import gribiwe.view.listener.CursorListener;
 import gribiwe.view.listener.KeyListener;
 import gribiwe.view.listener.OverrunListener;
@@ -21,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * class for starting JavaFx application
@@ -103,8 +109,8 @@ public class BodyView extends Application {
     */
    private void initScreenSize() {
       Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-      Properties.setScreenHeight ((int) primaryScreenBounds.getHeight());
-      Properties.setScreenWidth ((int) primaryScreenBounds.getWidth());
+      Properties.setScreenHeight((int) primaryScreenBounds.getHeight());
+      Properties.setScreenWidth((int) primaryScreenBounds.getWidth());
    }
 
    /**
@@ -119,6 +125,23 @@ public class BodyView extends Application {
          e.printStackTrace();
       }
       controller = loader.getController();
+
+      ModelBrain modelBrain;
+      List<String> appParams = ParametersImpl.getParameters(this).getUnnamed();
+      if (appParams.size() > 0) {
+         String nameOfImplementationClass = appParams.get(0);
+         try {
+            Class enteringNumberClass = Class.forName(nameOfImplementationClass);
+            modelBrain = new ModelBrainImpl((EnteringNumber) enteringNumberClass.newInstance());
+            controller.setModel(modelBrain);
+         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+           throw new Error("Failed initialization of EnteringNumber via first argument: "+nameOfImplementationClass, e);
+         }
+      } else {
+         modelBrain = new ModelBrainImpl(new EnteringNumberImpl());
+         controller.setModel(modelBrain);
+      }
+
       rootLayout.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
       rootLayout.getChildren().get(0).setStyle("-fx-background-color: rgba(0, 0, 0, 0.01);");
       rootLayout.setBackground(Background.EMPTY);

@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.EnteredNumberDTO;
+import gribiwe.model.dto.EnteredNumberDto;
 import gribiwe.model.util.Digit;
 
 import java.math.BigDecimal;
@@ -49,6 +49,6 @@ public interface EnteringNumber {
     * @return constructed number
     * with additional information
     */
-   EnteredNumberDTO getNumberDTO();
+   EnteredNumberDto getNumberDTO();
 
 }

@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.OutputNumberDTO;
+import gribiwe.model.dto.OutputNumberDto;
 import gribiwe.model.util.ResultNumberStatus;
 
 import java.math.BigDecimal;
@@ -41,8 +41,8 @@ class ResultNumberImpl implements ResultNumber {
    }
 
    @Override
-   public OutputNumberDTO getNumberDTO() {
-      return new OutputNumberDTO(number);
+   public OutputNumberDto getNumberDTO() {
+      return new OutputNumberDto(number);
    }
 
    @Override
@@ -53,5 +53,11 @@ class ResultNumberImpl implements ResultNumber {
    @Override
    public ResultNumberStatus getStatus() {
       return status;
+   }
+
+   @Override
+   public void clear() {
+      number = BigDecimal.ZERO;
+      status = ResultNumberStatus.EQUALS_RESULT;
    }
 }

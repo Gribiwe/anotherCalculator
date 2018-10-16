@@ -1,7 +1,6 @@
 package gribiwe.controller.util;
 
-import gribiwe.model.dto.HistoryLineDTO;
-import gribiwe.model.util.SimpleOperation;
+import gribiwe.model.dto.HistoryLineDto;
 
 import static gribiwe.model.util.SimpleOperation.*;
 
@@ -25,29 +24,29 @@ public class HistoryLineParser {
    }
 
    /**
-    * method for parsing {@code HistoryLineDTO} to string value
+    * method for parsing {@code HistoryLineDto} to string value
     *
-    * @param historyLineDTO DTO of history line from model
+    * @param historyLineDto DTO of history line from model
     * @return string value of parsed history
     */
-   public String parse(HistoryLineDTO historyLineDTO) {
+   public String parse(HistoryLineDto historyLineDto) {
       StringBuilder stringBuilder = new StringBuilder();
 
-      for (int i = 0; i < historyLineDTO.getNumbers().size(); i++) {
+      for (int i = 0; i < historyLineDto.getNumbers().size(); i++) {
          String number;
-         if (historyLineDTO.getSpecialOperations().get(i) != null) {
-            number = new LastSpecialOperationStoryParser().parse(historyLineDTO.getNumbers().get(i), historyLineDTO.getSpecialOperations().get(i));
+         if (historyLineDto.getSpecialOperations().get(i) != null) {
+            number = new LastSpecialOperationStoryParser().parse(historyLineDto.getNumbers().get(i), historyLineDto.getSpecialOperations().get(i));
          } else {
-            number = parser.formatResult((historyLineDTO.getNumbers().get(i)), false);
+            number = parser.formatResult((historyLineDto.getNumbers().get(i)), false);
          }
 
-         if (historyLineDTO.getOperations().get(i).equals(PLUS)) {
+         if (historyLineDto.getOperations().get(i).equals(PLUS)) {
             stringBuilder.append(number).append("   +   ");
-         } else if (historyLineDTO.getOperations().get(i).equals(SUBTRACT)) {
+         } else if (historyLineDto.getOperations().get(i).equals(SUBTRACT)) {
             stringBuilder.append(number).append("   -   ");
-         } else if (historyLineDTO.getOperations().get(i).equals(MULTIPLY)) {
+         } else if (historyLineDto.getOperations().get(i).equals(MULTIPLY)) {
             stringBuilder.append(number).append("   ×   ");
-         } else if (historyLineDTO.getOperations().get(i).equals(DIVIDE)) {
+         } else if (historyLineDto.getOperations().get(i).equals(DIVIDE)) {
             stringBuilder.append(number).append("   ÷   ");
          }
       }

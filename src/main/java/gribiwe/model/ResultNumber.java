@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.OutputNumberDTO;
+import gribiwe.model.dto.OutputNumberDto;
 import gribiwe.model.util.ResultNumberStatus;
 
 import java.math.BigDecimal;
@@ -23,12 +23,12 @@ public interface ResultNumber {
    void loadResult(BigDecimal result, ResultNumberStatus resultNumberStatus);
 
    /**
-    * forms new OutputNumberDTO object with
+    * forms new OutputNumberDto object with
     * number on it
     *
-    * @return current number in OutputNumberDTO object
+    * @return current number in OutputNumberDto object
     */
-   OutputNumberDTO getNumberDTO();
+   OutputNumberDto getNumberDTO();
 
    /**
     * @return current BigDecimal number
@@ -40,4 +40,9 @@ public interface ResultNumber {
     * @see ResultNumberStatus
     */
    ResultNumberStatus getStatus();
+
+   /**
+    * clears result number
+    */
+   void clear();
 }

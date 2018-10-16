@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.MemoryDTO;
+import gribiwe.model.dto.MemoryDto;
 import gribiwe.model.util.MemoryOperation;
 
 import java.math.BigDecimal;
@@ -39,5 +39,5 @@ public interface Memory {
     *
     * @return dto for answer from model
     */
-   MemoryDTO getDTO();
+   MemoryDto getDTO();
 }

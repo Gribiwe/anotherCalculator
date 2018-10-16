@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.HistoryLineDTO;
+import gribiwe.model.dto.HistoryLineDto;
 import gribiwe.model.util.CalculatorMath;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
@@ -93,8 +93,8 @@ class HistoryLineImpl implements HistoryLine {
    }
 
    @Override
-   public HistoryLineDTO getHistoryLineDTO() {
-      return new HistoryLineDTO(numbers, operations, specialOperations);
+   public HistoryLineDto getHistoryLineDTO() {
+      return new HistoryLineDto(numbers, operations, specialOperations);
    }
 
    @Override

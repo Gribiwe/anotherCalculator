@@ -1,8 +1,11 @@
 package view;
 
+import com.sun.javafx.robot.impl.FXRobotHelper;
+import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
 import org.junit.jupiter.api.Test;
 import org.loadui.testfx.utils.FXTestUtils;
+import org.testfx.api.FxToolkit;
 import org.testfx.util.WaitForAsyncUtils;
 
 /**
