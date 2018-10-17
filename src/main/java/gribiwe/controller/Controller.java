@@ -526,6 +526,11 @@ public class Controller implements Initializable {
       updateMemory();
    }
 
+   /**
+    * method which gets information about
+    * memory from model, parsing it
+    * and sends to the view
+    */
    private void updateMemory() {
       if (mainModel.isMemoryActive()) {
          BigDecimal memoryNumber = mainModel.getMemoryNumber();
@@ -539,6 +544,11 @@ public class Controller implements Initializable {
       }
    }
 
+   /**
+    * method which gets information about
+    * result or building number from model,
+    * parsing it and sends to the view
+    */
    private void updateOutPutNumber() {
       String outputNumber;
       if (mainModel.isBuildingNumber()) {
@@ -551,6 +561,11 @@ public class Controller implements Initializable {
       inputFieldNumber.setText(outputNumber);
    }
 
+   /**
+    * method which gets information about
+    * history line from the model, parsing it
+    * and sends it to the view
+    */
    private void updateHistory() {
       HistoryLineDto historyLineDto = mainModel.getHistoryLineDto();
       String historyLineText = HistoryLineParser.parse(historyLineDto);
@@ -598,4 +613,3 @@ public class Controller implements Initializable {
       button_point.setDisable(disable);
    }
 }
-// TODO: 17.10.2018 static. more static
