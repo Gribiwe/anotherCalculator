@@ -168,24 +168,23 @@ class HistoryLineImpl {
          return BigDecimal.ZERO;
       }
 
-      CalculatorMath calculatorMath = new CalculatorMath();
-      BigDecimal calculatingResult = calculatorMath.calculateSpecialOperations(numbers.get(0), specialOperations.get(0));
+      BigDecimal calculatingResult = CalculatorMath.calculateSpecialOperations(numbers.get(0), specialOperations.get(0));
 
       for (int i = 0; i < operations.size() && i < numbers.size() - 1; i++) {
          SimpleOperation currentOperation = operations.get(i);
          if (currentOperation == null) {
             continue;
          }
-         BigDecimal number = calculatorMath.calculateSpecialOperations(numbers.get(i + 1), specialOperations.get(i + 1));
+         BigDecimal number = CalculatorMath.calculateSpecialOperations(numbers.get(i + 1), specialOperations.get(i + 1));
 
          if (currentOperation == PLUS) {
-            calculatingResult = calculatorMath.plus(calculatingResult, number);
+            calculatingResult = CalculatorMath.plus(calculatingResult, number);
          } else if (currentOperation == SUBTRACT) {
-            calculatingResult = calculatorMath.subtract(calculatingResult, number);
+            calculatingResult = CalculatorMath.subtract(calculatingResult, number);
          } else if (currentOperation == MULTIPLY) {
-            calculatingResult = calculatorMath.multiply(calculatingResult, number);
+            calculatingResult = CalculatorMath.multiply(calculatingResult, number);
          } else if (currentOperation == DIVIDE) {
-            calculatingResult = calculatorMath.divide(calculatingResult, number);
+            calculatingResult = CalculatorMath.divide(calculatingResult, number);
          }
       }
       return calculatingResult;

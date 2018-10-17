@@ -34,7 +34,7 @@ public class CalculatorMath {
     * @param number number to process
     * @return processed number
     */
-   private BigDecimal proceed(BigDecimal number) {
+   private static BigDecimal proceed(BigDecimal number) {
       if (number.setScale(DEFAULT_SCALE, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) == 0) {
          return BigDecimal.ZERO;
       } else {
@@ -49,7 +49,7 @@ public class CalculatorMath {
     * @param b second number
     * @return sum of number a and b
     */
-   public BigDecimal plus(BigDecimal a, BigDecimal b) {
+   public static BigDecimal plus(BigDecimal a, BigDecimal b) {
       return proceed(a.add(b));
    }
 
@@ -60,7 +60,7 @@ public class CalculatorMath {
     * @param b second number
     * @return subtraction of number a and b
     */
-   public BigDecimal subtract(BigDecimal a, BigDecimal b) {
+   public static BigDecimal subtract(BigDecimal a, BigDecimal b) {
       return proceed(a.subtract(b));
    }
 
@@ -71,7 +71,7 @@ public class CalculatorMath {
     * @param b second number
     * @return result of multiplying
     */
-   public BigDecimal multiply(BigDecimal a, BigDecimal b) {
+   public static BigDecimal multiply(BigDecimal a, BigDecimal b) {
       return a.multiply(b);
    }
 
@@ -83,7 +83,7 @@ public class CalculatorMath {
     * @param b second number
     * @return result of dividing
     */
-   public BigDecimal divide(BigDecimal a, BigDecimal b) {
+   public static BigDecimal divide(BigDecimal a, BigDecimal b) {
       if (a.compareTo(BigDecimal.ZERO) == 0) {
          return BigDecimal.ZERO;
       }
@@ -96,7 +96,7 @@ public class CalculatorMath {
     * @param a number to square
     * @return result of squaring
     */
-   public BigDecimal square(BigDecimal a) {
+   private static BigDecimal square(BigDecimal a) {
       return a.multiply(a);
    }
 
@@ -107,7 +107,7 @@ public class CalculatorMath {
     * @param x by this number one will be divided
     * @return result of dividing number one to x
     */
-   public BigDecimal oneDivX(BigDecimal x) {
+   private static BigDecimal oneDivX(BigDecimal x) {
       return BigDecimal.ONE.divide(x, DEFAULT_SCALE, RoundingMode.HALF_UP);
    }
 
@@ -119,7 +119,7 @@ public class CalculatorMath {
     * @param a number to find root
     * @return root value
     */
-   public BigDecimal root(BigDecimal a) {
+   private static BigDecimal root(BigDecimal a) {
       if (a.compareTo(BigDecimal.ZERO) == 0) return BigDecimal.ZERO;
       if (a.compareTo(BigDecimal.ONE) == 0) return a;
       BigInteger n = a.movePointRight((DEFAULT_SCALE + 1) << 1).toBigInteger();
@@ -141,7 +141,7 @@ public class CalculatorMath {
     * @param b number of percents of first number
     * @return percent value of a
     */
-   public BigDecimal percent(BigDecimal a, BigDecimal b) {
+   public static BigDecimal percent(BigDecimal a, BigDecimal b) {
       return proceed(a.multiply(b.divide(BigDecimal.valueOf(ONE_HUNDRED), DEFAULT_SCALE, RoundingMode.HALF_UP)));
    }
 
@@ -153,7 +153,7 @@ public class CalculatorMath {
     * @param operations     operations to do
     * @return processed number by operations
     */
-   public BigDecimal calculateSpecialOperations(BigDecimal number, List<SpecialOperation> operations) {
+   public static BigDecimal calculateSpecialOperations(BigDecimal number, List<SpecialOperation> operations) {
       if (operations == null) {
          return number;
       }

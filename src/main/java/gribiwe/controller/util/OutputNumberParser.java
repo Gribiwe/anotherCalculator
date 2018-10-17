@@ -27,7 +27,7 @@ public class OutputNumberParser {
     * @param dto {@code BuildingNumberDto} to parse
     * @return string value of {@code BuildingNumberDto}
     */
-   public String formatInput(BuildingNumberDto dto) {
+   public static String formatInput(BuildingNumberDto dto) {
       String minus = "";
       if (dto.isNegated()) {
          minus = "-";
@@ -54,7 +54,7 @@ public class OutputNumberParser {
     *                   with group separate spaces
     * @return parsed number
     */
-   public String formatResult(BigDecimal value, boolean needSpaces) {
+   public static String formatResult(BigDecimal value, boolean needSpaces) {
       String minus = "";
 
       if (value.compareTo(BigDecimal.ZERO) < 0) {
@@ -100,7 +100,7 @@ public class OutputNumberParser {
     * @param original string value of parsed number
     * @return parsed number with spaces
     */
-   private String addSpaces(String original) {
+   private static String addSpaces(String original) {
       String leftOfPoint;
       if (original.contains(",")) {
          leftOfPoint = original.substring(0, original.indexOf(","));
@@ -122,7 +122,7 @@ public class OutputNumberParser {
     * @param value number to parse, must be not negated
     * @return parsed number
     */
-   private String formatResult(BigDecimal value) {
+   private static String formatResult(BigDecimal value) {
       String toReturn;
       if (value.compareTo(BigDecimal.ZERO) == 0) {
          toReturn = "0";
@@ -141,7 +141,7 @@ public class OutputNumberParser {
     * @param value parsing number
     * @return parsed string value
     */
-   private String parseResultBiggerOrEqualsOne(BigDecimal value) {
+   private static String parseResultBiggerOrEqualsOne(BigDecimal value) {
       String leftValue = value.toBigInteger().toString();
       String toReturn;
       if (leftValue.length() > 16) {
@@ -176,7 +176,7 @@ public class OutputNumberParser {
     * @param value parsing number
     * @return parsed string value
     */
-   private String parseResultLessOne(BigDecimal value) {
+   private static String parseResultLessOne(BigDecimal value) {
       String allValue = value.toPlainString();
       allValue = allValue.substring(allValue.indexOf(".") + 1);
 
@@ -218,7 +218,7 @@ public class OutputNumberParser {
     * @param value   number to format
     * @return string of formatted number
     */
-   private String formatWithFormatter(String pattern, BigDecimal value) {
+   private static String formatWithFormatter(String pattern, BigDecimal value) {
       DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
       decimalFormatSymbols.setDecimalSeparator(',');
       decimalFormatSymbols.setGroupingSeparator(' ');
@@ -246,7 +246,7 @@ public class OutputNumberParser {
     * @param a number to re-scale
     * @return rightly scaled number
     */
-   private BigDecimal cut(BigDecimal a) {
+   private static BigDecimal cut(BigDecimal a) {
       String aStr = a.toPlainString();
       if (aStr.length() > SCALE_SIZE) {
          return new BigDecimal(aStr.substring(0, SCALE_SIZE));

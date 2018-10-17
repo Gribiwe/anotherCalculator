@@ -53,7 +53,7 @@ class MemoryImpl {
       enable = true;
    }
 
-   public boolean isEnable() {
+   boolean isEnable() {
       return enable;
    }
 

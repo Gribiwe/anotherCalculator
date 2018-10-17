@@ -106,7 +106,7 @@ class TailSpecialOperationHistoryImpl {
     * @return result of calculation
     */
    BigDecimal calculate() {
-      return new CalculatorMath().calculateSpecialOperations(number, operations);
+      return CalculatorMath.calculateSpecialOperations(number, operations);
    }
 
    /**

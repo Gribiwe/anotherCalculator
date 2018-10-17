@@ -51,7 +51,7 @@ public class EnteringNumberImpl {
    /**
     * first initials of building number
     */
-   public EnteringNumberImpl() {
+   EnteringNumberImpl() {
       removeAllSymbols();
    }
 

@@ -18,24 +18,12 @@ import static gribiwe.model.util.SimpleOperation.*;
 public class HistoryLineParser {
 
    /**
-    * exemplar of {@code OutputNumberParser} for parsing numbers
-    */
-   private OutputNumberParser parser;
-
-   /**
-    * initial of {@code OutputNumberParser}
-    */
-   public HistoryLineParser() {
-      parser = new OutputNumberParser();
-   }
-
-   /**
     * method for parsing {@code HistoryLineDto} to string value
     *
     * @param historyLineDto DTO of history line from model
     * @return string value of parsed history
     */
-   public String parse(HistoryLineDto historyLineDto) {
+   public static String parse(HistoryLineDto historyLineDto) {
       StringBuilder stringBuilder = new StringBuilder();
 
       for (int i = 0; i < historyLineDto.getNumbers().size(); i++) {
@@ -43,7 +31,7 @@ public class HistoryLineParser {
          if (historyLineDto.getSpecialOperations().get(i) != null) {
             number = parseSpecialOperations(historyLineDto.getNumbers().get(i), historyLineDto.getSpecialOperations().get(i));
          } else {
-            number = parser.formatResult((historyLineDto.getNumbers().get(i)), false);
+            number = OutputNumberParser.formatResult((historyLineDto.getNumbers().get(i)), false);
          }
 
          if (historyLineDto.getOperations().get(i).equals(PLUS)) {
@@ -67,9 +55,9 @@ public class HistoryLineParser {
     * @param operations special operations of number
     * @return string value of parsed number with operations
     */
-   public String parseSpecialOperations(BigDecimal number, List<SpecialOperation> operations) {
+   private static String parseSpecialOperations(BigDecimal number, List<SpecialOperation> operations) {
       String result;
-      result = new OutputNumberParser().formatResult(number, false);
+      result = OutputNumberParser.formatResult(number, false);
       for (Operation operation : operations) {
          if (operation.equals(SpecialOperation.SQUARE)) {
             result = "sqr( " + result + " )";
@@ -91,7 +79,7 @@ public class HistoryLineParser {
     * @param formingSpecialOperationsDto dto to parse
     * @return string value of parsed number with operations
     */
-   public String parseSpecialOperations(FormingSpecialOperationsDto formingSpecialOperationsDto) {
+   public static String parseSpecialOperations(FormingSpecialOperationsDto formingSpecialOperationsDto) {
       return parseSpecialOperations(formingSpecialOperationsDto.getNumber(), formingSpecialOperationsDto.getOperations());
    }
 }

@@ -157,17 +157,6 @@ public class Controller implements Initializable {
    public AnchorPane button_point;
 
    /**
-    * parser of numbers which will be sent to view
-    */
-   private OutputNumberParser outputNumberParser;
-
-   /**
-    * parser of history line for forming
-    * a string value for history line label
-    */
-   private HistoryLineParser historyLineParser;
-
-   /**
     * exemplar of model brain
     */
    private ModelBrainImpl mainModel;
@@ -184,8 +173,6 @@ public class Controller implements Initializable {
    @Override
    public void initialize(URL location, ResourceBundle resources) {
       mainModel = new ModelBrainImpl();
-      outputNumberParser = new OutputNumberParser();
-      historyLineParser = new HistoryLineParser();
    }
 
    /**
@@ -542,7 +529,7 @@ public class Controller implements Initializable {
    private void updateMemory() {
       if (mainModel.isMemoryActive()) {
          BigDecimal memoryNumber = mainModel.getMemoryNumber();
-         String memoryString = outputNumberParser.formatResult(memoryNumber, true);
+         String memoryString = OutputNumberParser.formatResult(memoryNumber, true);
          memoryText.setText(memoryString);
       } else {
          memoryText.setText("");
@@ -556,21 +543,21 @@ public class Controller implements Initializable {
       String outputNumber;
       if (mainModel.isBuildingNumber()) {
          BuildingNumberDto buildingNumberDto = mainModel.getBuildingNumber();
-         outputNumber = outputNumberParser.formatInput(buildingNumberDto);
+         outputNumber = OutputNumberParser.formatInput(buildingNumberDto);
       } else {
          BigDecimal numberAtResult = mainModel.getResultNumber();
-         outputNumber = outputNumberParser.formatResult(numberAtResult, true);
+         outputNumber = OutputNumberParser.formatResult(numberAtResult, true);
       }
       inputFieldNumber.setText(outputNumber);
    }
 
    private void updateHistory() {
       HistoryLineDto historyLineDto = mainModel.getHistoryLineDto();
-      String historyLineText = historyLineParser.parse(historyLineDto);
+      String historyLineText = HistoryLineParser.parse(historyLineDto);
 
       if (mainModel.isFormingSpecialOperation()) {
          FormingSpecialOperationsDto formingSpecialOperationsDto = mainModel.getFormingSpecialOperationsDto();
-         historyLineText += historyLineParser.parseSpecialOperations(formingSpecialOperationsDto);
+         historyLineText += HistoryLineParser.parseSpecialOperations(formingSpecialOperationsDto);
       }
       historyLine.setText(historyLineText);
    }

@@ -197,7 +197,7 @@ public class ModelBrainImpl {
     * @throws OverflowException if result value is overflow
     */
    public void doPercent() throws OverflowException {
-      BigDecimal result = new CalculatorMath().percent(historyLine.calculate(), getNumberFromBuildingOrResultNumber());
+      BigDecimal result = CalculatorMath.percent(historyLine.calculate(), getNumberFromBuildingOrResultNumber());
       resultNumber.loadResult(result, EQUALS_RESULT);
       tailSpecialOperationHistory.clear();
       tailSpecialOperationHistory.initNumber(result);

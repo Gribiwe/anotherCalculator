@@ -2,9 +2,7 @@ package modelparser;
 
 import gribiwe.controller.util.HistoryLineParser;
 import gribiwe.controller.util.OutputNumberParser;
-import gribiwe.model.EnteringNumberImpl;
 import gribiwe.model.ModelBrainImpl;
-import gribiwe.model.dto.BuildingNumberDto;
 import gribiwe.model.dto.FormingSpecialOperationsDto;
 import gribiwe.model.exception.OverflowException;
 import gribiwe.model.exception.UncorrectedDataException;
@@ -13,18 +11,18 @@ import gribiwe.model.exception.ZeroDivideZeroException;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 
 import static gribiwe.model.util.MemoryOperation.ADD;
 import static gribiwe.model.util.MemoryOperation.SUBTRACT;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Util class for testing parsed model values
  *
  * @author Gribiwe
  */
-class TestUtil extends Assert {
+class TestUtil {
 
    /**
     * exemplar of Main model class
@@ -66,41 +64,32 @@ class TestUtil extends Assert {
    void doTest(String actionSequence, String expectedOutputNumber, String expectedHistory, String expectedMemory) {
       mainModel = new ModelBrainImpl();
 
-      HistoryLineParser historyLineParser = new HistoryLineParser();
-      OutputNumberParser outputNumberParser = new OutputNumberParser();
-
       for (String command : actionSequence.split(" ")) {
          try {
             emulate(command);
-         } catch (OverflowException e) {
-            e.printStackTrace();
-         } catch (ZeroDivideZeroException e) {
-            e.printStackTrace();
-         } catch (ZeroDivideException e) {
-            e.printStackTrace();
-         } catch (UncorrectedDataException e) {
-            e.printStackTrace();
+         } catch (OverflowException | ZeroDivideZeroException | ZeroDivideException | UncorrectedDataException e) {
+            fail("unexpected exception");
          }
       }
 
       String outputNumberAtResult;
       if (mainModel.isBuildingNumber()) {
-         outputNumberAtResult = outputNumberParser.formatInput(mainModel.getBuildingNumber());
+         outputNumberAtResult = OutputNumberParser.formatInput(mainModel.getBuildingNumber());
       } else {
-         outputNumberAtResult = outputNumberParser.formatResult(mainModel.getResultNumber(), true);
+         outputNumberAtResult = OutputNumberParser.formatResult(mainModel.getResultNumber(), true);
       }
       assertEquals(expectedOutputNumber, outputNumberAtResult);
 
       String historyLineAtResult;
-      historyLineAtResult = historyLineParser.parse(mainModel.getHistoryLineDto());
+      historyLineAtResult = HistoryLineParser.parse(mainModel.getHistoryLineDto());
       if (mainModel.isFormingSpecialOperation()) {
          FormingSpecialOperationsDto formingSpecialOperationsDto = mainModel.getFormingSpecialOperationsDto();
-         historyLineAtResult += historyLineParser.parseSpecialOperations(formingSpecialOperationsDto);
+         historyLineAtResult += HistoryLineParser.parseSpecialOperations(formingSpecialOperationsDto);
       }
       assertEquals(expectedHistory, historyLineAtResult);
 
       String memoryNumberAtResult;
-      memoryNumberAtResult = outputNumberParser.formatResult(mainModel.getMemoryNumber(), true);
+      memoryNumberAtResult = OutputNumberParser.formatResult(mainModel.getMemoryNumber(), true);
       assertEquals(expectedMemory, memoryNumberAtResult);
    }
 
@@ -110,7 +99,6 @@ class TestUtil extends Assert {
     *
     * @param section string value of
     *                operation or number to emulate
-    * @return answer of model
     */
    private void emulate(String section) throws OverflowException, ZeroDivideZeroException, ZeroDivideException, UncorrectedDataException {
       if (section.equals("/")) {
@@ -158,9 +146,8 @@ class TestUtil extends Assert {
     * Expected, it's a numbers or point
     *
     * @param character char value to emulate
-    * @return answer of model
     */
-   private void emulate(Character character) throws OverflowException, ZeroDivideZeroException, ZeroDivideException, UncorrectedDataException {
+   private void emulate(Character character) {
       if (character == ',') {
           mainModel.addPoint();
       } else if (character == '0') {
@@ -191,7 +178,7 @@ class TestUtil extends Assert {
     *
     * @param number string value of number to enter
     */
-   private void enterNumber(String number) throws OverflowException, UncorrectedDataException, ZeroDivideZeroException, ZeroDivideException {
+   private void enterNumber(String number) {
       for (int i = 0; i < number.length() - 1; i++) {
          char character = number.charAt(i);
          emulate(character);
