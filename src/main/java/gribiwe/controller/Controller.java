@@ -1,10 +1,11 @@
 package gribiwe.controller;
 
 import gribiwe.controller.util.HistoryLineParser;
-import gribiwe.controller.util.LastSpecialOperationStoryParser;
 import gribiwe.controller.util.OutputNumberParser;
-import gribiwe.model.ModelBrain;
-import gribiwe.model.dto.*;
+import gribiwe.model.ModelBrainImpl;
+import gribiwe.model.dto.BuildingNumberDto;
+import gribiwe.model.dto.FormingSpecialOperationsDto;
+import gribiwe.model.dto.HistoryLineDto;
 import gribiwe.model.exception.*;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.SimpleOperation;
@@ -14,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -166,15 +168,9 @@ public class Controller implements Initializable {
    private HistoryLineParser historyLineParser;
 
    /**
-    * parser of special "fake" operations
-    * for history
-    */
-   private LastSpecialOperationStoryParser lastSpecialOperationStoryParser;
-
-   /**
     * exemplar of model brain
     */
-   private ModelBrain mainModel;
+   private ModelBrainImpl mainModel;
 
    /**
     * shows is buttons of calculator
@@ -187,9 +183,9 @@ public class Controller implements Initializable {
     */
    @Override
    public void initialize(URL location, ResourceBundle resources) {
+      mainModel = new ModelBrainImpl();
       outputNumberParser = new OutputNumberParser();
       historyLineParser = new HistoryLineParser();
-      lastSpecialOperationStoryParser = new LastSpecialOperationStoryParser();
    }
 
    /**
@@ -198,7 +194,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitOne() {
-      updateView(() -> mainModel.addDigit(Digit.ONE));
+      mainModel.addDigit(Digit.ONE);
+      updateAll();
    }
 
    /**
@@ -207,7 +204,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitTwo() {
-      updateView(() -> mainModel.addDigit(Digit.TWO));
+      mainModel.addDigit(Digit.TWO);
+      updateAll();
    }
 
    /**
@@ -216,7 +214,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitThree() {
-      updateView(() -> mainModel.addDigit(Digit.THREE));
+      mainModel.addDigit(Digit.THREE);
+      updateAll();
    }
 
    /**
@@ -225,7 +224,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitFour() {
-      updateView(() -> mainModel.addDigit(Digit.FOUR));
+      mainModel.addDigit(Digit.FOUR);
+      updateAll();
    }
 
 
@@ -235,7 +235,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitFive() {
-      updateView(() -> mainModel.addDigit(Digit.FIVE));
+      mainModel.addDigit(Digit.FIVE);
+      updateAll();
    }
 
    /**
@@ -244,7 +245,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitSix() {
-      updateView(() -> mainModel.addDigit(Digit.SIX));
+      mainModel.addDigit(Digit.SIX);
+      updateAll();
    }
 
    /**
@@ -253,7 +255,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitSeven() {
-      updateView(() -> mainModel.addDigit(Digit.SEVEN));
+      mainModel.addDigit(Digit.SEVEN);
+      updateAll();
    }
 
    /**
@@ -262,7 +265,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitEight() {
-      updateView(() -> mainModel.addDigit(Digit.EIGHT));
+      mainModel.addDigit(Digit.EIGHT);
+      updateAll();
    }
 
    /**
@@ -271,7 +275,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitNine() {
-      updateView(() -> mainModel.addDigit(Digit.NINE));
+      mainModel.addDigit(Digit.NINE);
+      updateAll();
    }
 
    /**
@@ -280,7 +285,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitZero() {
-      updateView(() -> mainModel.addDigit(Digit.ZERO));
+      mainModel.addDigit(Digit.ZERO);
+      updateAll();
    }
 
    /**
@@ -289,7 +295,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addPoint() {
-      updateView(() -> mainModel.addPoint());
+      mainModel.addPoint();
+      updateAll();
    }
 
    /**
@@ -297,7 +304,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void deleteDigit() {
-      updateView(() -> mainModel.deleteDigit());
+      mainModel.deleteDigit();
+      updateAll();
    }
 
    /**
@@ -305,7 +313,8 @@ public class Controller implements Initializable {
     */
    @FXML
    public void deleteAllDigits() {
-      updateView(() -> mainModel.deleteAllDigits());
+      mainModel.deleteAllDigits();
+      updateAll();
    }
 
    /**
@@ -314,193 +323,256 @@ public class Controller implements Initializable {
     */
    @FXML
    public void deleteAllDigitsAndHistory() {
-      updateView(() -> mainModel.deleteAllDigitsAndHistory());
+      mainModel.deleteAllDigitsAndHistory();
+      updateAll();
    }
 
    /**
     * method of operation percent
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doPercent() {
-      updateView(() -> mainModel.doPercent());
+      try {
+         mainModel.doPercent();
+         updateAll();
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of operation negate
-    *
-    * @see CalculatorAction
     */
    @FXML
-   public void doNegate() {
-      updateView(() -> mainModel.doNegate());
+   public void
+   doNegate() {
+      mainModel.doNegate();
+      updateAll();
    }
 
    /**
     * method of operation plus
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doPlus() {
-      updateView(() -> mainModel.doOperation(SimpleOperation.PLUS));
+      try {
+         mainModel.doOperation(SimpleOperation.PLUS);
+         updateAll();
+      } catch (ZeroDivideException e) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (ZeroDivideZeroException e) {
+         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of operation subtract
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doSubtract() {
-      updateView(() -> mainModel.doOperation(SimpleOperation.SUBTRACT));
+      try {
+         mainModel.doOperation(SimpleOperation.SUBTRACT);
+         updateAll();
+      } catch (ZeroDivideException e) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (ZeroDivideZeroException e) {
+         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of operation multiply
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doMultiply() {
-      updateView(() -> mainModel.doOperation(SimpleOperation.MULTIPLY));
+      try {
+         mainModel.doOperation(SimpleOperation.MULTIPLY);
+         updateAll();
+      } catch (ZeroDivideException e) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (ZeroDivideZeroException e) {
+         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of operation divide
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doDivide() {
-      updateView(() -> mainModel.doOperation(SimpleOperation.DIVIDE));
+      try {
+         mainModel.doOperation(SimpleOperation.DIVIDE);
+         updateAll();
+      } catch (ZeroDivideException e) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (ZeroDivideZeroException e) {
+         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of operation square
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doSquare() {
-      updateView(() -> mainModel.doSpecialOperation(SpecialOperation.SQUARE));
+      try {
+         mainModel.doSpecialOperation(SpecialOperation.SQUARE);
+         updateAll();
+      } catch (ZeroDivideException e) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (UncorrectedDataException e) {
+         updateError(INCORRECT_DATA_EXCEPTION_TEXT);
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of operation one divide by x
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doOneDivX() {
-      updateView(() -> mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X));
+      try {
+         mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X);
+         updateAll();
+      } catch (ZeroDivideException e) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (UncorrectedDataException e) {
+         updateError(INCORRECT_DATA_EXCEPTION_TEXT);
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of operation root
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doRoot() {
-      updateView(() -> mainModel.doSpecialOperation(SpecialOperation.ROOT));
+      try {
+         mainModel.doSpecialOperation(SpecialOperation.ROOT);
+         updateAll();
+      } catch (ZeroDivideException e) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (UncorrectedDataException e) {
+         updateError(INCORRECT_DATA_EXCEPTION_TEXT);
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of equals calling
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doEquals() {
-      updateView(() -> mainModel.doEquals());
+      try {
+         mainModel.doEquals();
+         updateAll();
+      } catch (ZeroDivideException e) {
+         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (ZeroDivideZeroException e) {
+         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT);
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
     * method of adding number to memory
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doAddMemory() {
-      updateView(() -> mainModel.operateMemory(ADD));
+      mainModel.operateMemory(ADD);
+      updateAll();
    }
 
    /**
     * method of removing number from memory
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doRemoveMemory() {
-      updateView(() -> mainModel.operateMemory(SUBTRACT));
+      mainModel.operateMemory(SUBTRACT);
+      updateAll();
    }
 
    /**
     * method of clearing memory
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void doClearMemory() {
-      updateView(() -> mainModel.clearMemory());
+      mainModel.clearMemory();
+      updateAll();
    }
 
    /**
     * method of loading memory number
-    *
-    * @see CalculatorAction
     */
    @FXML
    public void loadFromMemory() {
-      updateView(() -> mainModel.loadFromMemory());
+      try {
+         mainModel.loadFromMemory();
+         updateAll();
+      } catch (OverflowException e) {
+         updateError(OVERFLOW_EXCEPTION_TEXT);
+      }
    }
 
    /**
-    * method which processes an {@code AnswerDto}
-    * by parsers. Than sends a string values to view
+    * method which gets information from model
+    * and sends then to view
     *
-    * @see CalculatorAction
-    * @see AnswerDto
     * @see OutputNumberParser
     * @see HistoryLineParser
-    * @see LastSpecialOperationStoryParser
     */
-   private void updateView(CalculatorAction calculatorAction) {
-      AnswerDto answerDto;
-      try {
-         answerDto = calculatorAction.doAction();
-      } catch (CalculatorException e) {
-         processException(e);
-         return;
+   private void updateAll() {
+      updateHistory();
+      updateOutPutNumber();
+      updateMemory();
+   }
+
+   private void updateMemory() {
+      if (mainModel.isMemoryActive()) {
+         BigDecimal memoryNumber = mainModel.getMemoryNumber();
+         String memoryString = outputNumberParser.formatResult(memoryNumber, true);
+         memoryText.setText(memoryString);
+      } else {
+         memoryText.setText("");
       }
-
-      if (answerDto != null) {
-         String outputNumber;
-         OutputNumberDto outputNumberDto = answerDto.getOutputNumberDto();
-         if (outputNumberDto.getClass().equals(EnteredNumberDto.class)) {
-            outputNumber = outputNumberParser.formatInput((EnteredNumberDto) outputNumberDto);
-         } else {
-            outputNumber = outputNumberParser.formatResult(outputNumberDto.getValue(), true);
-         }
-         inputFieldNumber.setText(outputNumber);
-
-         String historyLineText = historyLineParser.parse(answerDto.getHistoryLineDto());
-         historyLineText += lastSpecialOperationStoryParser.parse(answerDto.getTailSpecialOperationHistoryDto());
-         historyLine.setText(historyLineText);
-
-         MemoryDto memoryDto = answerDto.getMemoryDto();
-         if (memoryDto.isEnable()) {
-            String memoryString = outputNumberParser.formatResult(memoryDto.getMemoryNumber(), true);
-            memoryText.setText(memoryString);
-         } else {
-            memoryText.setText("");
-         }
-         if (!enabledOperationButtons) {
-            setOperationButtonsDisable(false);
-         }
+      if (!enabledOperationButtons) {
+         setOperationButtonsDisable(false);
       }
+   }
+
+   private void updateOutPutNumber() {
+      String outputNumber;
+      if (mainModel.isBuildingNumber()) {
+         BuildingNumberDto buildingNumberDto = mainModel.getBuildingNumber();
+         outputNumber = outputNumberParser.formatInput(buildingNumberDto);
+      } else {
+         BigDecimal numberAtResult = mainModel.getResultNumber();
+         outputNumber = outputNumberParser.formatResult(numberAtResult, true);
+      }
+      inputFieldNumber.setText(outputNumber);
+   }
+
+   private void updateHistory() {
+      HistoryLineDto historyLineDto = mainModel.getHistoryLineDto();
+      String historyLineText = historyLineParser.parse(historyLineDto);
+
+      if (mainModel.isFormingSpecialOperation()) {
+         FormingSpecialOperationsDto formingSpecialOperationsDto = mainModel.getFormingSpecialOperationsDto();
+         historyLineText += historyLineParser.parseSpecialOperations(formingSpecialOperationsDto);
+      }
+      historyLine.setText(historyLineText);
    }
 
    /**
@@ -508,39 +580,12 @@ public class Controller implements Initializable {
     * to view of calculator
     *
     * @param messageToOutput message to show in result
-    * @param answerDto       dto to view
     */
-   private void updateError(String messageToOutput, AnswerDto answerDto) {
+   private void updateError(String messageToOutput) {
       setOperationButtonsDisable(true);
       inputFieldNumber.setText(messageToOutput);
-
-      HistoryLineDto historyLineDto = answerDto.getHistoryLineDto();
-      TailSpecialOperationHistoryDto lastSpecialOperationStory = answerDto.getTailSpecialOperationHistoryDto();
-
-      String historyLineText = historyLineParser.parse(historyLineDto);
-      historyLineText += lastSpecialOperationStoryParser.parse(lastSpecialOperationStory);
-      historyLine.setText(historyLineText);
+      updateHistory();
       mainModel.clearModel();
-   }
-
-   /**
-    * method for processing an exception
-    *
-    * @param e exception to process
-    */
-   private void processException(CalculatorException e) {
-      Class exceptionClass = e.getClass();
-      AnswerDto answerDto = e.getAnswerDto();
-
-      if (exceptionClass.equals(UncorrectedDataException.class)) {
-         updateError(INCORRECT_DATA_EXCEPTION_TEXT, answerDto);
-      } else if (exceptionClass.equals(ZeroDivideException.class)) {
-         updateError(DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDto);
-      } else if (exceptionClass.equals(ZeroDivideZeroException.class)) {
-         updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT, answerDto);
-      }  else if (exceptionClass.equals(OverflowException.class)) {
-         updateError(OVERFLOW_EXCEPTION_TEXT, answerDto);
-      }
    }
 
    /**
@@ -565,8 +610,5 @@ public class Controller implements Initializable {
       button_negate.setDisable(disable);
       button_point.setDisable(disable);
    }
-
-   public void setModel(ModelBrain mainModel) {
-      this.mainModel = mainModel;
-   }
 }
+// TODO: 17.10.2018 static. more static

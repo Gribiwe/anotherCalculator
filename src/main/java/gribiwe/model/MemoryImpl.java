@@ -1,6 +1,5 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.MemoryDto;
 import gribiwe.model.util.MemoryOperation;
 
 import java.math.BigDecimal;
@@ -8,13 +7,11 @@ import java.math.BigDecimal;
 import static gribiwe.model.util.MemoryOperation.ADD;
 
 /**
- * implementation of Memory
- * for keeping some number in specified place
+ * Class for keeping some number in specified place
  *
- * @see Memory
  * @author Gribiwe
  */
-class MemoryImpl implements Memory {
+class MemoryImpl {
 
    /**
     * shows is memory enabled
@@ -33,13 +30,21 @@ class MemoryImpl implements Memory {
       number = BigDecimal.ZERO;
    }
 
-   @Override
+   /**
+    * @return current memory number
+    */
    public BigDecimal getNumber() {
       return number;
    }
 
-   @Override
-   public void doOperation(BigDecimal num, MemoryOperation operation) {
+   /**
+    * making operation to current number with new one
+    *
+    * @param num       number to operate
+    * @param operation to process
+    * @see MemoryOperation
+    */
+   void doOperation(BigDecimal num, MemoryOperation operation) {
       if (operation == ADD) {
          number = number.add(num);
       } else {
@@ -48,15 +53,15 @@ class MemoryImpl implements Memory {
       enable = true;
    }
 
-   @Override
-   public void clear() {
+   public boolean isEnable() {
+      return enable;
+   }
+
+   /**
+    * clears memory
+    */
+   void clear() {
       number = BigDecimal.ZERO;
       enable = false;
    }
-
-   @Override
-   public MemoryDto getDTO() {
-      return new MemoryDto(number, enable);
-   }
-
 }

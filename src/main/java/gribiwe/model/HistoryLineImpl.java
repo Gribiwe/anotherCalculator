@@ -12,14 +12,12 @@ import java.util.List;
 import static gribiwe.model.util.SimpleOperation.*;
 
 /**
- * implementation of HistoryLine interface
- * for keeping information about operations
+ * keeping information about operations
  * and numbers at history
  *
  * @author Gribiwe
- * @see HistoryLine
  */
-class HistoryLineImpl implements HistoryLine {
+class HistoryLineImpl {
 
    /**
     * list of numbers at history
@@ -61,50 +59,88 @@ class HistoryLineImpl implements HistoryLine {
       specialOperations = new ArrayList<>();
    }
 
-   @Override
-   public void uploadSpecialOperations(List<SpecialOperation> specialOperations) {
+   /**
+    * uploads list of special operations to save it
+    * at history to last number
+    *
+    * @param specialOperations list of special operations
+    * @see SpecialOperation
+    * @see List
+    */
+   void uploadSpecialOperations(List<SpecialOperation> specialOperations) {
       this.specialOperations.set(this.specialOperations.size() - 1, specialOperations);
    }
 
-   @Override
+   /**
+    * adds number with provided operation
+    * to history
+    *
+    * @param number        number to add
+    * @param operation     operation to add
+    * @param saveOperation if true - saves last operation
+    *                      for some requirements
+    * @see SimpleOperation
+    */
    public void add(BigDecimal number, SimpleOperation operation, boolean saveOperation) {
       numbers.add(number);
       operations.add(operation);
       if (saveOperation) {
          savedOperation = operation;
       }
-      this.specialOperations.add(null);
+      this.specialOperations.add(new ArrayList<>());
 
    }
 
-   @Override
-   public BigDecimal getSavedResult() {
+   /**
+    * @return saved number
+    */
+   BigDecimal getSavedResult() {
       return savedResult;
    }
 
-   @Override
-   public SimpleOperation getSavedOperation() {
+   /**
+    * @return saved operation
+    * @see SimpleOperation
+    */
+   SimpleOperation getSavedOperation() {
       return savedOperation;
    }
 
-   @Override
-   public void setSavedResult(BigDecimal savedResult) {
+   /**
+    * sets saved number
+    *
+    * @param savedResult number to save
+    */
+   void setSavedResult(BigDecimal savedResult) {
       this.savedResult = savedResult;
    }
 
-   @Override
-   public HistoryLineDto getHistoryLineDTO() {
+   /**
+    * forms dto for answering from model
+    *
+    * @return dto of history line
+    * @see HistoryLineDto
+    */
+   HistoryLineDto getHistoryLineDto() {
       return new HistoryLineDto(numbers, operations, specialOperations);
    }
 
-   @Override
-   public void changeLastOperation(SimpleOperation operation) {
+   /**
+    * changing the last operation
+    *
+    * @param operation operation change to
+    * @see SimpleOperation
+    */
+   void changeLastOperation(SimpleOperation operation) {
       operations.set(operations.size() - 1, operation);
       savedOperation = operation;
    }
 
-   @Override
-   public SimpleOperation getLastOperation() {
+   /**
+    * @return last simple operation in history
+    * @see SimpleOperation
+    */
+   SimpleOperation getLastOperation() {
       if (operations.size() == 0) {
          return null;
       } else {
@@ -112,15 +148,22 @@ class HistoryLineImpl implements HistoryLine {
       }
    }
 
-   @Override
-   public void clearHistory() {
+   /**
+    * clears the history. All of arrays become empty
+    */
+   void clearHistory() {
       operations.clear();
       numbers.clear();
       specialOperations.clear();
    }
 
-   @Override
-   public BigDecimal calculate() {
+   /**
+    * calculating a numbers with
+    * operations in history
+    *
+    * @return result of calculation
+    */
+   BigDecimal calculate() {
       if (numbers.size() == 0) {
          return BigDecimal.ZERO;
       }

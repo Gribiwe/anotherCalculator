@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.TailSpecialOperationHistoryDto;
+import gribiwe.model.dto.FormingSpecialOperationsDto;
 import gribiwe.model.util.CalculatorMath;
 import gribiwe.model.util.SpecialOperation;
 
@@ -9,15 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * implementation of interface designed
- * to represent tail of history line
+ * Class designed to represent tail of history line
  * with processing special operations
  *
  * @author Gribiwe
- * @see TailSpecialOperationHistory
  * @see SpecialOperation
  */
-class TailSpecialOperationHistoryImpl implements TailSpecialOperationHistory {
+class TailSpecialOperationHistoryImpl {
 
    /**
     * list of special operations
@@ -47,47 +45,76 @@ class TailSpecialOperationHistoryImpl implements TailSpecialOperationHistory {
       processing = false;
    }
 
-   @Override
-   public boolean isProcessing() {
+   /**
+    * @return true if processing of new
+    * special operations
+    */
+   boolean isProcessing() {
       return processing;
    }
 
-   @Override
-   public BigDecimal getNumber() {
+   /**
+    * @return start number
+    */
+   BigDecimal getNumber() {
       return number;
    }
 
-   @Override
-   public void addOperation(SpecialOperation operation) {
+   /**
+    * adds special operation to list of special
+    * operations of current number
+    *
+    * @param operation operation to add
+    * @see SpecialOperation
+    */
+   void addOperation(SpecialOperation operation) {
       operations.add(operation);
    }
 
-   @Override
-   public void initNumber(BigDecimal number) {
+   /**
+    * initial of first number of new tail
+    *
+    * @param number number to start
+    */
+   void initNumber(BigDecimal number) {
       this.number = number;
       processing = true;
    }
 
-   @Override
-   public void clear() {
+   /**
+    * clears tail - all of operations and number
+    */
+   void clear() {
       number = null;
       operations = new ArrayList<>();
       processing = false;
    }
 
-   @Override
-   public TailSpecialOperationHistoryDto getDTO() {
+   /**
+    * forms a dto for answering from model
+    *
+    * @return formed dto
+    */
+   FormingSpecialOperationsDto getFormingSpecialOperationsDto() {
       if (number == null) return null;
-      return new TailSpecialOperationHistoryDto(operations, number);
+      return new FormingSpecialOperationsDto(operations, number);
    }
 
-   @Override
-   public BigDecimal calculate() {
+   /**
+    * calculates a special operations of this tail
+    *
+    * @return result of calculation
+    */
+   BigDecimal calculate() {
       return new CalculatorMath().calculateSpecialOperations(number, operations);
    }
 
-   @Override
-   public List<SpecialOperation> getOperations() {
+   /**
+    * @return list of special operations
+    * @see SpecialOperation
+    * @see List
+    */
+   List<SpecialOperation> getOperations() {
       return operations;
    }
 }

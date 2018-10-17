@@ -1,20 +1,18 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.EnteredNumberDto;
+import gribiwe.model.dto.BuildingNumberDto;
 import gribiwe.model.util.Digit;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * implementation of interface EnteringNumber
- * for building a new number
+ * Class for building a new number
  *
  * @author Gribiwe
- * @see EnteringNumber
- * @see EnteredNumberDto
+ * @see BuildingNumberDto
  */
-public class EnteringNumberImpl implements EnteringNumber {
+public class EnteringNumberImpl {
 
    /**
     * max length of building number
@@ -57,8 +55,12 @@ public class EnteringNumberImpl implements EnteringNumber {
       removeAllSymbols();
    }
 
-   @Override
-   public void addDigit(Digit digit) {
+   /**
+    * adds new digit to number
+    *
+    * @param digit digit to add
+    */
+   void addDigit(Digit digit) {
       int currentLimit = MAX_LENGTH;
 
       if (number.intValue() == 0) {
@@ -73,22 +75,28 @@ public class EnteringNumberImpl implements EnteringNumber {
          }
       }
    }
-//todo когда понадобится другая реализация.
-//todo сделать такую реализацию (с помощью инт-са) которой0
-   @Override
-   public void addPoint() {
+
+   /**
+    * adds point to number
+    * for creation decimal number
+    */
+   void addPoint() {
       needPoint = true;
    }
 
-   @Override
-   public void negate() {
+   /**
+    * negates number
+    */
+   void negate() {
       if (!(isZero() && leftLength + currentScale == 1) || needPoint) {
          needNegate = !needNegate;
       }
    }
 
-   @Override
-   public void removeSymbol() {
+   /**
+    * removing one digit or point
+    */
+   void removeSymbol() {
       if (needPoint && currentScale == 0) {
          needPoint = false;
       } else if (currentScale > 0) {
@@ -106,31 +114,15 @@ public class EnteringNumberImpl implements EnteringNumber {
       }
    }
 
-   @Override
-   public void removeAllSymbols() {
+   /**
+    * starts creation of number from the begin
+    */
+   void removeAllSymbols() {
       makeNumberZero();
       currentScale = 0;
       leftLength = 1;
       needNegate = false;
       needPoint = false;
-   }
-
-   @Override
-   public BigDecimal getNumber() {
-      BigDecimal numberToReturn = number;
-      if (needNegate) {
-         numberToReturn = numberToReturn.negate();
-      }
-      return numberToReturn;
-   }
-
-   @Override
-   public EnteredNumberDto getNumberDTO() {
-      BigDecimal numberToReturn = number;
-      if (needNegate) {
-         numberToReturn = numberToReturn.negate();
-      }
-      return new EnteredNumberDto(numberToReturn, needPoint, needNegate);
    }
 
    /**
@@ -187,5 +179,28 @@ public class EnteringNumberImpl implements EnteringNumber {
          leftLength++;
       }
       number = number.multiply(BigDecimal.valueOf(10)).add(BigDecimal.valueOf(digit));
+   }
+
+   /**
+    * @return constructed number as BigInteger
+    */
+   BigDecimal getNumber() {
+      BigDecimal numberToReturn = number;
+      if (needNegate) {
+         numberToReturn = numberToReturn.negate();
+      }
+      return numberToReturn;
+   }
+
+   /**
+    * @return constructed number
+    * with additional information
+    */
+   BuildingNumberDto getBuildingNumberDTO() {
+      BigDecimal numberToReturn = number;
+      if (needNegate) {
+         numberToReturn = numberToReturn.negate();
+      }
+      return new BuildingNumberDto(numberToReturn, needPoint, needNegate);
    }
 }

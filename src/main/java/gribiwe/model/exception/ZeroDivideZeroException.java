@@ -1,21 +1,20 @@
 package gribiwe.model.exception;
 
-import gribiwe.model.dto.AnswerDto;
 
 /**
- * CalculatorException class designed to be thrown
+ * Exception class designed to be thrown
  * if was trying to divide zero by zero
  *
  * @author Gribiwe
- * @see CalculatorException
  */
-public class ZeroDivideZeroException extends CalculatorException {
+public class ZeroDivideZeroException extends Exception {
 
    /**
-    * creates exception with answerDto inside
-    * @param answerDto current answer dto of model
+    * default constructor for messaged exception
+    *
+    * @param message message of exception
     */
-   public ZeroDivideZeroException(String message, AnswerDto answerDto) {
-      super(message, answerDto);
+   public ZeroDivideZeroException(String message) {
+      super(message);
    }
 }

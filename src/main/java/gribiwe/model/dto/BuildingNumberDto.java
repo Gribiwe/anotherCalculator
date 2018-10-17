@@ -4,13 +4,10 @@ import java.math.BigDecimal;
 
 /**
  * DTO of building number at calculator
- * extends OutputNumberDto so all of
- * entered numbers is OutputNumber too
  *
  * @author Gribiwe
- * @see OutputNumberDto
  */
-public class EnteredNumberDto extends OutputNumberDto {
+public class BuildingNumberDto {
 
    /**
     * shows is building number needs
@@ -25,14 +22,19 @@ public class EnteredNumberDto extends OutputNumberDto {
    private final boolean isNegated;
 
    /**
-    * initials of EnteredNumberDto
+    * BigDecimal building number
+    */
+   private final BigDecimal value;
+
+   /**
+    * initials of BuildingNumberDto
     *
     * @param value     current number
     * @param isPointed needs to be pointed
     * @param isNegated needs to be negated
     */
-   public EnteredNumberDto(BigDecimal value, boolean isPointed, boolean isNegated) {
-      super(value);
+   public BuildingNumberDto(BigDecimal value, boolean isPointed, boolean isNegated) {
+      this.value = value;
       this.isPointed = isPointed;
       this.isNegated = isNegated;
    }
@@ -43,5 +45,9 @@ public class EnteredNumberDto extends OutputNumberDto {
 
    public boolean isNegated() {
       return isNegated;
+   }
+
+   public BigDecimal getValue() {
+      return value;
    }
 }

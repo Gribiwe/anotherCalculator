@@ -1,18 +1,15 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.OutputNumberDto;
 import gribiwe.model.util.ResultNumberStatus;
 
 import java.math.BigDecimal;
 
 /**
- * implementation of interface for keeping number
- * with some status
+ * Class for keeping number with some status
  *
  * @author Gribiwe
- * @see ResultNumber
  */
-class ResultNumberImpl implements ResultNumber {
+class ResultNumberImpl {
 
    /**
     * current number
@@ -34,29 +31,37 @@ class ResultNumberImpl implements ResultNumber {
       status = ResultNumberStatus.EQUALS_RESULT;
    }
 
-   @Override
-   public void loadResult(BigDecimal result, ResultNumberStatus resultNumberStatus) {
+   /**
+    * method for loading number with
+    * provided status
+    *
+    * @param result      number to load
+    * @param resultNumberStatus status of number
+    */
+   void loadResult(BigDecimal result, ResultNumberStatus resultNumberStatus) {
       number = result;
       status = resultNumberStatus;
    }
 
-   @Override
-   public OutputNumberDto getNumberDTO() {
-      return new OutputNumberDto(number);
-   }
-
-   @Override
-   public BigDecimal getNumber() {
+   /**
+    * @return current BigDecimal number
+    */
+   BigDecimal getNumber() {
       return number;
    }
 
-   @Override
-   public ResultNumberStatus getStatus() {
+   /**
+    * @return current status or result number
+    * @see ResultNumberStatus
+    */
+   ResultNumberStatus getStatus() {
       return status;
    }
 
-   @Override
-   public void clear() {
+   /**
+    * clears result number
+    */
+   void clear() {
       number = BigDecimal.ZERO;
       status = ResultNumberStatus.EQUALS_RESULT;
    }

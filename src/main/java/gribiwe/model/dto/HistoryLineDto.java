@@ -13,6 +13,7 @@ import java.util.List;
  * @author Gribiwe
  */
 public class HistoryLineDto {
+
    /**
     * list of numbers at history
     */

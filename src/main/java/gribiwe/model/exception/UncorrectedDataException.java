@@ -1,21 +1,19 @@
 package gribiwe.model.exception;
 
-import gribiwe.model.dto.AnswerDto;
-
 /**
- * CalculatorException class designed to be thrown
+ * Exception class designed to be thrown
  * if was trying to get root of negated value
  *
  * @author Gribiwe
- * @see CalculatorException
  */
-public class UncorrectedDataException extends CalculatorException {
+public class UncorrectedDataException extends Exception {
 
    /**
-    * creates exception with answerDto inside
-    * @param answerDto current answer dto of model
+    * default constructor for messaged exception
+    *
+    * @param message message of exception
     */
-   public UncorrectedDataException(String message, AnswerDto answerDto) {
-      super(message, answerDto);
+   public UncorrectedDataException(String message) {
+      super(message);
    }
 }

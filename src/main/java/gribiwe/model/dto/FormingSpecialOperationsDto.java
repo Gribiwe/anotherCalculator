@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Gribiwe
  */
-public class TailSpecialOperationHistoryDto {
+public class FormingSpecialOperationsDto {
 
    /**
     * list of current processing special operations
@@ -28,7 +28,7 @@ public class TailSpecialOperationHistoryDto {
     * @param operations current processing special operations
     * @param number     number of start of building
     */
-   public TailSpecialOperationHistoryDto(List<SpecialOperation> operations, BigDecimal number) {
+   public FormingSpecialOperationsDto(List<SpecialOperation> operations, BigDecimal number) {
       this.operations = operations;
       this.number = number;
    }

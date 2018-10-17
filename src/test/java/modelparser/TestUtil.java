@@ -1,15 +1,15 @@
 package modelparser;
 
 import gribiwe.controller.util.HistoryLineParser;
-import gribiwe.controller.util.LastSpecialOperationStoryParser;
 import gribiwe.controller.util.OutputNumberParser;
 import gribiwe.model.EnteringNumberImpl;
-import gribiwe.model.ModelBrain;
 import gribiwe.model.ModelBrainImpl;
-import gribiwe.model.dto.AnswerDto;
-import gribiwe.model.dto.EnteredNumberDto;
-import gribiwe.model.dto.OutputNumberDto;
-import gribiwe.model.exception.CalculatorException;
+import gribiwe.model.dto.BuildingNumberDto;
+import gribiwe.model.dto.FormingSpecialOperationsDto;
+import gribiwe.model.exception.OverflowException;
+import gribiwe.model.exception.UncorrectedDataException;
+import gribiwe.model.exception.ZeroDivideException;
+import gribiwe.model.exception.ZeroDivideZeroException;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
@@ -29,14 +29,14 @@ class TestUtil extends Assert {
    /**
     * exemplar of Main model class
     */
-   private ModelBrain mainModel;
+   private ModelBrainImpl mainModel;
 
    /**
     * default constructor which
     * makes initialization of main model
     */
    TestUtil() {
-      mainModel = new ModelBrainImpl(new EnteringNumberImpl());
+      mainModel = new ModelBrainImpl();
    }
 
    /**
@@ -54,24 +54,6 @@ class TestUtil extends Assert {
    }
 
    /**
-    * method for testing of thrown
-    * exception after emulating actions
-    *
-    * @param actionSequence string value of sequence
-    *                       which will be emulated
-    * @param expected       class of expected thrown exception
-    * @param <T>            any throwable object
-    */
-   <T extends Throwable> void doExceptionTest(String actionSequence, Class<T> expected) {
-      mainModel.clearModel();
-      Assertions.assertThrows(expected, () -> {
-         for (String command : actionSequence.split(" ")) {
-            emulate(command);
-         }
-      });
-   }
-
-   /**
     * test method for testing parsed model value
     *
     * @param actionSequence       string value of sequence
@@ -82,40 +64,43 @@ class TestUtil extends Assert {
     * @param expectedMemory       value of expected memory value
     */
    void doTest(String actionSequence, String expectedOutputNumber, String expectedHistory, String expectedMemory) {
-      mainModel = new ModelBrainImpl(new EnteringNumberImpl());
-      AnswerDto answerDto = null;
+      mainModel = new ModelBrainImpl();
 
       HistoryLineParser historyLineParser = new HistoryLineParser();
-      LastSpecialOperationStoryParser lastSpecialOperationStoryParser = new LastSpecialOperationStoryParser();
+      OutputNumberParser outputNumberParser = new OutputNumberParser();
 
       for (String command : actionSequence.split(" ")) {
          try {
-            answerDto = emulate(command);
-         } catch (CalculatorException e) {
-            fail("Unexpected exception in test: \n");
+            emulate(command);
+         } catch (OverflowException e) {
+            e.printStackTrace();
+         } catch (ZeroDivideZeroException e) {
+            e.printStackTrace();
+         } catch (ZeroDivideException e) {
+            e.printStackTrace();
+         } catch (UncorrectedDataException e) {
             e.printStackTrace();
          }
       }
 
-      assertNotNull("mistake at action sequence", answerDto);
-      OutputNumberParser outputNumberParser = new OutputNumberParser();
-
-      OutputNumberDto outputNumberDto = answerDto.getOutputNumberDto();
       String outputNumberAtResult;
-      if (outputNumberDto.getClass().equals(EnteredNumberDto.class)) {
-         outputNumberAtResult = outputNumberParser.formatInput((EnteredNumberDto) answerDto.getOutputNumberDto());
+      if (mainModel.isBuildingNumber()) {
+         outputNumberAtResult = outputNumberParser.formatInput(mainModel.getBuildingNumber());
       } else {
-         outputNumberAtResult = outputNumberParser.formatResult(outputNumberDto.getValue(), true);
+         outputNumberAtResult = outputNumberParser.formatResult(mainModel.getResultNumber(), true);
       }
       assertEquals(expectedOutputNumber, outputNumberAtResult);
 
       String historyLineAtResult;
-      historyLineAtResult = historyLineParser.parse(answerDto.getHistoryLineDto());
-      historyLineAtResult += lastSpecialOperationStoryParser.parse(answerDto.getTailSpecialOperationHistoryDto());
+      historyLineAtResult = historyLineParser.parse(mainModel.getHistoryLineDto());
+      if (mainModel.isFormingSpecialOperation()) {
+         FormingSpecialOperationsDto formingSpecialOperationsDto = mainModel.getFormingSpecialOperationsDto();
+         historyLineAtResult += historyLineParser.parseSpecialOperations(formingSpecialOperationsDto);
+      }
       assertEquals(expectedHistory, historyLineAtResult);
 
       String memoryNumberAtResult;
-      memoryNumberAtResult = outputNumberParser.formatResult(answerDto.getMemoryDto().getMemoryNumber(), true);
+      memoryNumberAtResult = outputNumberParser.formatResult(mainModel.getMemoryNumber(), true);
       assertEquals(expectedMemory, memoryNumberAtResult);
    }
 
@@ -126,47 +111,44 @@ class TestUtil extends Assert {
     * @param section string value of
     *                operation or number to emulate
     * @return answer of model
-    * @throws CalculatorException if was overflow, taking root
-    *                             of negative value, dividing by
-    *                             zero or zero was divided by zero
     */
-   private AnswerDto emulate(String section) throws CalculatorException {
+   private void emulate(String section) throws OverflowException, ZeroDivideZeroException, ZeroDivideException, UncorrectedDataException {
       if (section.equals("/")) {
-         return mainModel.doOperation(SimpleOperation.DIVIDE);
+         mainModel.doOperation(SimpleOperation.DIVIDE);
       } else if (section.equals("*")) {
-         return mainModel.doOperation(SimpleOperation.MULTIPLY);
+         mainModel.doOperation(SimpleOperation.MULTIPLY);
       } else if (section.equals("-")) {
-         return mainModel.doOperation(SimpleOperation.SUBTRACT);
+         mainModel.doOperation(SimpleOperation.SUBTRACT);
       } else if (section.equals("+")) {
-         return mainModel.doOperation(SimpleOperation.PLUS);
+         mainModel.doOperation(SimpleOperation.PLUS);
       } else if (section.equals("=")) {
-         return mainModel.doEquals();
+         mainModel.doEquals();
       } else if (section.equals("√")) {
-         return mainModel.doSpecialOperation(SpecialOperation.ROOT);
+         mainModel.doSpecialOperation(SpecialOperation.ROOT);
       } else if (section.equals("1/x")) {
-         return mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X);
+         mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X);
       } else if (section.equals("sqr")) {
-         return mainModel.doSpecialOperation(SpecialOperation.SQUARE);
+         mainModel.doSpecialOperation(SpecialOperation.SQUARE);
       } else if (section.equals("%")) {
-         return mainModel.doPercent();
+         mainModel.doPercent();
       } else if (section.equals("m+")) {
-         return mainModel.operateMemory(ADD);
+         mainModel.operateMemory(ADD);
       } else if (section.equals("m-")) {
-         return mainModel.operateMemory(SUBTRACT);
+         mainModel.operateMemory(SUBTRACT);
       } else if (section.equals("mr")) {
-         return mainModel.loadFromMemory();
+         mainModel.loadFromMemory();
       } else if (section.equals("mc")) {
-         return mainModel.clearMemory();
+         mainModel.clearMemory();
       } else if (section.equals("ce")) {
-         return mainModel.deleteAllDigits();
+         mainModel.deleteAllDigits();
       } else if (section.equals("c")) {
-         return mainModel.deleteAllDigitsAndHistory();
+         mainModel.deleteAllDigitsAndHistory();
       } else if (section.equals("backspace")) {
-         return mainModel.deleteDigit();
+         mainModel.deleteDigit();
       } else if (section.equals("n")) {
-         return mainModel.doNegate();
+         mainModel.doNegate();
       } else {
-         return enterNumber(section);
+         enterNumber(section);
       }
    }
 
@@ -177,35 +159,30 @@ class TestUtil extends Assert {
     *
     * @param character char value to emulate
     * @return answer of model
-    * @throws CalculatorException if was overflow, taking root
-    *                             of negative value, dividing by
-    *                             zero or zero was divided by zero
     */
-   private AnswerDto emulate(Character character) throws CalculatorException {
+   private void emulate(Character character) throws OverflowException, ZeroDivideZeroException, ZeroDivideException, UncorrectedDataException {
       if (character == ',') {
-         return mainModel.addPoint();
+          mainModel.addPoint();
       } else if (character == '0') {
-         return mainModel.addDigit(Digit.ZERO);
+          mainModel.addDigit(Digit.ZERO);
       } else if (character == '1') {
-         return mainModel.addDigit(Digit.ONE);
+          mainModel.addDigit(Digit.ONE);
       } else if (character == '2') {
-         return mainModel.addDigit(Digit.TWO);
+          mainModel.addDigit(Digit.TWO);
       } else if (character == '3') {
-         return mainModel.addDigit(Digit.THREE);
+          mainModel.addDigit(Digit.THREE);
       } else if (character == '4') {
-         return mainModel.addDigit(Digit.FOUR);
+          mainModel.addDigit(Digit.FOUR);
       } else if (character == '5') {
-         return mainModel.addDigit(Digit.FIVE);
+          mainModel.addDigit(Digit.FIVE);
       } else if (character == '6') {
-         return mainModel.addDigit(Digit.SIX);
+          mainModel.addDigit(Digit.SIX);
       } else if (character == '7') {
-         return mainModel.addDigit(Digit.SEVEN);
+          mainModel.addDigit(Digit.SEVEN);
       } else if (character == '8') {
-         return mainModel.addDigit(Digit.EIGHT);
+          mainModel.addDigit(Digit.EIGHT);
       } else if (character == '9') {
-         return mainModel.addDigit(Digit.NINE);
-      } else {
-         return null;
+          mainModel.addDigit(Digit.NINE);
       }
    }
 
@@ -213,16 +190,12 @@ class TestUtil extends Assert {
     * method for entering a number to model
     *
     * @param number string value of number to enter
-    * @return answer of model
-    * @throws CalculatorException if was overflow, taking root
-    *                             of negative value, dividing by
-    *                             zero or zero was divided by zero
     */
-   private AnswerDto enterNumber(String number) throws CalculatorException {
+   private void enterNumber(String number) throws OverflowException, UncorrectedDataException, ZeroDivideZeroException, ZeroDivideException {
       for (int i = 0; i < number.length() - 1; i++) {
          char character = number.charAt(i);
          emulate(character);
       }
-      return emulate(number.charAt(number.length() - 1));
+      emulate(number.charAt(number.length() - 1));
    }
 }
