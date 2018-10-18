@@ -2,8 +2,8 @@ package modelparser;
 
 import gribiwe.controller.util.HistoryLineParser;
 import gribiwe.controller.util.OutputNumberParser;
-import gribiwe.model.ModelBrainImpl;
-import gribiwe.model.dto.FormingSpecialOperationsDto;
+import gribiwe.model.ModelBrain;
+import gribiwe.model.dto.BuildingSpecialOperations;
 import gribiwe.model.exception.OverflowException;
 import gribiwe.model.exception.UncorrectedDataException;
 import gribiwe.model.exception.ZeroDivideException;
@@ -11,6 +11,8 @@ import gribiwe.model.exception.ZeroDivideZeroException;
 import gribiwe.model.util.Digit;
 import gribiwe.model.util.SimpleOperation;
 import gribiwe.model.util.SpecialOperation;
+
+import java.math.BigDecimal;
 
 import static gribiwe.model.util.MemoryOperation.ADD;
 import static gribiwe.model.util.MemoryOperation.SUBTRACT;
@@ -27,14 +29,14 @@ class TestUtil {
    /**
     * exemplar of Main model class
     */
-   private ModelBrainImpl mainModel;
+   private ModelBrain mainModel;
 
    /**
     * default constructor which
     * makes initialization of main model
     */
    TestUtil() {
-      mainModel = new ModelBrainImpl();
+      mainModel = new ModelBrain();
    }
 
    /**
@@ -62,11 +64,11 @@ class TestUtil {
     * @param expectedMemory       value of expected memory value
     */
    void doTest(String actionSequence, String expectedOutputNumber, String expectedHistory, String expectedMemory) {
-      mainModel = new ModelBrainImpl();
-
+      mainModel = new ModelBrain();
+      BigDecimal modelResult = null;
       for (String command : actionSequence.split(" ")) {
          try {
-            emulate(command);
+            modelResult = emulate(command);
          } catch (OverflowException | ZeroDivideZeroException | ZeroDivideException | UncorrectedDataException e) {
             fail("unexpected exception");
          }
@@ -76,15 +78,15 @@ class TestUtil {
       if (mainModel.isBuildingNumber()) {
          outputNumberAtResult = OutputNumberParser.formatInput(mainModel.getBuildingNumber());
       } else {
-         outputNumberAtResult = OutputNumberParser.formatResult(mainModel.getResultNumber(), true);
+         outputNumberAtResult = OutputNumberParser.formatResult(modelResult, true);
       }
       assertEquals(expectedOutputNumber, outputNumberAtResult);
 
       String historyLineAtResult;
       historyLineAtResult = HistoryLineParser.parse(mainModel.getHistoryLineDto());
       if (mainModel.isFormingSpecialOperation()) {
-         FormingSpecialOperationsDto formingSpecialOperationsDto = mainModel.getFormingSpecialOperationsDto();
-         historyLineAtResult += HistoryLineParser.parseSpecialOperations(formingSpecialOperationsDto);
+         BuildingSpecialOperations buildingSpecialOperations = mainModel.getFormingSpecialOperationsDto();
+         historyLineAtResult += HistoryLineParser.parseSpecialOperations(buildingSpecialOperations);
       }
       assertEquals(expectedHistory, historyLineAtResult);
 
@@ -99,45 +101,48 @@ class TestUtil {
     *
     * @param section string value of
     *                operation or number to emulate
+    * @return result from model after emulating action
     */
-   private void emulate(String section) throws OverflowException, ZeroDivideZeroException, ZeroDivideException, UncorrectedDataException {
+   private BigDecimal emulate(String section) throws OverflowException, ZeroDivideZeroException, ZeroDivideException, UncorrectedDataException {
+      BigDecimal toReturn;
       if (section.equals("/")) {
-         mainModel.doOperation(SimpleOperation.DIVIDE);
+         toReturn = mainModel.doOperation(SimpleOperation.DIVIDE);
       } else if (section.equals("*")) {
-         mainModel.doOperation(SimpleOperation.MULTIPLY);
+         toReturn = mainModel.doOperation(SimpleOperation.MULTIPLY);
       } else if (section.equals("-")) {
-         mainModel.doOperation(SimpleOperation.SUBTRACT);
+         toReturn = mainModel.doOperation(SimpleOperation.SUBTRACT);
       } else if (section.equals("+")) {
-         mainModel.doOperation(SimpleOperation.PLUS);
+         toReturn = mainModel.doOperation(SimpleOperation.PLUS);
       } else if (section.equals("=")) {
-         mainModel.doEquals();
+         toReturn = mainModel.doEquals();
       } else if (section.equals("√")) {
-         mainModel.doSpecialOperation(SpecialOperation.ROOT);
+         toReturn = mainModel.doSpecialOperation(SpecialOperation.ROOT);
       } else if (section.equals("1/x")) {
-         mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X);
+         toReturn = mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X);
       } else if (section.equals("sqr")) {
-         mainModel.doSpecialOperation(SpecialOperation.SQUARE);
+         toReturn = mainModel.doSpecialOperation(SpecialOperation.SQUARE);
       } else if (section.equals("%")) {
-         mainModel.doPercent();
+         toReturn = mainModel.doPercent();
       } else if (section.equals("m+")) {
-         mainModel.operateMemory(ADD);
+         toReturn = mainModel.operateMemory(ADD);
       } else if (section.equals("m-")) {
-         mainModel.operateMemory(SUBTRACT);
+         toReturn = mainModel.operateMemory(SUBTRACT);
       } else if (section.equals("mr")) {
-         mainModel.loadFromMemory();
+         toReturn = mainModel.loadFromMemory();
       } else if (section.equals("mc")) {
-         mainModel.clearMemory();
+         toReturn = mainModel.clearMemory();
       } else if (section.equals("ce")) {
-         mainModel.deleteAllDigits();
+         toReturn = mainModel.deleteAllDigits();
       } else if (section.equals("c")) {
-         mainModel.deleteAllDigitsAndHistory();
+         toReturn = mainModel.deleteAllDigitsAndHistory();
       } else if (section.equals("backspace")) {
-         mainModel.deleteDigit();
+         toReturn = mainModel.deleteDigit();
       } else if (section.equals("n")) {
-         mainModel.doNegate();
+         toReturn = mainModel.doNegate();
       } else {
-         enterNumber(section);
+         toReturn = enterNumber(section);
       }
+      return toReturn;
    }
 
    /**
@@ -146,43 +151,51 @@ class TestUtil {
     * Expected, it's a numbers or point
     *
     * @param character char value to emulate
+    * @return number from model after entering character
     */
-   private void emulate(Character character) {
+   private BigDecimal emulate(Character character) {
+      BigDecimal toReturn;
       if (character == ',') {
-          mainModel.addPoint();
+         toReturn = mainModel.addPoint();
       } else if (character == '0') {
-          mainModel.addDigit(Digit.ZERO);
+         toReturn = mainModel.addDigit(Digit.ZERO);
       } else if (character == '1') {
-          mainModel.addDigit(Digit.ONE);
+         toReturn = mainModel.addDigit(Digit.ONE);
       } else if (character == '2') {
-          mainModel.addDigit(Digit.TWO);
+         toReturn = mainModel.addDigit(Digit.TWO);
       } else if (character == '3') {
-          mainModel.addDigit(Digit.THREE);
+         toReturn = mainModel.addDigit(Digit.THREE);
       } else if (character == '4') {
-          mainModel.addDigit(Digit.FOUR);
+         toReturn = mainModel.addDigit(Digit.FOUR);
       } else if (character == '5') {
-          mainModel.addDigit(Digit.FIVE);
+         toReturn = mainModel.addDigit(Digit.FIVE);
       } else if (character == '6') {
-          mainModel.addDigit(Digit.SIX);
+         toReturn = mainModel.addDigit(Digit.SIX);
       } else if (character == '7') {
-          mainModel.addDigit(Digit.SEVEN);
+         toReturn = mainModel.addDigit(Digit.SEVEN);
       } else if (character == '8') {
-          mainModel.addDigit(Digit.EIGHT);
+         toReturn = mainModel.addDigit(Digit.EIGHT);
       } else if (character == '9') {
-          mainModel.addDigit(Digit.NINE);
+         toReturn = mainModel.addDigit(Digit.NINE);
+      } else {
+         System.out.println(character);
+         fail("error in syntax");
+         toReturn = null;
       }
+      return toReturn;
    }
 
    /**
     * method for entering a number to model
     *
     * @param number string value of number to enter
+    * @return number from model after entering number
     */
-   private void enterNumber(String number) {
+   private BigDecimal enterNumber(String number) {
       for (int i = 0; i < number.length() - 1; i++) {
          char character = number.charAt(i);
          emulate(character);
       }
-      emulate(number.charAt(number.length() - 1));
+      return emulate(number.charAt(number.length() - 1));
    }
 }

@@ -1,6 +1,6 @@
 package model;
 
-import gribiwe.model.ModelBrainImpl;
+import gribiwe.model.ModelBrain;
 import gribiwe.model.exception.OverflowException;
 import gribiwe.model.exception.UncorrectedDataException;
 import gribiwe.model.exception.ZeroDivideException;
@@ -23,22 +23,23 @@ public class ModelTest extends Assert {
    /**
     * exemplar of Main model class
     */
-   private static ModelBrainImpl mainModel;
+   private static ModelBrain mainModel;
 
    /**
     * initialization of mainModel
     */
    @BeforeAll
    static void setup() {
-      mainModel = new ModelBrainImpl();
+      mainModel = new ModelBrain();
    }
 
    /**
     * testing model
-    * 3 * 2 - 5 * 10 - 1 √ have be 3
+    * 3 * 2 - 5 * 10 - 1 = √  =| have be 3
     */
    @Test
    void testModel() {
+      BigDecimal result = null;
       try {
          mainModel.addDigit(Digit.THREE);
          mainModel.doOperation(SimpleOperation.MULTIPLY);
@@ -51,16 +52,11 @@ public class ModelTest extends Assert {
          mainModel.doOperation(SimpleOperation.SUBTRACT);
          mainModel.addDigit(Digit.ONE);
          mainModel.doEquals();
-         mainModel.doSpecialOperation(SpecialOperation.ROOT);
-      } catch (ZeroDivideZeroException e) {
-         e.printStackTrace();
-      } catch (OverflowException e) {
-         e.printStackTrace();
-      } catch (ZeroDivideException e) {
-         e.printStackTrace();
-      } catch (UncorrectedDataException e) {
+         result = mainModel.doSpecialOperation(SpecialOperation.ROOT);
+      } catch (ZeroDivideZeroException | UncorrectedDataException | OverflowException | ZeroDivideException e) {
          e.printStackTrace();
       }
-      assertEquals(0, mainModel.getResultNumber().compareTo(BigDecimal.valueOf(3)));
+      System.out.println(result);
+      assertEquals(0,result.compareTo(BigDecimal.valueOf(3)));
    }
 }

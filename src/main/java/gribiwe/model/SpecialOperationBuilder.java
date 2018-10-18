@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.FormingSpecialOperationsDto;
+import gribiwe.model.dto.BuildingSpecialOperations;
 import gribiwe.model.util.CalculatorMath;
 import gribiwe.model.util.SpecialOperation;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @author Gribiwe
  * @see SpecialOperation
  */
-class TailSpecialOperationHistoryImpl {
+class SpecialOperationBuilder {
 
    /**
     * list of special operations
@@ -39,7 +39,7 @@ class TailSpecialOperationHistoryImpl {
    /**
     * initial of default values
     */
-   TailSpecialOperationHistoryImpl() {
+   SpecialOperationBuilder() {
       number = null;
       operations = new ArrayList<>();
       processing = false;
@@ -95,9 +95,11 @@ class TailSpecialOperationHistoryImpl {
     *
     * @return formed dto
     */
-   FormingSpecialOperationsDto getFormingSpecialOperationsDto() {
-      if (number == null) return null;
-      return new FormingSpecialOperationsDto(operations, number);
+   BuildingSpecialOperations getFormingSpecialOperationsDto() {
+      if (number == null) {
+         return null;
+      }
+      return new BuildingSpecialOperations(operations, number);
    }
 
    /**

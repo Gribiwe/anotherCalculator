@@ -1,7 +1,7 @@
 package gribiwe.controller.util;
 
-import gribiwe.model.dto.FormingSpecialOperationsDto;
-import gribiwe.model.dto.HistoryLineDto;
+import gribiwe.model.dto.BuildingSpecialOperations;
+import gribiwe.model.dto.HistoryInfo;
 import gribiwe.model.util.Operation;
 import gribiwe.model.util.SpecialOperation;
 
@@ -18,29 +18,29 @@ import static gribiwe.model.util.SimpleOperation.*;
 public class HistoryLineParser {
 
    /**
-    * method for parsing {@code HistoryLineDto} to string value
+    * method for parsing {@code HistoryInfo} to string value
     *
-    * @param historyLineDto DTO of history line from model
-    * @return string value of parsed history
+    * @param historyInfo DTO of historyInfo line from model
+    * @return string value of parsed historyInfo
     */
-   public static String parse(HistoryLineDto historyLineDto) {
+   public static String parse(HistoryInfo historyInfo) {
       StringBuilder stringBuilder = new StringBuilder();
 
-      for (int i = 0; i < historyLineDto.getNumbers().size(); i++) {
+      for (int i = 0; i < historyInfo.getNumbers().size(); i++) {
          String number;
-         if (historyLineDto.getSpecialOperations().get(i) != null) {
-            number = parseSpecialOperations(historyLineDto.getNumbers().get(i), historyLineDto.getSpecialOperations().get(i));
+         if (historyInfo.getSpecialOperations().get(i) != null) {
+            number = parseSpecialOperations(historyInfo.getNumbers().get(i), historyInfo.getSpecialOperations().get(i));
          } else {
-            number = OutputNumberParser.formatResult((historyLineDto.getNumbers().get(i)), false);
+            number = OutputNumberParser.formatResult((historyInfo.getNumbers().get(i)), false);
          }
 
-         if (historyLineDto.getOperations().get(i).equals(PLUS)) {
+         if (historyInfo.getOperations().get(i).equals(PLUS)) {
             stringBuilder.append(number).append("   +   ");
-         } else if (historyLineDto.getOperations().get(i).equals(SUBTRACT)) {
+         } else if (historyInfo.getOperations().get(i).equals(SUBTRACT)) {
             stringBuilder.append(number).append("   -   ");
-         } else if (historyLineDto.getOperations().get(i).equals(MULTIPLY)) {
+         } else if (historyInfo.getOperations().get(i).equals(MULTIPLY)) {
             stringBuilder.append(number).append("   ×   ");
-         } else if (historyLineDto.getOperations().get(i).equals(DIVIDE)) {
+         } else if (historyInfo.getOperations().get(i).equals(DIVIDE)) {
             stringBuilder.append(number).append("   ÷   ");
          }
       }
@@ -76,10 +76,10 @@ public class HistoryLineParser {
     * method for parsing dto with
     * information about forming special operations
     *
-    * @param formingSpecialOperationsDto dto to parse
+    * @param buildingSpecialOperations dto to parse
     * @return string value of parsed number with operations
     */
-   public static String parseSpecialOperations(FormingSpecialOperationsDto formingSpecialOperationsDto) {
-      return parseSpecialOperations(formingSpecialOperationsDto.getNumber(), formingSpecialOperationsDto.getOperations());
+   public static String parseSpecialOperations(BuildingSpecialOperations buildingSpecialOperations) {
+      return parseSpecialOperations(buildingSpecialOperations.getNumber(), buildingSpecialOperations.getOperations());
    }
 }

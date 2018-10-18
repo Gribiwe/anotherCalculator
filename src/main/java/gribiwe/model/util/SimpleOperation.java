@@ -27,11 +27,5 @@ public enum SimpleOperation implements Operation{
     * operation of dividing
     * one number by another one
     */
-   DIVIDE,
-
-   /**
-    * empty operation for
-    * ignoring in history
-    */
-   NOTHING
+   DIVIDE
 }

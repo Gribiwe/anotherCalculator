@@ -1,6 +1,6 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.BuildingNumberDto;
+import gribiwe.model.dto.BuildingNumber;
 import gribiwe.model.util.Digit;
 
 import java.math.BigDecimal;
@@ -10,9 +10,9 @@ import java.math.RoundingMode;
  * Class for building a new number
  *
  * @author Gribiwe
- * @see BuildingNumberDto
+ * @see BuildingNumber
  */
-public class EnteringNumberImpl {
+class NumberBuilder {
 
    /**
     * max length of building number
@@ -51,7 +51,7 @@ public class EnteringNumberImpl {
    /**
     * first initials of building number
     */
-   EnteringNumberImpl() {
+   NumberBuilder() {
       removeAllSymbols();
    }
 
@@ -102,7 +102,7 @@ public class EnteringNumberImpl {
       } else if (currentScale > 0) {
          decreaseScale();
       } else if (leftLength > 1) {
-         number = number.divide(BigDecimal.valueOf(10), 0, RoundingMode.DOWN);
+         number = number.divide(BigDecimal.TEN, 0, RoundingMode.DOWN);
          leftLength--;
       } else if (leftLength == 1) {
          makeNumberZero();
@@ -149,8 +149,9 @@ public class EnteringNumberImpl {
     */
    private void addDigitAfterPoint(int digit) {
       increaseScale();
-      BigDecimal newNumberOfDigitToAdd = BigDecimal.valueOf(digit).divide(BigDecimal.valueOf(Math.pow(10, currentScale)), currentScale, RoundingMode.DOWN);
-      number = number.add(newNumberOfDigitToAdd);
+      double doubleNumberToAdd = digit / Math.pow(10, currentScale);
+      BigDecimal numberToAdd = BigDecimal.valueOf(doubleNumberToAdd).setScale(currentScale, RoundingMode.DOWN);
+      number = number.add(numberToAdd);
    }
 
    /**
@@ -196,11 +197,11 @@ public class EnteringNumberImpl {
     * @return constructed number
     * with additional information
     */
-   BuildingNumberDto getBuildingNumberDTO() {
+   BuildingNumber getBuildingNumberDTO() {
       BigDecimal numberToReturn = number;
       if (needNegate) {
          numberToReturn = numberToReturn.negate();
       }
-      return new BuildingNumberDto(numberToReturn, needPoint, needNegate);
+      return new BuildingNumber(numberToReturn, needPoint, needNegate);
    }
 }

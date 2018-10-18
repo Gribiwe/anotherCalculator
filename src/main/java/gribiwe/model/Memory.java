@@ -11,7 +11,7 @@ import static gribiwe.model.util.MemoryOperation.ADD;
  *
  * @author Gribiwe
  */
-class MemoryImpl {
+class Memory {
 
    /**
     * shows is memory enabled
@@ -26,7 +26,7 @@ class MemoryImpl {
    /**
     * initial of default values
     */
-   MemoryImpl() {
+   Memory() {
       number = BigDecimal.ZERO;
    }
 

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  *
  * @author Gribiwe
  */
-class ResultNumberImpl {
+class ResultNumber {
 
    /**
     * current number
@@ -26,7 +26,7 @@ class ResultNumberImpl {
    /**
     * initial of default values
     */
-   ResultNumberImpl() {
+   ResultNumber() {
       number = BigDecimal.ZERO;
       status = ResultNumberStatus.EQUALS_RESULT;
    }

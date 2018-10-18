@@ -134,7 +134,7 @@ public class SpecialOperationsTest {
       testUtil.doTest("n","0", "negate( 0 )");
       testUtil.doTest("n =","0", "");
       testUtil.doTest("n = = = =","0", "");
-      testUtil.doTest("nn= = = = =","0", "");
+      testUtil.doTest("n n = = = = =","0", "");
 
       testUtil.doTest(",","0,","");
       testUtil.doTest(", n","-0,","");

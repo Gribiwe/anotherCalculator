@@ -1,6 +1,6 @@
 package gribiwe.controller.util;
 
-import gribiwe.model.dto.BuildingNumberDto;
+import gribiwe.model.dto.BuildingNumber;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -9,7 +9,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 /**
- * class for parsing {@code BuildingNumberDto} to string value
+ * class for parsing {@code BuildingNumber} to string value
  *
  * @author Gribiwe
  */
@@ -21,13 +21,13 @@ public class OutputNumberParser {
    private static final int SCALE_SIZE = 10000;
 
    /**
-    * method for parsing a value of {@code BuildingNumberDto} which appeared
+    * method for parsing a value of {@code BuildingNumber} which appeared
     * by user's input
     *
-    * @param dto {@code BuildingNumberDto} to parse
-    * @return string value of {@code BuildingNumberDto}
+    * @param dto {@code BuildingNumber} to parse
+    * @return string value of {@code BuildingNumber}
     */
-   public static String formatInput(BuildingNumberDto dto) {
+   public static String formatInput(BuildingNumber dto) {
       String minus = "";
       if (dto.isNegated()) {
          minus = "-";

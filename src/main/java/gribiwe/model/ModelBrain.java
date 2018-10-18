@@ -1,8 +1,8 @@
 package gribiwe.model;
 
-import gribiwe.model.dto.BuildingNumberDto;
-import gribiwe.model.dto.FormingSpecialOperationsDto;
-import gribiwe.model.dto.HistoryLineDto;
+import gribiwe.model.dto.BuildingNumber;
+import gribiwe.model.dto.BuildingSpecialOperations;
+import gribiwe.model.dto.HistoryInfo;
 import gribiwe.model.exception.OverflowException;
 import gribiwe.model.exception.UncorrectedDataException;
 import gribiwe.model.exception.ZeroDivideException;
@@ -10,12 +10,10 @@ import gribiwe.model.exception.ZeroDivideZeroException;
 import gribiwe.model.util.*;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.List;
 
 import static gribiwe.model.util.ResultNumberStatus.*;
 import static gribiwe.model.util.SimpleOperation.DIVIDE;
-import static gribiwe.model.util.SimpleOperation.NOTHING;
 import static gribiwe.model.util.SpecialOperation.*;
 
 /**
@@ -23,65 +21,50 @@ import static gribiwe.model.util.SpecialOperation.*;
  *
  * @author Gribiwe
  */
-public class ModelBrainImpl {
+public class ModelBrain {
 
    /**
-    * shows that {@link #enteringNumber} builds a number
+    * shows that {@link #numberBuilder} builds a number
     */
    private boolean buildingNumber;
 
    /**
     * needs for building a new number
     *
-    * @see EnteringNumberImpl
+    * @see NumberBuilder
     */
-   private EnteringNumberImpl enteringNumber;
+   private NumberBuilder numberBuilder;
 
    /**
     * keeps last non-saved special operation progress
     *
-    * @see TailSpecialOperationHistoryImpl
+    * @see SpecialOperationBuilder
     */
-   private TailSpecialOperationHistoryImpl tailSpecialOperationHistory;
+   private SpecialOperationBuilder tailSpecialOperationHistory;
 
    /**
     * keeps history of numbers and operations
     * calculates it
     *
-    * @see HistoryLineImpl
+    * @see History
     */
-   private HistoryLineImpl historyLine;
+   private History history;
 
    /**
     * keeps number saved to memory
     *
-    * @see MemoryImpl
+    * @see Memory
     */
-   private MemoryImpl memory;
+   private Memory memory;
 
    /**
     * keeps number to send in answer
     * is {@link #buildingNumber} is false
     * and status of number
     *
-    * @see ResultNumberImpl
+    * @see ResultNumber
     */
-   private ResultNumberImpl resultNumber;
-
-   /**
-    * value of max possible exponent
-    */
-   private final static int MAX_EXPONENT = 9999;
-
-   /**
-    * value of min possible exponent
-    */
-   private final static int MIN_EXPONENT = -9999;
-
-   /**
-    * string patter for checking overflow
-    */
-   private final static String CHECK_OVERFLOW_NUMBER_PATTERN = "0.###############E0";
+   private ResultNumber resultNumber;
 
    /**
     * exception message for digit which is null
@@ -97,43 +80,46 @@ public class ModelBrainImpl {
     * creation of new exemplar of this class
     * sets default values
     */
-   public ModelBrainImpl() {
+   public ModelBrain() {
       buildingNumber = false;
-      this.enteringNumber = new EnteringNumberImpl();
-      tailSpecialOperationHistory = new TailSpecialOperationHistoryImpl();
-      historyLine = new HistoryLineImpl();
-      memory = new MemoryImpl();
-      resultNumber = new ResultNumberImpl();
+      this.numberBuilder = new NumberBuilder();
+      tailSpecialOperationHistory = new SpecialOperationBuilder();
+      history = new History();
+      memory = new Memory();
+      resultNumber = new ResultNumber();
    }
 
    /**
     * method for removing one digit or point from input
     */
-   public void deleteDigit() {
+   public BigDecimal deleteDigit() {
       if (buildingNumber) {
-         enteringNumber.removeSymbol();
+         numberBuilder.removeSymbol();
       }
+      return resultNumber.getNumber();
    }
 
    /**
     * method for clearing number line
     */
-   public void deleteAllDigits() {
+   public BigDecimal deleteAllDigits() {
       if (buildingNumber) {
-         enteringNumber.removeAllSymbols();
+         numberBuilder.removeAllSymbols();
       } else {
          startBuildingNumber();
       }
+      return resultNumber.getNumber();
    }
 
    /**
     * method for deletion all numbers at result field
     * and clearing history line
     */
-   public void deleteAllDigitsAndHistory() {
+   public BigDecimal deleteAllDigitsAndHistory() {
       deleteAllDigits();
-      tailSpecialOperationHistory = new TailSpecialOperationHistoryImpl();
-      historyLine = new HistoryLineImpl();
+      tailSpecialOperationHistory = new SpecialOperationBuilder();
+      history = new History();
+      return resultNumber.getNumber();
    }
 
    /**
@@ -141,20 +127,20 @@ public class ModelBrainImpl {
     *
     * @throws NullPointerException if digit is null
     */
-   public void addDigit(Digit digit) {
+   public BigDecimal addDigit(Digit digit) {
       verifyNull(digit, DIGIT_IS_NULL_EXCEPTION_TEXT);
       startBuildingNumber();
-      enteringNumber.addDigit(digit);
-
+      numberBuilder.addDigit(digit);
+      return resultNumber.getNumber();
    }
 
    /**
     * method for adding point to input number
     */
-   public void addPoint() {
+   public BigDecimal addPoint() {
       startBuildingNumber();
-      enteringNumber.addPoint();
-
+      numberBuilder.addPoint();
+      return resultNumber.getNumber();
    }
 
    /**
@@ -165,7 +151,7 @@ public class ModelBrainImpl {
     * @throws NullPointerException    if operation is null
     * @throws OverflowException       if result value is overflow
     */
-   public void doOperation(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException, OverflowException {
+   public BigDecimal doOperation(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException, OverflowException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
 
       if (tailSpecialOperationHistory.isProcessing()) {
@@ -176,19 +162,20 @@ public class ModelBrainImpl {
          if (buildingNumber || resultNumberStatus == EQUALS_RESULT) {
             doOperationWithBuiltOrEqualsOrMemoryNumber(operation);
          } else if (resultNumberStatus == HISTORY_RESULT) {
-            historyLine.changeLastOperation(operation);
+            history.changeLastOperation(operation);
          } else if (resultNumberStatus == LOADED_FROM_MEMORY) {
             doOperationWithBuiltOrEqualsOrMemoryNumber(operation);
          } else if (resultNumberStatus == BLOCKED_BY_MEMORY) {
 
-            if (historyLine.getLastOperation() == null) {
+            if (history.getLastOperation() == null) {
                doOperationWithBuiltOrEqualsOrMemoryNumber(operation);
             } else {
-               historyLine.changeLastOperation(operation);
+               history.changeLastOperation(operation);
             }
          }
       }
       verifyOverflow();
+      return resultNumber.getNumber();
    }
 
    /**
@@ -196,12 +183,13 @@ public class ModelBrainImpl {
     *
     * @throws OverflowException if result value is overflow
     */
-   public void doPercent() throws OverflowException {
-      BigDecimal result = CalculatorMath.percent(historyLine.calculate(), getNumberFromBuildingOrResultNumber());
+   public BigDecimal doPercent() throws OverflowException {
+      BigDecimal result = CalculatorMath.percent(history.calculate(), getNumberFromBuildingOrResultNumber());
       resultNumber.loadResult(result, EQUALS_RESULT);
       tailSpecialOperationHistory.clear();
       tailSpecialOperationHistory.initNumber(result);
       verifyOverflow();
+      return resultNumber.getNumber();
    }
 
    /**
@@ -211,7 +199,7 @@ public class ModelBrainImpl {
     * @throws ZeroDivideZeroException if was trying to divide zero by zero
     * @throws OverflowException       if result value is overflow
     */
-   public void doEquals() throws ZeroDivideZeroException, ZeroDivideException, OverflowException {
+   public BigDecimal doEquals() throws ZeroDivideZeroException, ZeroDivideException, OverflowException {
       if (tailSpecialOperationHistory.isProcessing()) {
          doEqualsAfterSpecialOperation();
       } else {
@@ -223,6 +211,7 @@ public class ModelBrainImpl {
          }
       }
       verifyOverflow();
+      return resultNumber.getNumber();
    }
 
    /**
@@ -232,7 +221,7 @@ public class ModelBrainImpl {
     * @throws NullPointerException     if operation is null
     * @throws UncorrectedDataException if was trying to find root of negated value
     */
-   public void doSpecialOperation(SpecialOperation operation) throws UncorrectedDataException, ZeroDivideException, OverflowException {
+   public BigDecimal doSpecialOperation(SpecialOperation operation) throws UncorrectedDataException, ZeroDivideException, OverflowException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
       if (tailSpecialOperationHistory.isProcessing()) {
          doNextSpecialOperation(operation);
@@ -241,22 +230,23 @@ public class ModelBrainImpl {
       }
       resultNumber.loadResult(tailSpecialOperationHistory.calculate(), EQUALS_RESULT);
       verifyOverflow();
+      return resultNumber.getNumber();
    }
 
    /**
     * method negating number
     */
-   public void doNegate() {
+   public BigDecimal doNegate() {
       if (buildingNumber) {
-         enteringNumber.negate();
+         numberBuilder.negate();
       } else {
          try {
             doSpecialOperation(NEGATE);
          } catch (UncorrectedDataException | OverflowException | ZeroDivideException e) {
-            // don't expects
-            e.printStackTrace();
+            throw new RuntimeException("unexpected exception in model on working with negate as with special operation", e);
          }
       }
+      return resultNumber.getNumber();
    }
 
    /**
@@ -264,11 +254,12 @@ public class ModelBrainImpl {
     *
     * @throws NullPointerException if operation is null
     */
-   public void operateMemory(MemoryOperation operation) throws NullPointerException {
+   public BigDecimal operateMemory(MemoryOperation operation) throws NullPointerException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
       BigDecimal numberToOperate = getNumberFromBuildingOrResultNumber();
       memory.doOperation(numberToOperate, operation);
       resultNumber.loadResult(numberToOperate, BLOCKED_BY_MEMORY);
+      return resultNumber.getNumber();
    }
 
    /**
@@ -277,26 +268,28 @@ public class ModelBrainImpl {
     *
     * @throws OverflowException if result value is overflow
     */
-   public void loadFromMemory() throws OverflowException {
+   public BigDecimal loadFromMemory() throws OverflowException {
       buildingNumber = false;
       resultNumber.loadResult(memory.getNumber(), LOADED_FROM_MEMORY);
       verifyOverflow();
+      return resultNumber.getNumber();
    }
 
    /**
     * method for cleaning memory
     */
-   public void clearMemory() {
+   public BigDecimal clearMemory() {
       memory.clear();
       resultNumber.loadResult(getNumberFromBuildingOrResultNumber(), BLOCKED_BY_MEMORY);
+      return resultNumber.getNumber();
    }
 
    /**
     * clears model all values
     */
    public void clearModel() {
-      historyLine.clearHistory();
-      enteringNumber.removeAllSymbols();
+      history.clearHistory();
+      numberBuilder.removeAllSymbols();
       memory.clear();
       tailSpecialOperationHistory.clear();
       resultNumber.clear();
@@ -311,12 +304,14 @@ public class ModelBrainImpl {
     * @return current number for operations
     */
    private BigDecimal getNumberFromBuildingOrResultNumber() {
+      BigDecimal number;
       if (buildingNumber) {
          buildingNumber = false;
-         return enteringNumber.getNumber();
+         number = numberBuilder.getNumber();
       } else {
-         return resultNumber.getNumber();
+         number = resultNumber.getNumber();
       }
+      return number;
    }
 
    /**
@@ -324,7 +319,7 @@ public class ModelBrainImpl {
     */
    private void startBuildingNumber() {
       if (!buildingNumber) {
-         enteringNumber.removeAllSymbols();
+         numberBuilder.removeAllSymbols();
          tailSpecialOperationHistory.clear();
          buildingNumber = true;
       }
@@ -332,7 +327,7 @@ public class ModelBrainImpl {
 
    /**
     * method for processing new simple operation while
-    * current number is on building or it's {@link #enteringNumber} with
+    * current number is on building or it's {@link #numberBuilder} with
     * status EQUALS or number from {@link #memory}
     *
     * @param operation new operation to process
@@ -345,8 +340,8 @@ public class ModelBrainImpl {
       verifyZeroDividingByZero(numberToHistory, operation);
       verifyDividingByZero(numberToHistory, operation);
 
-      historyLine.add(numberToHistory, operation, true);
-      resultNumber.loadResult(historyLine.calculate(), HISTORY_RESULT);
+      history.add(numberToHistory, operation, true);
+      resultNumber.loadResult(history.calculate(), HISTORY_RESULT);
    }
 
    /**
@@ -362,26 +357,26 @@ public class ModelBrainImpl {
       BigDecimal number = tailSpecialOperationHistory.getNumber();
       List<SpecialOperation> operations = tailSpecialOperationHistory.getOperations();
 
-      historyLine.add(number, operation, true);
-      historyLine.uploadSpecialOperations(operations);
+      history.add(number, operation, true);
+      history.uploadSpecialOperations(operations);
 
       tailSpecialOperationHistory.clear();
-      resultNumber.loadResult(historyLine.calculate(), HISTORY_RESULT);
+      resultNumber.loadResult(history.calculate(), HISTORY_RESULT);
    }
 
    /**
     * method for calculation equals value, while
-    * {@link #enteringNumber} have a status EQUALS.
+    * {@link #numberBuilder} have a status EQUALS.
     * Adds to history last saved result and operation,
     * calculates it, clears history and loads result
     * as new equals result.
     */
    private void doEqualsAfterEquals() {
-      historyLine.add(resultNumber.getNumber(), historyLine.getSavedOperation(), false);
-      historyLine.add(historyLine.getSavedResult(), NOTHING, false);
+      history.add(resultNumber.getNumber(), history.getSavedOperation(), false);
+      history.add(history.getSavedResult());
 
-      resultNumber.loadResult(historyLine.calculate(), EQUALS_RESULT);
-      historyLine.clearHistory();
+      resultNumber.loadResult(history.calculate(), EQUALS_RESULT);
+      history.clearHistory();
    }
 
    /**
@@ -398,11 +393,11 @@ public class ModelBrainImpl {
       verifyZeroDividingByZero(numberToCalculate);
       verifyDividingByZero(numberToCalculate);
 
-      historyLine.setSavedResult(numberToCalculate);
-      historyLine.add(numberToCalculate, NOTHING, false);
+      history.setSavedResult(numberToCalculate);
+      history.add(numberToCalculate);
 
-      resultNumber.loadResult(historyLine.calculate(), EQUALS_RESULT);
-      historyLine.clearHistory();
+      resultNumber.loadResult(history.calculate(), EQUALS_RESULT);
+      history.clearHistory();
    }
 
    /**
@@ -410,13 +405,13 @@ public class ModelBrainImpl {
     * to history. Calculates it. Loads it as equals result
     */
    private void doEqualsAfterSpecialOperation() {
-      historyLine.add(tailSpecialOperationHistory.getNumber(), NOTHING, false);
-      historyLine.setSavedResult(tailSpecialOperationHistory.calculate());
-      historyLine.uploadSpecialOperations(tailSpecialOperationHistory.getOperations());
+      history.add(tailSpecialOperationHistory.getNumber());
+      history.setSavedResult(tailSpecialOperationHistory.calculate());
+      history.uploadSpecialOperations(tailSpecialOperationHistory.getOperations());
 
       tailSpecialOperationHistory.clear();
-      resultNumber.loadResult(historyLine.calculate(), EQUALS_RESULT);
-      historyLine.clearHistory();
+      resultNumber.loadResult(history.calculate(), EQUALS_RESULT);
+      history.clearHistory();
    }
 
    /**
@@ -465,14 +460,23 @@ public class ModelBrainImpl {
    }
 
    /**
+    * BigDecimal value of the most little number
+    * of the numbers which calls overflow exception
+    * because of value is too big
+    */
+   private static final BigDecimal MAX_BORDER_VALUE = new BigDecimal("99999999999999995E+9983");
+
+   /**
+    * the closest possible number to zero
+    */
+   private static final BigDecimal CLOSEST_TO_ZERO_VALUE = new BigDecimal("1.0E-9999");
+
+   /**
     * verifies is there is an overflow exception
     */
    private void verifyOverflow() throws OverflowException {
-      BigDecimal value = resultNumber.getNumber();
-      String output = new DecimalFormat(CHECK_OVERFLOW_NUMBER_PATTERN).format(value);
-      long exponent = Long.parseLong(output.substring(output.indexOf("E") + 1));
-
-      if (exponent > MAX_EXPONENT || exponent < MIN_EXPONENT) {
+      BigDecimal value = resultNumber.getNumber().abs();
+      if (value.compareTo(MAX_BORDER_VALUE) >= 0 || value.compareTo(CLOSEST_TO_ZERO_VALUE) < 0 && !isZero(value)) {
          throw new OverflowException("Value is overflow: " + value);
       }
    }
@@ -500,10 +504,10 @@ public class ModelBrainImpl {
     *                                 divide zero by zero
     */
    private void verifyZeroDividingByZero(BigDecimal divisor, SimpleOperation operation) throws ZeroDivideZeroException {
-      SimpleOperation lastOperation = historyLine.getLastOperation();
-      if (lastOperation == DIVIDE && isZero(historyLine.calculate()) && isZero(divisor)) {
+      SimpleOperation lastOperation = history.getLastOperation();
+      if (lastOperation == DIVIDE && isZero(history.calculate()) && isZero(divisor)) {
          if (operation != null) {
-            historyLine.add(divisor, operation, false);
+            history.add(divisor, operation, false);
          }
 
          throw new ZeroDivideZeroException("Cant divide zero by zero! Uncertain is answer");
@@ -521,9 +525,9 @@ public class ModelBrainImpl {
     *                             (not zero) by zero
     */
    private void verifyDividingByZero(BigDecimal divisor, SimpleOperation operation) throws ZeroDivideException {
-      if (historyLine.getLastOperation() == DIVIDE && isZero(divisor)) {
+      if (history.getLastOperation() == DIVIDE && isZero(divisor)) {
          if (operation != null) {
-            historyLine.add(divisor, operation, false);
+            history.add(divisor, operation, false);
          }
 
          throw new ZeroDivideException("Divisor is zero! Can't divide by zero");
@@ -612,10 +616,6 @@ public class ModelBrainImpl {
       return number.compareTo(BigDecimal.ZERO) < 0;
    }
 
-   public BigDecimal getResultNumber() {
-      return resultNumber.getNumber();
-   }
-
    public boolean isBuildingNumber() {
       return buildingNumber;
    }
@@ -628,19 +628,19 @@ public class ModelBrainImpl {
       return memory.getNumber();
    }
 
-   public BuildingNumberDto getBuildingNumber() {
-      return enteringNumber.getBuildingNumberDTO();
+   public BuildingNumber getBuildingNumber() {
+      return numberBuilder.getBuildingNumberDTO();
    }
 
-   public HistoryLineDto getHistoryLineDto() {
-     return historyLine.getHistoryLineDto();
+   public HistoryInfo getHistoryLineDto() {
+     return history.getHistoryLineDto();
    }
 
    public boolean isFormingSpecialOperation() {
       return tailSpecialOperationHistory.isProcessing();
    }
 
-   public FormingSpecialOperationsDto getFormingSpecialOperationsDto() {
+   public BuildingSpecialOperations getFormingSpecialOperationsDto() {
       return tailSpecialOperationHistory.getFormingSpecialOperationsDto();
    }
 }

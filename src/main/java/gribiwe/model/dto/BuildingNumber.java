@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  *
  * @author Gribiwe
  */
-public class BuildingNumberDto {
+public class BuildingNumber {
 
    /**
     * shows is building number needs
@@ -27,13 +27,13 @@ public class BuildingNumberDto {
    private final BigDecimal value;
 
    /**
-    * initials of BuildingNumberDto
+    * initials of BuildingNumber
     *
     * @param value     current number
     * @param isPointed needs to be pointed
     * @param isNegated needs to be negated
     */
-   public BuildingNumberDto(BigDecimal value, boolean isPointed, boolean isNegated) {
+   public BuildingNumber(BigDecimal value, boolean isPointed, boolean isNegated) {
       this.value = value;
       this.isPointed = isPointed;
       this.isNegated = isNegated;
