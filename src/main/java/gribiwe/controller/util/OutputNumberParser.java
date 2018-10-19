@@ -16,9 +16,46 @@ import java.text.DecimalFormatSymbols;
 public class OutputNumberParser {
 
    /**
-    * max scale size for cutting BigDecimal value
+    * scale for cutting BigDecimal value
     */
-   private static final int SCALE_SIZE = 10000;
+   private static final int SCALE_SIZE = 9984;
+
+   /**
+    * count of numbers in each
+    * number group
+    */
+   private static final int GROUP_SIZE = 3;
+
+   /**
+    * decimal pattern for number with
+    * exponent and one symbol before point
+    */
+   private final static String PATTERN_POINTED_EXPONENT_VALUE = "0.###############E0";
+
+   /**
+    * decimal pattern for non-decimal number
+    * without exponent and point
+    */
+   private final static String PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE = "################";
+
+   /**
+    * decimal point for number with only
+    * one symbol after point
+    * without exponent
+    */
+   private final static String PATTERN_ONE_SYMBOL_AFTER_POINT_NOT_EXPONENT_VALUE = "###############.0";
+
+   /**
+    * decimal patter for number with
+    * one digit before point before point
+    * without exponent
+    */
+   private final static String PATTERN_POINTED_NOT_EXPONENT_VALUE = "#.################";
+
+   /**
+    * max count of numbers in out
+    */
+   private final static int MAX_NUMBERS = 16;
 
    /**
     * method for parsing a value of {@code BuildingNumber} which appeared
@@ -69,32 +106,6 @@ public class OutputNumberParser {
    }
 
    /**
-    * decimal pattern for number with
-    * exponent and one symbol before point
-    */
-   private final static String PATTERN_POINTED_EXPONENT_VALUE = "0.###############E0";
-
-   /**
-    * decimal pattern for non-decimal number
-    * without exponent and point
-    */
-   private final static String PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE = "################";
-
-   /**
-    * decimal point for number with only
-    * one symbol after point
-    * without exponent
-    */
-   private final static String PATTERN_ONE_SYMBOL_AFTER_POINT_NOT_EXPONENT_VALUE = "###############.0";
-
-   /**
-    * decimal patter for number with
-    * one digit before point before point
-    * without exponent
-    */
-   private final static String PATTERN_POINTED_NOT_EXPONENT_VALUE = "#.################";
-
-   /**
     * method for adding spaces to parsed number
     *
     * @param original string value of parsed number
@@ -109,7 +120,7 @@ public class OutputNumberParser {
          leftOfPoint = original;
          original = "";
       }
-      for (int i = leftOfPoint.length() - 3; i > 0; i -= 3) {
+      for (int i = leftOfPoint.length() - GROUP_SIZE; i > 0; i -= GROUP_SIZE) {
          leftOfPoint = leftOfPoint.substring(0, i) + " " + leftOfPoint.substring(i);
       }
       return leftOfPoint + original;
@@ -144,9 +155,9 @@ public class OutputNumberParser {
    private static String parseResultBiggerOrEqualsOne(BigDecimal value) {
       String leftValue = value.toBigInteger().toString();
       String toReturn;
-      if (leftValue.length() > 16) {
+      if (leftValue.length() > MAX_NUMBERS) {
          toReturn = formatWithFormatter(PATTERN_POINTED_EXPONENT_VALUE, value);
-      } else if (new BigDecimal(value.toBigInteger().toString()).subtract(cut(value)).compareTo(BigDecimal.ZERO) == 0) {
+      } else if (isHaveNotZerosAfterPoint(value)) {
          toReturn = formatWithFormatter(PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE, value);
       } else {
          StringBuilder pattern = new StringBuilder(PATTERN_ONE_SYMBOL_AFTER_POINT_NOT_EXPONENT_VALUE);
@@ -158,7 +169,7 @@ public class OutputNumberParser {
             pattern.append("#");
          }
          pattern.append(".");
-         for (int i = 0; i < 16 - outputIntegerValueSize; i++) {
+         for (int i = 0; i < MAX_NUMBERS - outputIntegerValueSize; i++) {
             pattern.append("#");
          }
          toReturn = formatWithFormatter(pattern.toString(), value);
@@ -190,7 +201,7 @@ public class OutputNumberParser {
 
       int indexOfLastNormNumber = indexOfNotZeroNumber;
       int zeroCount = 0;
-      for (int i = indexOfNotZeroNumber; i < allValue.length() && zeroCount < 15; i++) {
+      for (int i = indexOfNotZeroNumber; i < allValue.length() && zeroCount < MAX_NUMBERS - 1; i++) {
          if (allValue.charAt(i) != '0') {
             indexOfLastNormNumber = i;
             zeroCount = 0;
@@ -199,15 +210,35 @@ public class OutputNumberParser {
          }
       }
       String toReturn;
-      if ((indexOfNotZeroNumber > 2 && indexOfLastNormNumber >= indexOfNotZeroNumber + 16) ||
-              indexOfNotZeroNumber + 1 == 17 && indexOfLastNormNumber >= indexOfNotZeroNumber ||
-              indexOfNotZeroNumber + 1 > 17) {
+      if (isNumberSequenceNeedMinusExponent(indexOfLastNormNumber, indexOfNotZeroNumber)) {
          toReturn = formatWithFormatter(PATTERN_POINTED_EXPONENT_VALUE, value);
 
       } else {
          toReturn = formatWithFormatter(PATTERN_POINTED_NOT_EXPONENT_VALUE, value);
       }
       return toReturn;
+   }
+
+   /**
+    * method for checking is number should be
+    * with minus exponent format by
+    * indexes of start and end of normal
+    * number sequence
+    *
+    * @param indexOfLastNormNumber end index of normal number sequence
+    * @param indexOfNotZeroNumber  start index of normal number sequence
+    * @return true if number should be with minus exponent
+    */
+   private static boolean isNumberSequenceNeedMinusExponent(int indexOfLastNormNumber, int indexOfNotZeroNumber) {
+      boolean isAfterThirdZero = indexOfNotZeroNumber > 2;
+      boolean isHaveEnoughLength = indexOfLastNormNumber >= indexOfNotZeroNumber + MAX_NUMBERS;
+      boolean isStartsAtMaxNumberLimitIndex = indexOfNotZeroNumber + 1 == MAX_NUMBERS + 1;
+      boolean isHaveMoreThenOneNumber = indexOfLastNormNumber >= indexOfNotZeroNumber;
+      boolean isStartsAfterMaxNumberLimit = indexOfNotZeroNumber + 1 > MAX_NUMBERS + 1;
+
+      return isAfterThirdZero && isHaveEnoughLength ||
+              isStartsAtMaxNumberLimitIndex && isHaveMoreThenOneNumber ||
+              isStartsAfterMaxNumberLimit;
    }
 
    /**
@@ -240,18 +271,9 @@ public class OutputNumberParser {
       return output;
    }
 
-   /**
-    * cuts scale of number to 10000
-    *
-    * @param a number to re-scale
-    * @return rightly scaled number
-    */
-   private static BigDecimal cut(BigDecimal a) {
-      String aStr = a.toPlainString();
-      if (aStr.length() > SCALE_SIZE) {
-         return new BigDecimal(aStr.substring(0, SCALE_SIZE));
-      } else {
-         return a;
-      }
+   private static boolean isHaveNotZerosAfterPoint(BigDecimal value) {
+      value = value.setScale(SCALE_SIZE, RoundingMode.DOWN);
+      BigDecimal valueWithScaleZero = value.setScale(0, RoundingMode.DOWN);
+      return valueWithScaleZero.subtract(value).compareTo(BigDecimal.ZERO) == 0;
    }
 }

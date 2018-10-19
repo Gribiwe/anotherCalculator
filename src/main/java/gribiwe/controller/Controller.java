@@ -19,8 +19,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static gribiwe.model.util.MemoryOperation.ADD;
-import static gribiwe.model.util.MemoryOperation.SUBTRACT;
+import static gribiwe.model.util.MemoryOperation.*;
 
 /**
  * class of controller for connecting view part of calculator
@@ -181,7 +180,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitOne() {
-      updateAll(() ->mainModel.addDigit(Digit.ONE));
+      proceedAction(() -> mainModel.addDigit(Digit.ONE));
    }
 
    /**
@@ -190,7 +189,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitTwo() {
-      updateAll(() ->mainModel.addDigit(Digit.TWO));
+      proceedAction(() -> mainModel.addDigit(Digit.TWO));
    }
 
    /**
@@ -199,7 +198,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitThree() {
-      updateAll(() -> mainModel.addDigit(Digit.THREE));
+      proceedAction(() -> mainModel.addDigit(Digit.THREE));
    }
 
    /**
@@ -208,7 +207,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitFour() {
-      updateAll(() ->  mainModel.addDigit(Digit.FOUR));
+      proceedAction(() -> mainModel.addDigit(Digit.FOUR));
    }
 
 
@@ -218,7 +217,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitFive() {
-      updateAll(() ->  mainModel.addDigit(Digit.FIVE));
+      proceedAction(() -> mainModel.addDigit(Digit.FIVE));
    }
 
    /**
@@ -227,7 +226,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitSix() {
-      updateAll(() ->  mainModel.addDigit(Digit.SIX));
+      proceedAction(() -> mainModel.addDigit(Digit.SIX));
    }
 
    /**
@@ -236,7 +235,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitSeven() {
-      updateAll(() -> mainModel.addDigit(Digit.SEVEN));
+      proceedAction(() -> mainModel.addDigit(Digit.SEVEN));
    }
 
    /**
@@ -245,7 +244,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitEight() {
-      updateAll(() -> mainModel.addDigit(Digit.EIGHT));
+      proceedAction(() -> mainModel.addDigit(Digit.EIGHT));
    }
 
    /**
@@ -254,7 +253,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitNine() {
-      updateAll(() -> mainModel.addDigit(Digit.NINE));
+      proceedAction(() -> mainModel.addDigit(Digit.NINE));
    }
 
    /**
@@ -263,7 +262,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addDigitZero() {
-      updateAll(() -> mainModel.addDigit(Digit.ZERO));
+      proceedAction(() -> mainModel.addDigit(Digit.ZERO));
    }
 
    /**
@@ -272,7 +271,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void addPoint() {
-      updateAll(() ->mainModel.addPoint());
+      proceedAction(() -> mainModel.addPoint());
    }
 
    /**
@@ -280,7 +279,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void deleteDigit() {
-      updateAll(() -> mainModel.deleteDigit());
+      proceedAction(() -> mainModel.deleteDigit());
    }
 
    /**
@@ -288,7 +287,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void deleteAllDigits() {
-      updateAll(() ->mainModel.deleteAllDigits());
+      proceedAction(() -> mainModel.deleteAllDigits());
    }
 
    /**
@@ -297,7 +296,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void deleteAllDigitsAndHistory() {
-      updateAll(() -> mainModel.deleteAllDigitsAndHistory());
+      proceedAction(() -> mainModel.deleteAllDigitsAndHistory());
    }
 
    /**
@@ -305,7 +304,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doPercent() {
-         updateAll(() -> mainModel.doPercent());
+      proceedAction(() -> mainModel.doPercent());
    }
 
    /**
@@ -314,7 +313,7 @@ public class Controller implements Initializable {
    @FXML
    public void
    doNegate() {
-      updateAll(() -> mainModel.doNegate());
+      proceedAction(() -> mainModel.doNegate());
    }
 
    /**
@@ -322,7 +321,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doPlus() {
-      updateAll(() -> mainModel.doOperation(SimpleOperation.PLUS));
+      proceedAction(() -> mainModel.doOperation(SimpleOperation.PLUS));
    }
 
    /**
@@ -330,7 +329,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doSubtract() {
-      updateAll(() -> mainModel.doOperation(SimpleOperation.SUBTRACT));
+      proceedAction(() -> mainModel.doOperation(SimpleOperation.SUBTRACT));
    }
 
    /**
@@ -338,7 +337,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doMultiply() {
-      updateAll(() -> mainModel.doOperation(SimpleOperation.MULTIPLY));
+      proceedAction(() -> mainModel.doOperation(SimpleOperation.MULTIPLY));
    }
 
    /**
@@ -346,7 +345,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doDivide() {
-      updateAll(() -> mainModel.doOperation(SimpleOperation.DIVIDE));
+      proceedAction(() -> mainModel.doOperation(SimpleOperation.DIVIDE));
    }
 
    /**
@@ -354,7 +353,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doSquare() {
-      updateAll(() -> mainModel.doSpecialOperation(SpecialOperation.SQUARE));
+      proceedAction(() -> mainModel.doSpecialOperation(SpecialOperation.SQUARE));
    }
 
    /**
@@ -362,7 +361,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doOneDivX() {
-      updateAll(() -> mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X));
+      proceedAction(() -> mainModel.doSpecialOperation(SpecialOperation.ONE_DIV_X));
    }
 
    /**
@@ -370,7 +369,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doRoot() {
-      updateAll(() -> mainModel.doSpecialOperation(SpecialOperation.ROOT));
+      proceedAction(() -> mainModel.doSpecialOperation(SpecialOperation.ROOT));
    }
 
    /**
@@ -378,7 +377,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doEquals() {
-      updateAll(() -> mainModel.doEquals());
+      proceedAction(() -> mainModel.doEquals());
    }
 
    /**
@@ -386,7 +385,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doAddMemory() {
-      updateAll(() -> mainModel.operateMemory(ADD));
+      proceedAction(() -> mainModel.operateMemory(ADD));
    }
 
    /**
@@ -394,7 +393,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doRemoveMemory() {
-      updateAll(() -> mainModel.operateMemory(SUBTRACT));
+      proceedAction(() -> mainModel.operateMemory(SUBTRACT));
    }
 
    /**
@@ -402,7 +401,7 @@ public class Controller implements Initializable {
     */
    @FXML
    public void doClearMemory() {
-      updateAll(() -> mainModel.clearMemory());
+      proceedAction(() -> mainModel.clearMemory());
    }
 
    /**
@@ -410,31 +409,21 @@ public class Controller implements Initializable {
     */
    @FXML
    public void loadFromMemory() {
-      updateAll(() -> mainModel.loadFromMemory());
+      proceedAction(() -> mainModel.loadFromMemory());
    }
 
    /**
-    * method which gets information from model
-    * and sends then to view
+    * method which trying to do action
+    * for processing response from model
     *
     * @param action action to do with model
     * @see OutputNumberParser
     * @see HistoryLineParser
     */
-   private void updateAll(ControllerAction action) {
-      BigDecimal modelResponseNumber;
+   private void proceedAction(ControllerAction action) {
       try {
-         modelResponseNumber = action.doAction();
-         String outputNumber;
-         if (mainModel.isBuildingNumber()) {
-            BuildingNumber buildingNumber = mainModel.getBuildingNumber();
-            outputNumber = OutputNumberParser.formatInput(buildingNumber);
-         } else {
-            outputNumber = OutputNumberParser.formatResult(modelResponseNumber, true);
-         }
-         inputFieldNumber.setText(outputNumber);
-         updateHistory();
-         updateMemory();
+         BigDecimal modelResponseNumber = action.doAction();
+         updateAll(modelResponseNumber);
       } catch (OverflowException e) {
          updateError(OVERFLOW_EXCEPTION_TEXT);
       } catch (ZeroDivideException e) {
@@ -444,6 +433,26 @@ public class Controller implements Initializable {
       } catch (UncorrectedDataException e) {
          updateError(INCORRECT_DATA_EXCEPTION_TEXT);
       }
+   }
+
+   /**
+    * updates view values as
+    * history, memory and number at
+    * output field
+    *
+    * @param number response from model
+    */
+   private void updateAll(BigDecimal number) {
+      String outputNumber;
+      if (mainModel.isBuildingNumber()) {
+         BuildingNumber buildingNumber = mainModel.getBuildingNumber();
+         outputNumber = OutputNumberParser.formatInput(buildingNumber);
+      } else {
+         outputNumber = OutputNumberParser.formatResult(number, true);
+      }
+      inputFieldNumber.setText(outputNumber);
+      updateHistory();
+      updateMemory();
    }
 
    /**
