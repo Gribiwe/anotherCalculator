@@ -1,6 +1,6 @@
 package view;
 
-import gribiwe.view.BodyView;
+import gribiwe.view.Starter;
 import javafx.scene.Node;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -31,7 +31,7 @@ import java.util.concurrent.Executors;
 class UITest extends Assert {
 
    private static final String[] args = {null};
-   private static BodyView bodyView;
+   private static Starter bodyView;
    private static ExecutorService executorServiceFX;
    static Node borderedVisionPaneNode;
    static Robot robot;
@@ -39,7 +39,7 @@ class UITest extends Assert {
    @BeforeAll
    static void setUp() {
       if (!FxToolkit.isFXApplicationThreadRunning()) {
-         bodyView = new BodyView();
+         bodyView = new Starter();
          executorServiceFX = Executors.newSingleThreadExecutor();
          executorServiceFX.execute(() -> {
             bodyView.start(args);

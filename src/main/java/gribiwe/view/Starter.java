@@ -27,7 +27,7 @@ import java.io.IOException;
  *
  * @author Gribiwe
  */
-public class BodyView extends Application {
+public class Starter extends Application {
 
    /**
     * stage of application
