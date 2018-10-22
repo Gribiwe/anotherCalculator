@@ -79,7 +79,7 @@ public class HistoryLineParser {
          if (historyInfo.getSpecialOperations().get(i) != null) {
             number = parseSpecialOperations(historyInfo.getNumbers().get(i), historyInfo.getSpecialOperations().get(i));
          } else {
-            number = OutputNumberParser.formatResult((historyInfo.getNumbers().get(i)), false);
+            number = OutputNumberParser.parseResult((historyInfo.getNumbers().get(i)), false);
          }
 
          if (historyInfo.getOperations().get(i).equals(PLUS)) {
@@ -105,7 +105,7 @@ public class HistoryLineParser {
     */
    private static String parseSpecialOperations(BigDecimal number, List<SpecialOperation> operations) {
       String result;
-      result = OutputNumberParser.formatResult(number, false);
+      result = OutputNumberParser.parseResult(number, false);
       for (Operation operation : operations) {
          if (operation.equals(SpecialOperation.SQUARE)) {
             result = String.format(SQR_PATTERN, result);

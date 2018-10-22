@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 /**
  * class for testing model directly
  */
-public class ModelTest extends Assert {
+class ModelTest extends Assert {
 
    /**
     * exemplar of Main model class

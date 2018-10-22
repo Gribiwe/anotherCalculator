@@ -3,10 +3,7 @@ package gribiwe.model;
 import gribiwe.model.dto.BuildingNumber;
 import gribiwe.model.dto.BuildingSpecialOperations;
 import gribiwe.model.dto.HistoryInfo;
-import gribiwe.model.exception.OverflowException;
-import gribiwe.model.exception.UncorrectedDataException;
-import gribiwe.model.exception.ZeroDivideException;
-import gribiwe.model.exception.ZeroDivideZeroException;
+import gribiwe.model.exception.*;
 import gribiwe.model.util.*;
 
 import java.math.BigDecimal;
@@ -33,7 +30,7 @@ public class ModelBrain {
     *
     * @see NumberBuilder
     */
-   private NumberBuilder numberBuilder;
+   private final NumberBuilder numberBuilder;
 
    /**
     * keeps last non-saved special operation progress
@@ -55,7 +52,7 @@ public class ModelBrain {
     *
     * @see Memory
     */
-   private Memory memory;
+   private final Memory memory;
 
    /**
     * keeps number to send in answer
@@ -64,7 +61,7 @@ public class ModelBrain {
     *
     * @see ResultNumber
     */
-   private ResultNumber resultNumber;
+   private final ResultNumber resultNumber;
 
    /**
     * exception message for digit which is null
@@ -243,7 +240,7 @@ public class ModelBrain {
          try {
             doSpecialOperation(NEGATE);
          } catch (UncorrectedDataException | OverflowException | ZeroDivideException e) {
-            throw new RuntimeException("unexpected exception in model on working with negate as with special operation", e);
+            throw new NegateException("unexpected exception in model on working with negate as with special operation", e);
          }
       }
       return resultNumber.getNumber();

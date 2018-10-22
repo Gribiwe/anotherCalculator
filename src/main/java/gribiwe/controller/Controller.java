@@ -420,7 +420,7 @@ public class Controller implements Initializable {
     * @see OutputNumberParser
     * @see HistoryLineParser
     */
-   private void proceedAction(ControllerAction action) {
+   private void proceedAction(ModelAction action) {
       try {
          BigDecimal modelResponseNumber = action.doAction();
          updateAll(modelResponseNumber);
@@ -448,7 +448,7 @@ public class Controller implements Initializable {
          BuildingNumber buildingNumber = mainModel.getBuildingNumber();
          outputNumber = OutputNumberParser.formatInput(buildingNumber);
       } else {
-         outputNumber = OutputNumberParser.formatResult(number, true);
+         outputNumber = OutputNumberParser.parseResult(number, true);
       }
       inputFieldNumber.setText(outputNumber);
       updateHistory();
@@ -463,7 +463,7 @@ public class Controller implements Initializable {
    private void updateMemory() {
       if (mainModel.isMemoryActive()) {
          BigDecimal memoryNumber = mainModel.getMemoryNumber();
-         String memoryString = OutputNumberParser.formatResult(memoryNumber, true);
+         String memoryString = OutputNumberParser.parseResult(memoryNumber, true);
          memoryText.setText(memoryString);
       } else {
          memoryText.setText("");

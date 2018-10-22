@@ -8,7 +8,7 @@ import org.junit.Test;
  * model values with some combined operations
  * and clear operations
  */
-public class DifferentOperationsTest {
+class DifferentOperationsTest {
 
    /**
     * exemplar of TestUtil class for testing the cases

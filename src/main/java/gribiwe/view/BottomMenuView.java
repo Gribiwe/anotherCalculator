@@ -26,12 +26,12 @@ public class BottomMenuView {
    /**
     * root of visible part of calculator
     */
-   private AnchorPane mainPane;
+   private final AnchorPane mainPane;
 
    /**
     * root pane of calculator
     */
-   private AnchorPane root;
+   private final AnchorPane root;
 
    /**
     * value that represents is bottom menu shows
@@ -148,7 +148,7 @@ public class BottomMenuView {
    /**
     * key listener for blocking it when menu shows
     */
-   private KeyListener keyListener;
+   private final KeyListener keyListener;
 
    /**
     * constructor of bottom menu

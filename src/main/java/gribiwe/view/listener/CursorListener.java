@@ -28,7 +28,7 @@ public class CursorListener {
    /**
     * visible root pane of calculator
     */
-   private AnchorPane area;
+   private final AnchorPane area;
 
    /**
     * value of width of screen
@@ -142,7 +142,7 @@ public class CursorListener {
     * label of maximize button. Changes when it's become
     * a not fullscreen button
     */
-   private Label maximizeButtonText;
+   private final Label maximizeButtonText;
 
    /**
     * value of top anchor padding before resize tick
@@ -169,7 +169,7 @@ public class CursorListener {
     * blocks when i need it
     * (e.g. dragging)
     */
-   private KeyListener keyListener;
+   private final KeyListener keyListener;
 
    /**
     * creates cursor listener

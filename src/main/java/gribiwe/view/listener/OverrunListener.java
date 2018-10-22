@@ -12,7 +12,7 @@ public class OverrunListener {
    /**
     * label which are listening by this listener
     */
-   private Label label;
+   private final Label label;
 
    /**
     * creates listener

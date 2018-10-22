@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * @author Gribiwe
  */
 @FunctionalInterface
-interface ControllerAction {
+interface ModelAction {
 
    /**
     * designed to process some actions with returning BigDecimal value

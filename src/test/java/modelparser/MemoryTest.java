@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * class for testing operations wit memory
  */
-public class MemoryTest {
+class MemoryTest {
 
    /**
     * exemplar of TestUtil class for testing the cases

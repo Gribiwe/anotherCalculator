@@ -7,7 +7,7 @@ import org.junit.Test;
  * Class for testing simple operations
  * like plus, subtract, multiple, etc
  */
-public class SimpleOperationsTest {
+class SimpleOperationsTest {
 
    /**
     * exemplar of TestUtil class for testing the cases

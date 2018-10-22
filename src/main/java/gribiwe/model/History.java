@@ -22,7 +22,7 @@ class History {
    /**
     * list of numbers at history
     */
-   private List<BigDecimal> numbers;
+   private final List<BigDecimal> numbers;
 
    /**
     * list of simple operations between numbers
@@ -30,7 +30,7 @@ class History {
     *
     * @see SimpleOperation
     */
-   private List<SimpleOperation> operations;
+   private final List<SimpleOperation> operations;
 
    /**
     * list of lists of special operations of
@@ -38,7 +38,7 @@ class History {
     * operations at index 2 will be accepted to
     * number at index 2 of {@link #numbers}
     */
-   private List<List<SpecialOperation>> specialOperations;
+   private final List<List<SpecialOperation>> specialOperations;
 
    /**
     * saved number

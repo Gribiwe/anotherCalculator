@@ -7,7 +7,7 @@ import org.junit.Test;
  * Class for testing special operations
  * like root, sqr, one divide by x, etc.
  */
-public class SpecialOperationsTest {
+class SpecialOperationsTest {
 
    /**
     * exemplar of TestUtil class for testing the cases

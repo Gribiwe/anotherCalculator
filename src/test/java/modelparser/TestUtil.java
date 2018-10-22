@@ -78,7 +78,7 @@ class TestUtil {
       if (mainModel.isBuildingNumber()) {
          outputNumberAtResult = OutputNumberParser.formatInput(mainModel.getBuildingNumber());
       } else {
-         outputNumberAtResult = OutputNumberParser.formatResult(modelResult, true);
+         outputNumberAtResult = OutputNumberParser.parseResult(modelResult, true);
       }
       assertEquals(expectedOutputNumber, outputNumberAtResult);
 
@@ -91,7 +91,7 @@ class TestUtil {
       assertEquals(expectedHistory, historyLineAtResult);
 
       String memoryNumberAtResult;
-      memoryNumberAtResult = OutputNumberParser.formatResult(mainModel.getMemoryNumber(), true);
+      memoryNumberAtResult = OutputNumberParser.parseResult(mainModel.getMemoryNumber(), true);
       assertEquals(expectedMemory, memoryNumberAtResult);
    }
 

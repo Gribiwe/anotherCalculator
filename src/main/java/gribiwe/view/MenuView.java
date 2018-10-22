@@ -24,17 +24,17 @@ public class MenuView {
    /**
     * root of visible part of calculator
     */
-   private AnchorPane mainPane;
+   private final AnchorPane mainPane;
 
    /**
     * root pane of calculator
     */
-   private AnchorPane root;
+   private final AnchorPane root;
 
    /**
     * pane-button of calling of menu
     */
-   private AnchorPane button;
+   private final AnchorPane button;
 
    /**
     * value that represents is bottom menu shows
@@ -81,7 +81,7 @@ public class MenuView {
     * key listener for blocking it
     * while menu is shows
     */
-   private KeyListener keyListener;
+   private final KeyListener keyListener;
 
    /**
     * constructor of menu

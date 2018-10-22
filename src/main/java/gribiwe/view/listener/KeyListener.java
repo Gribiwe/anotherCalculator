@@ -21,15 +21,13 @@ public class KeyListener {
    /**
     * exemplar of application controller
     */
-   private Controller controller;
+   private final Controller controller;
 
    /**
     * node for checking is it blocked by
     * some calculator's exception
-    *
-    * @see gribiwe.model.exception.CalculatorException
     */
-   private Node someNodeForCheckBlock;
+   private final Node someNodeForCheckBlock;
 
    /**
     * creates listener for keyboard keys
