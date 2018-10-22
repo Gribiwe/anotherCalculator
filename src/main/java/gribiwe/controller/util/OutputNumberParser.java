@@ -162,8 +162,6 @@ public class OutputNumberParser {
       } else if (isHaveNotZerosAfterPoint(value)) {
          toReturn = formatWithFormatter(PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE, value, needSpace);
       } else {
-         System.out.println(needSpace);
-         System.out.println(value);
          int outputIntegerValueSize = integerDigitsLength(value);
          int fractionalNumberLength = MAX_NUMBERS - outputIntegerValueSize;
          toReturn = formatWithFormatter("", value, needSpace, fractionalNumberLength);
