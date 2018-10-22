@@ -162,12 +162,27 @@ public class OutputNumberParser {
       } else if (isHaveNotZerosAfterPoint(value)) {
          toReturn = formatWithFormatter(PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE, value, needSpace);
       } else {
-         String formattedValue = formatWithFormatter(PATTERN_ONE_SYMBOL_AFTER_POINT_NOT_EXPONENT_VALUE, value, false);
-         int outputIntegerValueSize = formattedValue.substring(0, formattedValue.indexOf(",")).length();
+         System.out.println(needSpace);
+         System.out.println(value);
+         int outputIntegerValueSize = integerDigitsLength(value);
          int fractionalNumberLength = MAX_NUMBERS - outputIntegerValueSize;
          toReturn = formatWithFormatter("", value, needSpace, fractionalNumberLength);
       }
       return toReturn;
+   }
+
+   /**
+    * method to calculate count of
+    * digits in the integer part of BigDecimal value.
+    * code gotten from  this conversation:
+    * https://stackoverflow.com/questions/35792590/how-to-check-number-of-digits-from-bigdecimal
+    *
+    * @param number number to proceed
+    * @return amount of digits in the integer part of BigDecimal
+    */
+   private static int integerDigitsLength(BigDecimal number) {
+      number = number.stripTrailingZeros();
+      return number.precision() - number.scale();
    }
 
    /**
@@ -261,11 +276,10 @@ public class OutputNumberParser {
       if (maximumFractionNumbers > -1) {
          RESULT_FORMATTER.setMaximumFractionDigits(maximumFractionNumbers);
       }
-      if (needSpace) {
-         RESULT_FORMATTER.setGroupingSize(GROUP_SIZE);
-         RESULT_FORMATTER.setGroupingUsed(true);
-      }
+      RESULT_FORMATTER.setGroupingSize(GROUP_SIZE);
+      RESULT_FORMATTER.setGroupingUsed(needSpace);
       String output = RESULT_FORMATTER.format(value);
+
       if (!output.contains("e-")) {
          if (output.contains(",")) {
             output = output.replaceAll("e", "e+");

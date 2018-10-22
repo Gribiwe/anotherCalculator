@@ -1,7 +1,7 @@
 package modelparser;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * class for testing parsed
@@ -18,8 +18,8 @@ class DifferentOperationsTest {
    /**
     * initialization of testUtil
     */
-   @Before
-   public void setup() {
+   @BeforeAll
+   static void setup() {
       testUtil = new TestUtil();
    }
 
@@ -27,7 +27,7 @@ class DifferentOperationsTest {
     * testing different cases with different operations
     */
    @Test
-   public void testSomeCases() {
+   void testSomeCases() {
       testUtil.doTest("5 / 3 * 1000000000000000 = =", "1,666666666666667e+30", "");
       testUtil.doTest("1 / 7 * 7 - 1 =", "0", "");
       testUtil.doTest("1 / 7 * 1000000000000000 * 7 - 1000000000000000 =", "0", "");
@@ -52,7 +52,7 @@ class DifferentOperationsTest {
     * testing of backspace
     */
    @Test
-   public void backspaceTest() {
+   void backspaceTest() {
       testUtil.doTest("25,25 backspace backspace backspace backspace + 25,2525 backspace backspace +", "27,25", "2   +   25,25   +   ");
       testUtil.doTest("25,25 backspace backspace backspace backspace backspace + 25,2525 backspace backspace +", "25,25", "0   +   25,25   +   ");
       testUtil.doTest("25,25 backspace backspace backspace backspace backspace backspace backspace backspace + 25,2525 backspace backspace +", "25,25", "0   +   25,25   +   ");
@@ -138,7 +138,7 @@ class DifferentOperationsTest {
     * testing of CE button
     */
    @Test
-   public void clearStrokeTest() {
+   void clearStrokeTest() {
       testUtil.doTest("1 ce ", "0", "");
       testUtil.doTest("111531 ce ", "0", "");
       testUtil.doTest("111531 ce 1243", "1 243", "");
@@ -163,7 +163,7 @@ class DifferentOperationsTest {
     * testing of C button
     */
    @Test
-   public void clearStrokeAndHistoryTest() {
+   void clearStrokeAndHistoryTest() {
       testUtil.doTest("1 c ", "0", "");
       testUtil.doTest("111531 c ", "0", "");
       testUtil.doTest("111531 c 1243", "1 243", "");

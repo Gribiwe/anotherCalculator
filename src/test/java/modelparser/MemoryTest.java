@@ -1,7 +1,7 @@
 package modelparser;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * class for testing operations wit memory
@@ -16,8 +16,8 @@ class MemoryTest {
    /**
     * initialization of testUtil
     */
-   @Before
-   public void setup() {
+   @BeforeAll
+   static void setup() {
       testUtil = new TestUtil();
    }
 
@@ -25,7 +25,7 @@ class MemoryTest {
     * testing add and subtract to memory operation
     */
    @Test
-   public void testAddSubtractMemory() {
+   void testAddSubtractMemory() {
       testUtil.doTest("5 m+", "5", "", "5");
       testUtil.doTest("5 m+ m+ m+", "5", "", "15");
       testUtil.doTest("5 n m+", "-5", "", "-5");

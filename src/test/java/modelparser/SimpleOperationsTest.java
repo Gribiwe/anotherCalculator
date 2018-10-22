@@ -1,7 +1,7 @@
 package modelparser;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * Class for testing simple operations
@@ -17,8 +17,8 @@ class SimpleOperationsTest {
    /**
     * initialization of testUtil
     */
-   @Before
-   public void setup() {
+   @BeforeAll
+   static void setup() {
       testUtil = new TestUtil();
    }
 
@@ -26,7 +26,7 @@ class SimpleOperationsTest {
     * testing operation plus
     */
    @Test
-   public void testPlus() {
+   void testPlus() {
       testUtil.doTest("0 +", "0", "0   +   ");
       testUtil.doTest("+", "0", "0   +   ");
 
@@ -154,7 +154,7 @@ class SimpleOperationsTest {
     * testing operation subtract
     */
    @Test
-   public void testSubtract() {
+   void testSubtract() {
       testUtil.doTest("0 -", "0", "0   -   ");
       testUtil.doTest("-", "0", "0   -   ");
 
@@ -284,7 +284,7 @@ class SimpleOperationsTest {
     * testing operation divide
     */
    @Test
-   public void testDivide() {
+   void testDivide() {
       // zero and one dividing
       testUtil.doTest("0 / 1 =", "0", "");
       testUtil.doTest("0 / 1 /", "0", "0   ÷   1   ÷   ");
@@ -351,7 +351,7 @@ class SimpleOperationsTest {
     * testing operation multiple
     */
    @Test
-   public void testMultiple() {
+   void testMultiple() {
       // simple numbers
       testUtil.doTest("1 / 3 * 0,0000000000000001 * 0,00000000001 * 10000000000000000 * 10000000000000 * 3 *", "10", "1   ÷   3   ×   0,0000000000000001   ×   0,00000000001   ×   1000000000000000   ×   10000000000000   ×   3   ×   ");
       testUtil.doTest("0 * 2 =", "0", "");
