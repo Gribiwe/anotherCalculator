@@ -15,8 +15,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 import static gribiwe.model.util.MemoryOperation.*;
@@ -54,6 +57,21 @@ public class Controller implements Initializable {
     * message of overflow
     */
    private static final String OVERFLOW_EXCEPTION_TEXT = "Переполнение";
+
+   /**
+    * message of negate exception
+    */
+   private static final String NEGATE_EXCEPTION_TEXT = "Неожиданная ошибка при работе с операцией negate.\nПожалуйста, отправьте файл exception_log разработчику";
+
+   /**
+    * message of null pointer exception
+    */
+   private static final String NULL_EXCEPTION_TEXT = "Неожиданный NullPointerException.\nПожалуйста, отправьте файл exception_log разработчику";
+
+   /**
+    * message of runtime exception exception
+    */
+   private static final String REALLY_UNEXPECTED_EXCEPTION_TEXT = "Неожиданный RuntimeException.\nПожалуйста, отправьте файл exception_log разработчику";
 
    /**
     * label for viewing a current number
@@ -432,7 +450,47 @@ public class Controller implements Initializable {
          updateError(ZERO_DIVIDE_BY_ZERO_EXCEPTION_TEXT);
       } catch (UncorrectedDataException e) {
          updateError(INCORRECT_DATA_EXCEPTION_TEXT);
+      } catch (NegateException e) {
+         updateError(NEGATE_EXCEPTION_TEXT);
+         writeUnexpectedThrowableLogFile(e);
+      } catch (RuntimeException e) {
+         updateError(REALLY_UNEXPECTED_EXCEPTION_TEXT);
+         writeUnexpectedThrowableLogFile(e);
       }
+   }
+
+   /**
+    * Method for writing file in situation with unexpected throwable
+    *
+    * @param throwable exemplar of unexpected throwable
+    */
+   private void writeUnexpectedThrowableLogFile(Throwable throwable) {
+      String stackTrace = getFullStackTrace(throwable);
+      try {
+         Files.write(Paths.get("exception_log"), stackTrace.getBytes());
+      } catch (IOException e1) {
+         e1.printStackTrace();
+      }
+   }
+
+   /**
+    * method for getting full stackTrace in string representation
+    *
+    * @param throwable unexpected throwable for parcing
+    * @return string statck
+    */
+   private String getFullStackTrace(Throwable throwable) {
+      Throwable cause = throwable.getCause();
+
+      StringBuilder traceBuilder = new StringBuilder("Exception " + throwable.getClass().getName() + " cause: " + cause);
+      for (StackTraceElement stackTraceElement : throwable.getStackTrace()) {
+         traceBuilder.append("\n").append(stackTraceElement);
+      }
+
+      if (cause != null) {
+         traceBuilder.append(getFullStackTrace(cause));
+      }
+      return traceBuilder.toString();
    }
 
    /**
@@ -464,7 +522,7 @@ public class Controller implements Initializable {
       if (mainModel.isMemoryActive()) {
          BigDecimal memoryNumber = mainModel.getMemoryNumber();
          String memoryString = OutputNumberParser.parseResult(memoryNumber, true);
-         memoryText.setText(memoryString);
+         memoryText.setText(memoryString);// TODO: 24.10.2018 dubl
       } else {
          memoryText.setText("");
       }

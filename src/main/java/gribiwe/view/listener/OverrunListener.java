@@ -44,25 +44,28 @@ public class OverrunListener {
     * method for fixing a overran value of label
     */
    private void updateSizes() {
+      String fontName = label.getFont().getName();
       if (fixingBigFontSize) {
+         Text textNode = (Text) label.lookup(".text");
          while (true) {
             label.layout();
             String originalString = label.getText();
-            Text textNode = (Text) label.lookup(".text");
+
             String actualString = textNode.getText();
 
             if (!originalString.equals(actualString)) {
-               label.setFont(new Font(label.getFont().getName(), label.getFont().getSize() - STEP_FOR_DECREASING_SIZE));
+               label.setFont(new Font(fontName, label.getFont().getSize() - STEP_FOR_DECREASING_SIZE));
                label.layout();
             } else {
                fixingBigFontSize = false;
-               return;
+               return;// TODO: 24.10.2018 remove ret
             }
          }
       } else{
-         label.setFont(new Font(label.getFont().getName(), BIGGEST_FONT_SIZE));
+         label.setFont(new Font(fontName, BIGGEST_FONT_SIZE));
          fixingBigFontSize = true;
          updateSizes();
       }
+
    }
 }

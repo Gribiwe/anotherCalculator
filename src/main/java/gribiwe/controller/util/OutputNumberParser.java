@@ -120,11 +120,14 @@ public class OutputNumberParser {
     * @return parsed number
     */
    public static String parseResult(BigDecimal value, boolean needSpaces) {
-      String minus = "";
+      String minus;
       if (value.compareTo(BigDecimal.ZERO) < 0) {
          minus = "-";
+      } else {
+         minus = "";
       }
-      String result = formResult(value.abs(), needSpaces);
+      
+      String result = formResult(value.abs(), needSpaces);/// TODO: 24.10.2018 minus 
       return minus + result;
    }
 
@@ -167,20 +170,6 @@ public class OutputNumberParser {
          toReturn = formatWithFormatter("", value, needSpace, fractionalNumberLength);
       }
       return toReturn;
-   }
-
-   /**
-    * method to calculate count of
-    * digits in the integer part of BigDecimal value.
-    * code gotten from  this conversation:
-    * https://stackoverflow.com/questions/35792590/how-to-check-number-of-digits-from-bigdecimal
-    *
-    * @param number number to proceed
-    * @return amount of digits in the integer part of BigDecimal
-    */
-   private static int integerDigitsLength(BigDecimal number) {
-      number = number.stripTrailingZeros();
-      return number.precision() - number.scale();
    }
 
    /**
@@ -278,7 +267,7 @@ public class OutputNumberParser {
       RESULT_FORMATTER.setGroupingUsed(needSpace);
       String output = RESULT_FORMATTER.format(value);
 
-      if (!output.contains("e-")) {
+      if (!output.contains("e-")) {// TODO: 24.10.2018 remove it and same
          if (output.contains(",")) {
             output = output.replaceAll("e", "e+");
          } else {
@@ -302,5 +291,19 @@ public class OutputNumberParser {
       value = value.setScale(SCALE_SIZE, RoundingMode.DOWN);
       BigDecimal valueWithScaleZero = value.setScale(0, RoundingMode.DOWN);
       return valueWithScaleZero.subtract(value).compareTo(BigDecimal.ZERO) == 0;
+   }
+
+   /**
+    * method to calculate count of
+    * digits in the integer part of BigDecimal value.
+    * code gotten from  this conversation:
+    * https://stackoverflow.com/questions/35792590/how-to-check-number-of-digits-from-bigdecimal
+    *
+    * @param number number to proceed
+    * @return amount of digits in the integer part of BigDecimal
+    */
+   private static int integerDigitsLength(BigDecimal number) {
+      number = number.stripTrailingZeros();
+      return number.precision() - number.scale();
    }
 }

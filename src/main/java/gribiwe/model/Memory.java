@@ -16,7 +16,7 @@ class Memory {
    /**
     * shows is memory enabled
     */
-   private boolean enable;
+   private boolean enable;// TODO: 24.10.2018 remove
 
    /**
     * current memory number

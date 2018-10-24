@@ -19,6 +19,17 @@ import static gribiwe.model.util.SpecialOperation.*;
  * @author Gribiwe
  */
 public class ModelBrain {
+   /**
+    * BigDecimal value of the most little number
+    * of the numbers which calls overflow exception
+    * because of value is too big
+    */
+   private static final BigDecimal MAX_BORDER_VALUE = new BigDecimal("99999999999999995E+9983");
+
+   /**
+    * the closest possible number to zero
+    */
+   private static final BigDecimal CLOSEST_TO_ZERO_VALUE = new BigDecimal("1.0E-9999");
 
    /**
     * shows that {@link #numberBuilder} builds a number
@@ -73,6 +84,7 @@ public class ModelBrain {
     */
    private static final String OPERATION_IS_NULL_EXCEPTION_TEXT = "Operation is null. I cant make calculations using null as operation";
 
+
    /**
     * creation of new exemplar of this class
     * sets default values
@@ -124,7 +136,7 @@ public class ModelBrain {
     *
     * @throws NullPointerException if digit is null
     */
-   public BigDecimal addDigit(Digit digit) {
+   public BigDecimal addDigit(Digit digit) throws NullPointerException {
       verifyNull(digit, DIGIT_IS_NULL_EXCEPTION_TEXT);
       startBuildingNumber();
       numberBuilder.addDigit(digit);
@@ -148,7 +160,7 @@ public class ModelBrain {
     * @throws NullPointerException    if operation is null
     * @throws OverflowException       if result value is overflow
     */
-   public BigDecimal doOperation(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException, OverflowException {
+   public BigDecimal doOperation(SimpleOperation operation) throws ZeroDivideZeroException, ZeroDivideException, OverflowException, NullPointerException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
 
       if (tailSpecialOperationHistory.isProcessing()) {
@@ -186,7 +198,9 @@ public class ModelBrain {
       tailSpecialOperationHistory.clear();
       tailSpecialOperationHistory.initNumber(result);
       verifyOverflow();
-      return resultNumber.getNumber();
+      throw new NullPointerException();
+
+//      return resultNumber.getNumber();
    }
 
    /**
@@ -208,7 +222,9 @@ public class ModelBrain {
          }
       }
       verifyOverflow();
-      return resultNumber.getNumber();
+
+      throw new IllegalArgumentException("BOOOBOBOB");
+//      return resultNumber.getNumber();
    }
 
    /**
@@ -218,7 +234,7 @@ public class ModelBrain {
     * @throws NullPointerException     if operation is null
     * @throws UncorrectedDataException if was trying to find root of negated value
     */
-   public BigDecimal doSpecialOperation(SpecialOperation operation) throws UncorrectedDataException, ZeroDivideException, OverflowException {
+   public BigDecimal doSpecialOperation(SpecialOperation operation) throws UncorrectedDataException, ZeroDivideException, OverflowException, NullPointerException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
       if (tailSpecialOperationHistory.isProcessing()) {
          doNextSpecialOperation(operation);
@@ -232,14 +248,17 @@ public class ModelBrain {
 
    /**
     * method negating number
+    *
+    * @throws NegateException in unexpected situation
     */
-   public BigDecimal doNegate() {
+   public BigDecimal doNegate() throws NegateException {
       if (buildingNumber) {
          numberBuilder.negate();
       } else {
          try {
             doSpecialOperation(NEGATE);
-         } catch (UncorrectedDataException | OverflowException | ZeroDivideException e) {
+            throw new UncorrectedDataException("boom");
+         } catch (UncorrectedDataException | OverflowException | ZeroDivideException | NullPointerException e) {
             throw new NegateException("unexpected exception in model on working with negate as with special operation", e);
          }
       }
@@ -457,18 +476,6 @@ public class ModelBrain {
    }
 
    /**
-    * BigDecimal value of the most little number
-    * of the numbers which calls overflow exception
-    * because of value is too big
-    */
-   private static final BigDecimal MAX_BORDER_VALUE = new BigDecimal("99999999999999995E+9983");
-
-   /**
-    * the closest possible number to zero
-    */
-   private static final BigDecimal CLOSEST_TO_ZERO_VALUE = new BigDecimal("1.0E-9999");
-
-   /**
     * verifies is there is an overflow exception
     */
    private void verifyOverflow() throws OverflowException {
@@ -539,7 +546,7 @@ public class ModelBrain {
     * @param message message of exception
     * @throws NullPointerException if object is null
     */
-   private void verifyNull(Object object, String message) {
+   private void verifyNull(Object object, String message) throws NullPointerException {
       if (object == null) {
          throw new NullPointerException(message);
       }
@@ -554,7 +561,7 @@ public class ModelBrain {
     */
    private void verifyOneDivX(SpecialOperation operation) throws ZeroDivideException {
       BigDecimal tailCalculationResult = tailSpecialOperationHistory.calculate();
-      if (isZero(tailCalculationResult) && operation == ONE_DIV_X) {
+      if (isZero(tailCalculationResult) && operation == ONE_DIV_X) {// TODO: 24.10.2018 swap is faster
          tailSpecialOperationHistory.addOperation(operation);
          throw new ZeroDivideException("Cant divide one by zero!");
       }
@@ -630,7 +637,7 @@ public class ModelBrain {
    }
 
    public HistoryInfo getHistoryLineDto() {
-     return history.getHistoryLineDto();
+      return history.getHistoryLineDto();
    }
 
    public boolean isFormingSpecialOperation() {

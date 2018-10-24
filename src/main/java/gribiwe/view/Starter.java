@@ -84,6 +84,14 @@ public class Starter extends Application {
    }
 
    /**
+    * style string for close to invisible background color
+    * if rgba will be rgba(0, 0, 0, 0) background will be disappeared
+    * and not able to click. Listeners will be dead too.
+    */
+   private final static String closeToFullInvisibleBackGroundColor = "-fx-background-color: rgba(0, 0, 0, 0.01);";
+
+
+   /**
     * start method for javaFx Application
     */
    @Override
@@ -120,7 +128,7 @@ public class Starter extends Application {
       }
       controller = loader.getController();
       rootLayout.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
-      rootLayout.getChildren().get(0).setStyle("-fx-background-color: rgba(0, 0, 0, 0.01);");
+      rootLayout.getChildren().get(0).setStyle(closeToFullInvisibleBackGroundColor); // TODO: 24.10.2018 magic d
       rootLayout.setBackground(Background.EMPTY);
       rootLayout.setLayoutX(0);
       rootLayout.setLayoutY(0);
