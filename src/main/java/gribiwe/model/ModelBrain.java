@@ -9,6 +9,8 @@ import gribiwe.model.util.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static gribiwe.model.util.BigDecimalZeroComparator.isLessThenZero;
+import static gribiwe.model.util.BigDecimalZeroComparator.isZero;
 import static gribiwe.model.util.ResultNumberStatus.*;
 import static gribiwe.model.util.SimpleOperation.DIVIDE;
 import static gribiwe.model.util.SpecialOperation.*;
@@ -198,9 +200,7 @@ public class ModelBrain {
       tailSpecialOperationHistory.clear();
       tailSpecialOperationHistory.initNumber(result);
       verifyOverflow();
-      throw new NullPointerException();
-
-//      return resultNumber.getNumber();
+      return resultNumber.getNumber();
    }
 
    /**
@@ -223,8 +223,7 @@ public class ModelBrain {
       }
       verifyOverflow();
 
-      throw new IllegalArgumentException("BOOOBOBOB");
-//      return resultNumber.getNumber();
+      return resultNumber.getNumber();
    }
 
    /**
@@ -257,7 +256,6 @@ public class ModelBrain {
       } else {
          try {
             doSpecialOperation(NEGATE);
-            throw new UncorrectedDataException("boom");
          } catch (UncorrectedDataException | OverflowException | ZeroDivideException | NullPointerException e) {
             throw new NegateException("unexpected exception in model on working with negate as with special operation", e);
          }
@@ -560,8 +558,7 @@ public class ModelBrain {
     * @throws ZeroDivideException if tries to divide by zero
     */
    private void verifyOneDivX(SpecialOperation operation) throws ZeroDivideException {
-      BigDecimal tailCalculationResult = tailSpecialOperationHistory.calculate();
-      if (isZero(tailCalculationResult) && operation == ONE_DIV_X) {// TODO: 24.10.2018 swap is faster
+      if (operation == ONE_DIV_X && isZero(tailSpecialOperationHistory.calculate())) {// TODO: 24.10.2018 swap is faster d
          tailSpecialOperationHistory.addOperation(operation);
          throw new ZeroDivideException("Cant divide one by zero!");
       }
@@ -598,26 +595,6 @@ public class ModelBrain {
 
          throw new UncorrectedDataException("You tried to find root of negated value. Not possible to calculate it.");
       }
-   }
-
-   /**
-    * checks number is zero
-    *
-    * @param number number to check
-    * @return true if number equals to zero
-    */
-   private boolean isZero(BigDecimal number) {
-      return number.compareTo(BigDecimal.ZERO) == 0;
-   }
-
-   /**
-    * checks is number less then zero
-    *
-    * @param number number to check
-    * @return true if number less to zero
-    */
-   private boolean isLessThenZero(BigDecimal number) {
-      return number.compareTo(BigDecimal.ZERO) < 0;
    }
 
    public boolean isBuildingNumber() {

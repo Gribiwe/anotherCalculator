@@ -8,6 +8,8 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+import static gribiwe.model.util.BigDecimalZeroComparator.isZero;
+
 /**
  * class for parsing {@code BuildingNumber} to string value
  *
@@ -30,20 +32,13 @@ public class OutputNumberParser {
     * decimal pattern for number with
     * exponent and one symbol before point
     */
-   private final static String PATTERN_POINTED_EXPONENT_VALUE = "0.###############E0";
+   private final static String PATTERN_PLUS_EXPONENT_VALUE = "0.###############E0";
 
    /**
     * decimal pattern for non-decimal number
     * without exponent and point
     */
    private final static String PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE = "################";
-
-   /**
-    * decimal point for number with only
-    * one symbol after point
-    * without exponent
-    */
-   private final static String PATTERN_ONE_SYMBOL_AFTER_POINT_NOT_EXPONENT_VALUE = "###############.0";
 
    /**
     * decimal patter for number with
@@ -58,16 +53,60 @@ public class OutputNumberParser {
    private final static int MAX_NUMBERS = 16;
 
    /**
+    * value of index of third zero after point
+    */
+   private final static int THIRD_ZERO_AFTER_POINT_INDEX = 2;
+
+   /**
     * Decimal formatter for formatting
     * result value
     */
-   private final static DecimalFormat RESULT_FORMATTER;
+   private final static DecimalFormat RESULT_FORMATTER = new DecimalFormat();
 
    /**
     * Decimal formatter for formatting
     * number, entered by user
     */
-   private final static DecimalFormat BUILT_NUMBER_FORMATTER;
+   private final static DecimalFormat BUILT_NUMBER_FORMATTER = new DecimalFormat();
+
+   /**
+    * Decimal symbols for formatting
+    */
+   private final static DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+
+   /**
+    * string of plus exponent
+    */
+   private final static String EXPONENT_PLUS = "e+";
+
+   /**
+    * string of minus exponent
+    */
+   private final static String EXPONENT_MINUS = "e";
+
+   /**
+    * enum for showing is exponent needs
+    * and what exactly exponent needs
+    */
+   private enum Exponent {
+
+      /**
+       * exponent doesn't need
+       */
+      NOT_NEEDS,
+
+      /**
+       * needs negate exponent
+       * e-
+       */
+      NEGATE,
+
+      /**
+       * needs plus exponent
+       * e+
+       */
+      PLUS
+   }
 
    /*
     * static field for initialization of
@@ -75,17 +114,9 @@ public class OutputNumberParser {
     * {@link #RESULT_FORMATTER}
     */
    static {
-      DecimalFormatSymbols decimalFormatSymbols;
-      decimalFormatSymbols = new DecimalFormatSymbols();
       decimalFormatSymbols.setDecimalSeparator(',');
       decimalFormatSymbols.setGroupingSeparator(' ');
-      decimalFormatSymbols.setExponentSeparator("e");
 
-      RESULT_FORMATTER = new DecimalFormat();
-      RESULT_FORMATTER.setDecimalFormatSymbols(decimalFormatSymbols);
-      RESULT_FORMATTER.setRoundingMode(RoundingMode.HALF_UP);
-
-      BUILT_NUMBER_FORMATTER = new DecimalFormat();
       BUILT_NUMBER_FORMATTER.setDecimalFormatSymbols(decimalFormatSymbols);
       BUILT_NUMBER_FORMATTER.setGroupingSize(GROUP_SIZE);
       BUILT_NUMBER_FORMATTER.setGroupingUsed(true);
@@ -99,37 +130,16 @@ public class OutputNumberParser {
     * @return string value of {@code BuildingNumber}
     */
    public static String formatInput(BuildingNumber dto) {
-      String minus = "";
-      if (dto.isNegated()) {
-         minus = "-";
-      }
-
-      BigDecimal value = dto.getValue().abs();
+      BigDecimal value = dto.getValue();
       BUILT_NUMBER_FORMATTER.setMinimumFractionDigits(value.scale());
       BUILT_NUMBER_FORMATTER.setDecimalSeparatorAlwaysShown(dto.isPointed());
-      return minus + BUILT_NUMBER_FORMATTER.format(value);
+      String result = BUILT_NUMBER_FORMATTER.format(value);
+      if (dto.isNegated() && isZero(value)) {//todo removed if done
+         result = "-" + result;
+      }
+      return result;
    }
 
-   /**
-    * method for parsing a BigDecimal value
-    * it's can be really big or small values with exponents
-    *
-    * @param value      number to parse
-    * @param needSpaces if true string will be
-    *                   with group separate spaces
-    * @return parsed number
-    */
-   public static String parseResult(BigDecimal value, boolean needSpaces) {
-      String minus;
-      if (value.compareTo(BigDecimal.ZERO) < 0) {
-         minus = "-";
-      } else {
-         minus = "";
-      }
-      
-      String result = formResult(value.abs(), needSpaces);/// TODO: 24.10.2018 minus 
-      return minus + result;
-   }
 
    /**
     * method for parsing a BigDecimal value
@@ -138,11 +148,11 @@ public class OutputNumberParser {
     * @param value number to parse, must be not negated
     * @return parsed number
     */
-   private static String formResult(BigDecimal value, boolean needSpaces) {
+   public static String parseResult(BigDecimal value, boolean needSpaces) {//todo remove minus str done
       String toReturn;
-      if (value.compareTo(BigDecimal.ZERO) == 0) {
+      if (isZero(value)) {
          toReturn = "0";
-      } else if (value.toBigInteger().compareTo(BigInteger.ONE) >= 0) {
+      } else if (value.toBigInteger().abs().compareTo(BigInteger.ONE) >= 0) {
          toReturn = parseResultBiggerOrEqualsOne(value, needSpaces);
       } else {
          toReturn = parseResultLessOne(value, needSpaces);
@@ -158,16 +168,15 @@ public class OutputNumberParser {
     * @return parsed string value
     */
    private static String parseResultBiggerOrEqualsOne(BigDecimal value, boolean needSpace) {
-      String leftValue = value.toBigInteger().toString();
+      int integerDigitsLength = integerDigitsLength(value);
       String toReturn;
-      if (leftValue.length() > MAX_NUMBERS) {
-         toReturn = formatWithFormatter(PATTERN_POINTED_EXPONENT_VALUE, value, needSpace);
+      if (integerDigitsLength > MAX_NUMBERS) {
+         toReturn = formatWithFormatter(PATTERN_PLUS_EXPONENT_VALUE, value, needSpace, Exponent.PLUS);
       } else if (isHaveNotZerosAfterPoint(value)) {
-         toReturn = formatWithFormatter(PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE, value, needSpace);
+         toReturn = formatWithFormatter(PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE, value, needSpace, Exponent.NOT_NEEDS);
       } else {
-         int outputIntegerValueSize = integerDigitsLength(value);
-         int fractionalNumberLength = MAX_NUMBERS - outputIntegerValueSize;
-         toReturn = formatWithFormatter("", value, needSpace, fractionalNumberLength);
+         int fractionalNumberLength = MAX_NUMBERS - integerDigitsLength;
+         toReturn = formatWithFormatter("", value, needSpace, Exponent.NOT_NEEDS, fractionalNumberLength);
       }
       return toReturn;
    }
@@ -182,36 +191,49 @@ public class OutputNumberParser {
     * @param value parsing number
     * @return parsed string value
     */
-   private static String parseResultLessOne(BigDecimal value, boolean needSpace) {
-      String allValue = value.toPlainString();
-      allValue = allValue.substring(allValue.indexOf(".") + 1);
-
-      int indexOfNotZeroNumber = -1;
-      for (int i = 0; i < allValue.length(); i++) {
-         if (allValue.charAt(i) != '0') {
-            indexOfNotZeroNumber = i;
-            break;
-         }
-      }
-
+   private static String parseResultLessOne(BigDecimal value, boolean needSpace) {//todo removed string done
+      int indexOfNotZeroNumber = value.scale() - value.precision();
       int indexOfLastNormNumber = indexOfNotZeroNumber;
-      int zeroCount = 0;
-      for (int i = indexOfNotZeroNumber; i < allValue.length() && zeroCount < MAX_NUMBERS - 1; i++) {
-         if (allValue.charAt(i) != '0') {
-            indexOfLastNormNumber = i;
-            zeroCount = 0;
-         } else {
-            zeroCount++;
+
+      if (indexOfNotZeroNumber > 0) {
+         int maxLastIndex = indexOfLastNormNumber + MAX_NUMBERS;
+         if (reScaleAndGetLastNotZeroDigit(value, maxLastIndex) != indexOfNotZeroNumber) {
+            indexOfLastNormNumber = reScaleAndGetLastNotZeroDigit(value, maxLastIndex + 2);
          }
       }
 
       String toReturn;
       if (isNumberSequenceNeedMinusExponent(indexOfLastNormNumber, indexOfNotZeroNumber)) {
-         toReturn = formatWithFormatter(PATTERN_POINTED_EXPONENT_VALUE, value, needSpace);
+         toReturn = formatWithFormatter(PATTERN_PLUS_EXPONENT_VALUE, value, needSpace, Exponent.NEGATE);
       } else {
-         toReturn = formatWithFormatter(PATTERN_POINTED_NOT_EXPONENT_VALUE, value, needSpace);
+         toReturn = formatWithFormatter(PATTERN_POINTED_NOT_EXPONENT_VALUE, value, needSpace, Exponent.NOT_NEEDS);
       }
       return toReturn;
+   }
+
+   /**
+    * method which re-scales BigDecimal number
+    * and finds last not zero digit from fractional
+    * part of number
+    *
+    * @param number   number to re-scale and process
+    * @param newScale value of new scale of number
+    * @return index of not zero digit
+    */
+   private static int reScaleAndGetLastNotZeroDigit(BigDecimal number, int newScale) {
+      number = reScale(number, newScale);
+      return number.stripTrailingZeros().scale() - 1;
+   }
+
+   /**
+    * re-scales BigDecimal number
+    *
+    * @param number   to re-scale
+    * @param newScale value of new number scale
+    * @return re-scaled number
+    */
+   private static BigDecimal reScale(BigDecimal number, int newScale) {
+      return number.setScale(newScale, RoundingMode.DOWN);
    }
 
    /**
@@ -225,7 +247,7 @@ public class OutputNumberParser {
     * @return true if number should be with minus exponent
     */
    private static boolean isNumberSequenceNeedMinusExponent(int indexOfLastNormNumber, int indexOfNotZeroNumber) {
-      boolean isAfterThirdZero = indexOfNotZeroNumber > 2;
+      boolean isAfterThirdZero = indexOfNotZeroNumber > THIRD_ZERO_AFTER_POINT_INDEX;
       boolean isHaveEnoughLength = indexOfLastNormNumber >= indexOfNotZeroNumber + MAX_NUMBERS;
       boolean isStartsAtMaxNumberLimitIndex = indexOfNotZeroNumber + 1 == MAX_NUMBERS + 1;
       boolean isHaveMoreThenOneNumber = indexOfLastNormNumber >= indexOfNotZeroNumber;
@@ -240,12 +262,14 @@ public class OutputNumberParser {
     * formats string value of decimal
     * with formatter
     *
-    * @param pattern formatting pattern
-    * @param value   number to format
+    * @param pattern   formatting pattern
+    * @param value     number to format
+    * @param needSpace shows is formatter have to add group spaces
+    * @param exponent  shows what exponent needs (if it needs)
     * @return string of formatted number
     */
-   private static String formatWithFormatter(String pattern, BigDecimal value, boolean needSpace) {
-      return formatWithFormatter(pattern, value, needSpace, -1);
+   private static String formatWithFormatter(String pattern, BigDecimal value, boolean needSpace, Exponent exponent) {
+      return formatWithFormatter(pattern, value, needSpace, exponent, -1);
    }
 
    /**
@@ -256,27 +280,32 @@ public class OutputNumberParser {
     * @param value                  number to format
     * @param maximumFractionNumbers maximum digits after point,
     *                               if -1, will be used default value
+    * @param needSpace              shows is formatter have to add group spaces
+    * @param exponent               shows what exponent needs (if it needs)
     * @return string of formatted number
     */
-   private static String formatWithFormatter(String pattern, BigDecimal value, boolean needSpace, int maximumFractionNumbers) {
-      RESULT_FORMATTER.applyPattern(pattern);
+   private static String formatWithFormatter(String pattern, BigDecimal value, boolean needSpace, Exponent exponent, int maximumFractionNumbers) {
+      RESULT_FORMATTER.applyPattern(pattern);// TODO: 24.10.2018 remove string on it and same done
+      RESULT_FORMATTER.setGroupingSize(GROUP_SIZE);
+      RESULT_FORMATTER.setGroupingUsed(needSpace);
+      RESULT_FORMATTER.setRoundingMode(RoundingMode.HALF_UP);
       if (maximumFractionNumbers > -1) {
          RESULT_FORMATTER.setMaximumFractionDigits(maximumFractionNumbers);
       }
-      RESULT_FORMATTER.setGroupingSize(GROUP_SIZE);
-      RESULT_FORMATTER.setGroupingUsed(needSpace);
-      String output = RESULT_FORMATTER.format(value);
-
-      if (!output.contains("e-")) {// TODO: 24.10.2018 remove it and same
-         if (output.contains(",")) {
-            output = output.replaceAll("e", "e+");
+      boolean showAlwaysDecimalSeparator = false;
+      if (exponent != Exponent.NOT_NEEDS) {
+         showAlwaysDecimalSeparator = true;
+         String exponentToSet;
+         if (exponent == Exponent.PLUS) {
+            exponentToSet = EXPONENT_PLUS;
          } else {
-            output = output.replaceAll("e", ",e+");
+            exponentToSet = EXPONENT_MINUS;
          }
-      } else if (!output.contains(",")) {
-         output = output.replaceAll("e", ",e");
+         decimalFormatSymbols.setExponentSeparator(exponentToSet);
       }
-      return output;
+      RESULT_FORMATTER.setDecimalSeparatorAlwaysShown(showAlwaysDecimalSeparator);
+      RESULT_FORMATTER.setDecimalFormatSymbols(decimalFormatSymbols);
+      return RESULT_FORMATTER.format(value);
    }
 
    /**
@@ -288,22 +317,39 @@ public class OutputNumberParser {
     * number after point
     */
    private static boolean isHaveNotZerosAfterPoint(BigDecimal value) {
-      value = value.setScale(SCALE_SIZE, RoundingMode.DOWN);
-      BigDecimal valueWithScaleZero = value.setScale(0, RoundingMode.DOWN);
-      return valueWithScaleZero.subtract(value).compareTo(BigDecimal.ZERO) == 0;
+      value = reScale(value, SCALE_SIZE);
+      BigDecimal valueWithScaleZero = reScale(value, 0);
+      return isZero(valueWithScaleZero.subtract(value));
    }
 
    /**
     * method to calculate count of
     * digits in the integer part of BigDecimal value.
     * code gotten from  this conversation:
-    * https://stackoverflow.com/questions/35792590/how-to-check-number-of-digits-from-bigdecimal
+    * https://stackoverflow.com/questions/18828377/biginteger-count-the-number-of-decimal-digits-in-a-scalable-method
     *
     * @param number number to proceed
     * @return amount of digits in the integer part of BigDecimal
     */
    private static int integerDigitsLength(BigDecimal number) {
-      number = number.stripTrailingZeros();
-      return number.precision() - number.scale();
+      BigInteger huge = number.toBigInteger().abs();
+      int digits = 0;
+      int bits = huge.bitLength();
+      // Serious reductions.
+      while (bits > 4) {
+         // 4 > log[2](10) so we should not reduce it too far.
+         int reduce = bits / 4;
+         // Divide by 10^reduce
+         huge = huge.divide(BigInteger.TEN.pow(reduce));
+         // Removed that many decimal digits.
+         digits += reduce;
+         // Recalculate bitLength
+         bits = huge.bitLength();
+      }
+      // Now 4 bits or less - add 1 if necessary.
+      if (huge.intValue() > 9) {
+         digits += 1;
+      }
+      return digits + 1;
    }
 }

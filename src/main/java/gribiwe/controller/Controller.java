@@ -179,12 +179,6 @@ public class Controller implements Initializable {
    private ModelBrain mainModel;
 
    /**
-    * shows is buttons of calculator
-    * blocked (by exception)
-    */
-   private boolean enabledOperationButtons = true;
-
-   /**
     * initial method. Calls by loading application
     */
    @Override
@@ -476,8 +470,8 @@ public class Controller implements Initializable {
    /**
     * method for getting full stackTrace in string representation
     *
-    * @param throwable unexpected throwable for parcing
-    * @return string statck
+    * @param throwable unexpected throwable for parsing
+    * @return string of stackTrace of throwable
     */
    private String getFullStackTrace(Throwable throwable) {
       Throwable cause = throwable.getCause();
@@ -511,6 +505,9 @@ public class Controller implements Initializable {
       inputFieldNumber.setText(outputNumber);
       updateHistory();
       updateMemory();
+      if (button_plus.isDisabled()) {
+         setOperationButtonsDisable(false);
+      }
    }
 
    /**
@@ -519,16 +516,14 @@ public class Controller implements Initializable {
     * and sends to the view
     */
    private void updateMemory() {
+      String memoryString;
       if (mainModel.isMemoryActive()) {
          BigDecimal memoryNumber = mainModel.getMemoryNumber();
-         String memoryString = OutputNumberParser.parseResult(memoryNumber, true);
-         memoryText.setText(memoryString);// TODO: 24.10.2018 dubl
+         memoryString = OutputNumberParser.parseResult(memoryNumber, true);// TODO: 24.10.2018 dubl d
       } else {
-         memoryText.setText("");
+         memoryString = "";
       }
-      if (!enabledOperationButtons) {
-         setOperationButtonsDisable(false);
-      }
+      memoryText.setText(memoryString);
    }
 
    /**
@@ -539,7 +534,6 @@ public class Controller implements Initializable {
    private void updateHistory() {
       HistoryInfo historyInfo = mainModel.getHistoryLineDto();
       String historyLineText = HistoryLineParser.parse(historyInfo);
-
       if (mainModel.isFormingSpecialOperation()) {
          BuildingSpecialOperations buildingSpecialOperations = mainModel.getFormingSpecialOperationsDto();
          historyLineText += HistoryLineParser.parseSpecialOperations(buildingSpecialOperations);
@@ -547,9 +541,11 @@ public class Controller implements Initializable {
       historyLine.setText(historyLineText);
    }
 
+
    /**
-    * method for sending info about exception
-    * to view of calculator
+    * method for sending exception's message
+    * to view of calculator with updating history
+    * and blocking buttons
     *
     * @param messageToOutput message to show in result
     */
@@ -567,7 +563,6 @@ public class Controller implements Initializable {
     * @param disable if true - buttons will be blocked. False - unblocked
     */
    private void setOperationButtonsDisable(boolean disable) {
-      enabledOperationButtons = false;
       button_ms.setDisable(disable);
       button_msub.setDisable(disable);
       button_mp.setDisable(disable);

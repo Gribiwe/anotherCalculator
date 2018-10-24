@@ -13,10 +13,7 @@ import static gribiwe.model.util.MemoryOperation.ADD;
  */
 class Memory {
 
-   /**
-    * shows is memory enabled
-    */
-   private boolean enable;// TODO: 24.10.2018 remove
+   // TODO: 24.10.2018 remove enable flag done
 
    /**
     * current memory number
@@ -27,13 +24,17 @@ class Memory {
     * initial of default values
     */
    Memory() {
-      number = BigDecimal.ZERO;
+      number = null;
    }
 
    /**
     * @return current memory number
     */
    public BigDecimal getNumber() {
+      if (number == null) {
+         number = BigDecimal.ZERO;
+      }
+
       return number;
    }
 
@@ -45,23 +46,25 @@ class Memory {
     * @see MemoryOperation
     */
    void doOperation(BigDecimal num, MemoryOperation operation) {
+      if (number == null) {
+         number = BigDecimal.ZERO;
+      }
+
       if (operation == ADD) {
          number = number.add(num);
       } else {
          number = number.subtract(num);
       }
-      enable = true;
    }
 
    boolean isEnable() {
-      return enable;
+      return number != null;
    }
 
    /**
     * clears memory
     */
    void clear() {
-      number = BigDecimal.ZERO;
-      enable = false;
+      number = null;
    }
 }
