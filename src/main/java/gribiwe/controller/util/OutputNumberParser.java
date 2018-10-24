@@ -85,6 +85,11 @@ public class OutputNumberParser {
    private final static String EXPONENT_MINUS = "e";
 
    /**
+    * string of minus prefix of building number formatter
+    */
+   private final static String MINUS = "-";
+
+   /**
     * enum for showing is exponent needs
     * and what exactly exponent needs
     */
@@ -133,10 +138,14 @@ public class OutputNumberParser {
       BigDecimal value = dto.getValue();
       BUILT_NUMBER_FORMATTER.setMinimumFractionDigits(value.scale());
       BUILT_NUMBER_FORMATTER.setDecimalSeparatorAlwaysShown(dto.isPointed());
-      String result = BUILT_NUMBER_FORMATTER.format(value);
-      if (dto.isNegated() && isZero(value)) {//todo removed if done
-         result = "-" + result;
+      if (dto.isNegated() && isZero(value)) {
+         BUILT_NUMBER_FORMATTER.setPositivePrefix(MINUS);
       }
+      String result = BUILT_NUMBER_FORMATTER.format(value);
+      BUILT_NUMBER_FORMATTER.setPositivePrefix("");
+//      if (dto.isNegated() && isZero(value)) {//todo re-moved if have a quest
+//         result = "-" + result;
+//      }
       return result;
    }
 
