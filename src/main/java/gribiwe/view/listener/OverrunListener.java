@@ -50,7 +50,6 @@ public class OverrunListener {
          while (true) {
             label.layout();
             String originalString = label.getText();
-
             String actualString = textNode.getText();
 
             if (!originalString.equals(actualString)) {
@@ -58,7 +57,7 @@ public class OverrunListener {
                label.layout();
             } else {
                fixingBigFontSize = false;
-               return;// TODO: 24.10.2018 remove ret
+               break;// TODO: 24.10.2018 remove return done
             }
          }
       } else{

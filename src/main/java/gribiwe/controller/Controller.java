@@ -519,7 +519,7 @@ public class Controller implements Initializable {
       String memoryString;
       if (mainModel.isMemoryActive()) {
          BigDecimal memoryNumber = mainModel.getMemoryNumber();
-         memoryString = OutputNumberParser.parseResult(memoryNumber, true);// TODO: 24.10.2018 dubl d
+         memoryString = OutputNumberParser.parseResult(memoryNumber, true);// TODO: 24.10.2018 dubl done
       } else {
          memoryString = "";
       }

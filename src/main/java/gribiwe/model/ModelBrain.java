@@ -26,7 +26,7 @@ public class ModelBrain {
     * of the numbers which calls overflow exception
     * because of value is too big
     */
-   private static final BigDecimal MAX_BORDER_VALUE = new BigDecimal("99999999999999995E+9983");
+   private static final BigDecimal MAX_NUMBER_BORDER_VALUE = new BigDecimal("99999999999999995E+9983");
 
    /**
     * the closest possible number to zero
@@ -200,7 +200,7 @@ public class ModelBrain {
       tailSpecialOperationHistory.clear();
       tailSpecialOperationHistory.initNumber(result);
       verifyOverflow();
-      return resultNumber.getNumber();
+      return result;
    }
 
    /**
@@ -232,6 +232,7 @@ public class ModelBrain {
     * @throws ZeroDivideException      if was trying to divide number (not zero) by zero
     * @throws NullPointerException     if operation is null
     * @throws UncorrectedDataException if was trying to find root of negated value
+    * @throws OverflowException        if value is overflows
     */
    public BigDecimal doSpecialOperation(SpecialOperation operation) throws UncorrectedDataException, ZeroDivideException, OverflowException, NullPointerException {
       verifyNull(operation, OPERATION_IS_NULL_EXCEPTION_TEXT);
@@ -355,7 +356,7 @@ public class ModelBrain {
       verifyDividingByZero(numberToHistory, operation);
 
       history.add(numberToHistory, operation, true);
-      resultNumber.loadResult(history.calculate(), HISTORY_RESULT);
+      loadHistoryCalculationToResultNumber(HISTORY_RESULT);
    }
 
    /**
@@ -375,7 +376,7 @@ public class ModelBrain {
       history.uploadSpecialOperations(operations);
 
       tailSpecialOperationHistory.clear();
-      resultNumber.loadResult(history.calculate(), HISTORY_RESULT);
+      loadHistoryCalculationToResultNumber(HISTORY_RESULT);
    }
 
    /**
@@ -389,7 +390,7 @@ public class ModelBrain {
       history.add(resultNumber.getNumber(), history.getSavedOperation(), false);
       history.add(history.getSavedResult());
 
-      resultNumber.loadResult(history.calculate(), EQUALS_RESULT);
+      loadHistoryCalculationToResultNumber(EQUALS_RESULT);
       history.clearHistory();
    }
 
@@ -410,7 +411,7 @@ public class ModelBrain {
       history.setSavedResult(numberToCalculate);
       history.add(numberToCalculate);
 
-      resultNumber.loadResult(history.calculate(), EQUALS_RESULT);
+      loadHistoryCalculationToResultNumber(EQUALS_RESULT);
       history.clearHistory();
    }
 
@@ -424,7 +425,7 @@ public class ModelBrain {
       history.uploadSpecialOperations(tailSpecialOperationHistory.getOperations());
 
       tailSpecialOperationHistory.clear();
-      resultNumber.loadResult(history.calculate(), EQUALS_RESULT);
+      loadHistoryCalculationToResultNumber(EQUALS_RESULT);
       history.clearHistory();
    }
 
@@ -462,6 +463,17 @@ public class ModelBrain {
    }
 
    /**
+    * method for loading history calculation
+    * to result number
+    *
+    * @param status provided status of result
+    *               number
+    */
+   private void loadHistoryCalculationToResultNumber(ResultNumberStatus status) {
+      resultNumber.loadResult(history.calculate(), status);
+   }
+
+   /**
     * verifies is current history will be
     * divided by zero when history is zero too
     *
@@ -478,7 +490,7 @@ public class ModelBrain {
     */
    private void verifyOverflow() throws OverflowException {
       BigDecimal value = resultNumber.getNumber().abs();
-      if (value.compareTo(MAX_BORDER_VALUE) >= 0 || value.compareTo(CLOSEST_TO_ZERO_VALUE) < 0 && !isZero(value)) {
+      if (value.compareTo(MAX_NUMBER_BORDER_VALUE) >= 0 || value.compareTo(CLOSEST_TO_ZERO_VALUE) < 0 && !isZero(value)) {
          throw new OverflowException("Value is overflow: " + value);
       }
    }
@@ -507,7 +519,7 @@ public class ModelBrain {
     */
    private void verifyZeroDividingByZero(BigDecimal divisor, SimpleOperation operation) throws ZeroDivideZeroException {
       SimpleOperation lastOperation = history.getLastOperation();
-      if (lastOperation == DIVIDE && isZero(history.calculate()) && isZero(divisor)) {
+      if (isZero(divisor) && lastOperation == DIVIDE && isZero(history.calculate())) {
          if (operation != null) {
             history.add(divisor, operation, false);
          }
@@ -558,8 +570,9 @@ public class ModelBrain {
     * @throws ZeroDivideException if tries to divide by zero
     */
    private void verifyOneDivX(SpecialOperation operation) throws ZeroDivideException {
-      if (operation == ONE_DIV_X && isZero(tailSpecialOperationHistory.calculate())) {// TODO: 24.10.2018 swap is faster d
+      if (operation == ONE_DIV_X && isZero(tailSpecialOperationHistory.calculate())) {// TODO: 24.10.2018 swap in if is faster done
          tailSpecialOperationHistory.addOperation(operation);
+
          throw new ZeroDivideException("Cant divide one by zero!");
       }
    }
@@ -573,8 +586,7 @@ public class ModelBrain {
     * @throws UncorrectedDataException if tries to root negate number
     */
    private void verifyRootOfNegatedNumberInNextSpecialOperation(SpecialOperation operation) throws UncorrectedDataException {
-      BigDecimal tailCalculationResult = tailSpecialOperationHistory.calculate();
-      if (isLessThenZero(tailCalculationResult) && operation == ROOT) {
+      if (operation == ROOT && isLessThenZero(tailSpecialOperationHistory.calculate())) {
          tailSpecialOperationHistory.addOperation(operation);
          throw new UncorrectedDataException("You tried to find root of negated value. Not possible to calculate it.");
       }
@@ -592,7 +604,6 @@ public class ModelBrain {
       if (isLessThenZero(number) && operation == ROOT) {
          tailSpecialOperationHistory.initNumber(number);
          tailSpecialOperationHistory.addOperation(operation);
-
          throw new UncorrectedDataException("You tried to find root of negated value. Not possible to calculate it.");
       }
    }

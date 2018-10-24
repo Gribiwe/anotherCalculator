@@ -90,6 +90,10 @@ public class Starter extends Application {
     */
    private final static String closeToFullInvisibleBackGroundColor = "-fx-background-color: rgba(0, 0, 0, 0.01);";
 
+   /**
+    * FX style of invisible background color
+    */
+   private final static String fullInvisibleBackgroundStyle = "-fx-background-color: rgba(0, 0, 0, 0);";
 
    /**
     * start method for javaFx Application
@@ -127,8 +131,8 @@ public class Starter extends Application {
          e.printStackTrace();
       }
       controller = loader.getController();
-      rootLayout.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
-      rootLayout.getChildren().get(0).setStyle(closeToFullInvisibleBackGroundColor); // TODO: 24.10.2018 magic d
+      rootLayout.setStyle(fullInvisibleBackgroundStyle);
+      rootLayout.getChildren().get(0).setStyle(closeToFullInvisibleBackGroundColor); // TODO: 24.10.2018 magic done
       rootLayout.setBackground(Background.EMPTY);
       rootLayout.setLayoutX(0);
       rootLayout.setLayoutY(0);
@@ -162,7 +166,7 @@ public class Starter extends Application {
       box.setMaxWidth(Properties.getScreenWidth());
       box.setMinHeight(Properties.getScreenHeight());
       box.setMaxHeight(Properties.getScreenHeight());
-      box.setStyle("-fx-background-color: rgba(0, 0, 0, 0);");
+      box.setStyle(fullInvisibleBackgroundStyle);
    }
 
    /**
