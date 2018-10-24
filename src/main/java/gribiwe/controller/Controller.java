@@ -500,7 +500,7 @@ public class Controller implements Initializable {
          BuildingNumber buildingNumber = mainModel.getBuildingNumber();
          outputNumber = OutputNumberParser.formatInput(buildingNumber);
       } else {
-         outputNumber = OutputNumberParser.parseResult(number, true);
+         outputNumber = OutputNumberParser.formatResult(number, true);
       }
       inputFieldNumber.setText(outputNumber);
       updateHistory();
@@ -519,7 +519,7 @@ public class Controller implements Initializable {
       String memoryString;
       if (mainModel.isMemoryActive()) {
          BigDecimal memoryNumber = mainModel.getMemoryNumber();
-         memoryString = OutputNumberParser.parseResult(memoryNumber, true);// TODO: 24.10.2018 dubl done
+         memoryString = OutputNumberParser.formatResult(memoryNumber, true);// TODO: 24.10.2018 dubl done
       } else {
          memoryString = "";
       }

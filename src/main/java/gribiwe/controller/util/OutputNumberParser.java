@@ -142,8 +142,8 @@ public class OutputNumberParser {
          BUILT_NUMBER_FORMATTER.setPositivePrefix(MINUS);
       }
       String result = BUILT_NUMBER_FORMATTER.format(value);
-      BUILT_NUMBER_FORMATTER.setPositivePrefix("");
-//      if (dto.isNegated() && isZero(value)) {//todo re-moved if have a quest
+      BUILT_NUMBER_FORMATTER.setPositivePrefix(MINUS);
+      //      if (dto.isNegated() && isZero(value)) { //todo minus adding have a question
 //         result = "-" + result;
 //      }
       return result;
@@ -151,32 +151,32 @@ public class OutputNumberParser {
 
 
    /**
-    * method for parsing a BigDecimal value
+    * method for formatting a BigDecimal value
     * it's can be really big or small values with exponents
     *
-    * @param value number to parse, must be not negated
-    * @return parsed number
+    * @param value number to formatting, must be not negated
+    * @return formatted number
     */
-   public static String parseResult(BigDecimal value, boolean needSpaces) {//todo remove minus str done
+   public static String formatResult(BigDecimal value, boolean needSpaces) {//todo remove minus str done
       String toReturn;
       if (isZero(value)) {
          toReturn = "0";
       } else if (value.toBigInteger().abs().compareTo(BigInteger.ONE) >= 0) {
-         toReturn = parseResultBiggerOrEqualsOne(value, needSpaces);
+         toReturn = formatResultBiggerOrEqualsOne(value, needSpaces);
       } else {
-         toReturn = parseResultLessOne(value, needSpaces);
+         toReturn = formatResultLessOne(value, needSpaces);
       }
       return toReturn;
    }
 
    /**
-    * method for parsing result value
+    * method for formatting result value
     * bigger or equals to one
     *
-    * @param value parsing number
-    * @return parsed string value
+    * @param value formatting number
+    * @return formatted string value
     */
-   private static String parseResultBiggerOrEqualsOne(BigDecimal value, boolean needSpace) {
+   private static String formatResultBiggerOrEqualsOne(BigDecimal value, boolean needSpace) {
       int integerDigitsLength = integerDigitsLength(value);
       String toReturn;
       if (integerDigitsLength > MAX_NUMBERS) {
@@ -191,16 +191,16 @@ public class OutputNumberParser {
    }
 
    /**
-    * method for parsing result
+    * method for formatting result
     * number less then one.
     * finds non-zero digits at decimal
     * number and moving them to start with
     * negative exponent (if needs)
     *
-    * @param value parsing number
-    * @return parsed string value
+    * @param value formatting number
+    * @return formatted string value
     */
-   private static String parseResultLessOne(BigDecimal value, boolean needSpace) {//todo removed string done
+   private static String formatResultLessOne(BigDecimal value, boolean needSpace) {//todo removed string done
       int indexOfNotZeroNumber = value.scale() - value.precision();
       int indexOfLastNormNumber = indexOfNotZeroNumber;
 
