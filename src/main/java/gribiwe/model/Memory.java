@@ -13,12 +13,10 @@ import static gribiwe.model.util.MemoryOperation.ADD;
  */
 class Memory {
 
-   // TODO: 24.10.2018 remove enable flag done
-
    /**
     * current memory number
     */
-   private BigDecimal number = null;
+   private BigDecimal number;
 
    /**
     * @return current memory number

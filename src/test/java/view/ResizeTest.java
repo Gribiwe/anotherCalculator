@@ -39,10 +39,10 @@ class ResizeTest extends UITest {
     * @param directionX value of final X coordinate of mouse
     */
    private void resizeTestTemplateX(int directionX) {
-      ResizeUtil.testResizeRight(0, directionX);
-      ResizeUtil.testResizeLeft(0, directionX);
       ResizeUtil.testResizeRight(1, directionX);
       ResizeUtil.testResizeLeft(1, directionX);
+      ResizeUtil.testResizeRight(3, directionX);
+      ResizeUtil.testResizeLeft(3, directionX);
       ResizeUtil.testResizeRight(6, directionX);
       ResizeUtil.testResizeLeft(6, directionX);
    }
@@ -53,9 +53,10 @@ class ResizeTest extends UITest {
     * @param directionY value of final Y coordinate of mouse
     */
    private void resizeTestTemplateY(int directionY) {
-      ResizeUtil.testResizeBottom(0, directionY);
       ResizeUtil.testResizeTop(1, directionY);
       ResizeUtil.testResizeBottom(1, directionY);
+      ResizeUtil.testResizeTop(3, directionY);
+      ResizeUtil.testResizeBottom(3, directionY);
       ResizeUtil.testResizeTop(4, directionY);
       ResizeUtil.testResizeBottom(4, directionY);
    }

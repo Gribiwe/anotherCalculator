@@ -82,16 +82,14 @@ class TestUtil {
       }
       assertEquals(expectedOutputNumber, outputNumberAtResult);
 
-      String historyLineAtResult;
-      historyLineAtResult = HistoryLineParser.parse(mainModel.getHistoryLineDto());
+      String historyLineAtResult = HistoryLineParser.parse(mainModel.getHistoryLineDto());
       if (mainModel.isFormingSpecialOperation()) {
          BuildingSpecialOperations buildingSpecialOperations = mainModel.getFormingSpecialOperationsDto();
          historyLineAtResult += HistoryLineParser.parseSpecialOperations(buildingSpecialOperations);
       }
       assertEquals(expectedHistory, historyLineAtResult);
 
-      String memoryNumberAtResult;
-      memoryNumberAtResult = OutputNumberParser.formatResult(mainModel.getMemoryNumber(), true);
+      String memoryNumberAtResult = OutputNumberParser.formatResult(mainModel.getMemoryNumber(), true);
       assertEquals(expectedMemory, memoryNumberAtResult);
    }
 
@@ -135,7 +133,7 @@ class TestUtil {
          toReturn = mainModel.deleteAllDigits();
       } else if (section.equals("c")) {
          toReturn = mainModel.deleteAllDigitsAndHistory();
-      } else if (section.equals("backspace")) {
+      } else if (section.equals("←")) {
          toReturn = mainModel.deleteDigit();
       } else if (section.equals("n")) {
          toReturn = mainModel.doNegate();

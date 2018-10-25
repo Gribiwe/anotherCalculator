@@ -57,7 +57,7 @@ public class OverrunListener {
                label.layout();
             } else {
                fixingBigFontSize = false;
-               break;// TODO: 24.10.2018 remove return done
+               break;
             }
          }
       } else{

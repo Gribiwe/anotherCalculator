@@ -96,52 +96,52 @@ public class Starter extends Application {
    private final static String fullInvisibleBackgroundStyle = "-fx-background-color: rgba(0, 0, 0, 0);";
 
    /**
-    * id of button plus
+    * FX:id of button plus
     */
    private final static String BUTTON_PLUS = "#button_plus";
 
    /**
-    * id of output number label
+    * FX:id of output number label
     */
    private final static String LABEL_OUTPUT = "#inputFieldNumber";
 
    /**
-    * id of button maximize
+    * FX:id of button maximize
     */
    private final static String BUTTON_MAXIMIZE = "#maximize";
 
    /**
-    * id of text of maximize button
+    * FX:id of text of maximize button
     */
    private final static String MAXIMIZE_TEXT_ID = "#maximizeText";
 
    /**
-    * id of pane of bar of window
+    * FX:id of pane of bar of window
     */
    private final static String PANE_BAR = "#bar";
 
    /**
-    * id of button exit
+    * FX:id of button exit
     */
    private final static String BUTTON_EXIT = "#exit";
 
    /**
-    * id of button hide
+    * FX:id of button hide
     */
    private final static String BUTTON_HIDE = "#hide";
 
    /**
-    * id of button open menu
+    * FX:id of button open menu
     */
    private final static String BUTTON_OPEN_MENU = "#menuButton";
 
    /**
-    * id of button open history
+    * FX:id of button open history
     */
    private final static String BUTTON_OPEN_HISTORY = "#button_history";
 
    /**
-    * id of button open memory
+    * FX:id of button open memory
     */
    private final static String BUTTON_OPEN_MEMORY = "#button_open_memory";
 
@@ -154,6 +154,7 @@ public class Starter extends Application {
     * path of fxml file of calculator
     */
    private final static String FXML_PATH = "/sample.fxml";
+
    /**
     * start method for javaFx Application
     */

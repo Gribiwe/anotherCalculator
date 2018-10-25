@@ -49,89 +49,89 @@ class DifferentOperationsTest {
    }
 
    /**
-    * testing of backspace
+    * testing of backspace operation
     */
    @Test
-   void backspaceTest() {
-      testUtil.doTest("25,25 backspace backspace backspace backspace + 25,2525 backspace backspace +", "27,25", "2   +   25,25   +   ");
-      testUtil.doTest("25,25 backspace backspace backspace backspace backspace + 25,2525 backspace backspace +", "25,25", "0   +   25,25   +   ");
-      testUtil.doTest("25,25 backspace backspace backspace backspace backspace backspace backspace backspace + 25,2525 backspace backspace +", "25,25", "0   +   25,25   +   ");
-      testUtil.doTest("25 + 0 + 5 = backspace", "30", "");
-      testUtil.doTest("25 + 0 + 5 = backspace backspace backspace", "30", "");
-      testUtil.doTest("25 + 0 + 5 backspace 54 backspace 543 backspace - backspace backspace + backspace 2 -", "581", "25   +   0   +   554   +   2   -   ");
+   void backSPaceTest() {
+      testUtil.doTest("25,25 ← ← ← ← + 25,2525 ← ← +", "27,25", "2   +   25,25   +   ");
+      testUtil.doTest("25,25 ← ← ← ← ← + 25,2525 ← ← +", "25,25", "0   +   25,25   +   ");
+      testUtil.doTest("25,25 ← ← ← ← ← ← ← ← + 25,2525 ← ← +", "25,25", "0   +   25,25   +   ");
+      testUtil.doTest("25 + 0 + 5 = ←", "30", "");
+      testUtil.doTest("25 + 0 + 5 = ← ← ←", "30", "");
+      testUtil.doTest("25 + 0 + 5 ← 54 ← 543 ← - ← ← + ← 2 -", "581", "25   +   0   +   554   +   2   -   ");
 
-      testUtil.doTest("backspace", "0", "");
-      testUtil.doTest("9999999999999999 backspace", "999 999 999 999 999", "");
-      testUtil.doTest("9999999999999999 backspace backspace", "99 999 999 999 999", "");
-      testUtil.doTest("1 backspace", "0", "");
-      testUtil.doTest("11 backspace", "1", "");
-      testUtil.doTest("11 backspace backspace", "0", "");
-      testUtil.doTest("111 backspace backspace", "1", "");
-      testUtil.doTest("111 backspace backspace backspace", "0", "");
-      testUtil.doTest("111 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("←", "0", "");
+      testUtil.doTest("9999999999999999 ←", "999 999 999 999 999", "");
+      testUtil.doTest("9999999999999999 ← ←", "99 999 999 999 999", "");
+      testUtil.doTest("1 ←", "0", "");
+      testUtil.doTest("11 ←", "1", "");
+      testUtil.doTest("11 ← ←", "0", "");
+      testUtil.doTest("111 ← ←", "1", "");
+      testUtil.doTest("111 ← ← ←", "0", "");
+      testUtil.doTest("111 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("2 backspace ", "0", "");
-      testUtil.doTest("22 backspace ", "2", "");
-      testUtil.doTest("22 backspace backspace", "0", "");
-      testUtil.doTest("222 backspace backspace", "2", "");
-      testUtil.doTest("222 backspace backspace backspace", "0", "");
-      testUtil.doTest("222 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("2 ← ", "0", "");
+      testUtil.doTest("22 ← ", "2", "");
+      testUtil.doTest("22 ← ←", "0", "");
+      testUtil.doTest("222 ← ←", "2", "");
+      testUtil.doTest("222 ← ← ←", "0", "");
+      testUtil.doTest("222 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("3 backspace ", "0", "");
-      testUtil.doTest("33 backspace ", "3", "");
-      testUtil.doTest("33 backspace backspace", "0", "");
-      testUtil.doTest("333 backspace backspace", "3", "");
-      testUtil.doTest("333 backspace backspace backspace", "0", "");
-      testUtil.doTest("333 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("3 ← ", "0", "");
+      testUtil.doTest("33 ← ", "3", "");
+      testUtil.doTest("33 ← ←", "0", "");
+      testUtil.doTest("333 ← ←", "3", "");
+      testUtil.doTest("333 ← ← ←", "0", "");
+      testUtil.doTest("333 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("4 backspace ", "0", "");
-      testUtil.doTest("44 backspace ", "4", "");
-      testUtil.doTest("44 backspace backspace", "0", "");
-      testUtil.doTest("444 backspace backspace", "4", "");
-      testUtil.doTest("444 backspace backspace backspace", "0", "");
-      testUtil.doTest("444 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("4 ← ", "0", "");
+      testUtil.doTest("44 ← ", "4", "");
+      testUtil.doTest("44 ← ←", "0", "");
+      testUtil.doTest("444 ← ←", "4", "");
+      testUtil.doTest("444 ← ← ←", "0", "");
+      testUtil.doTest("444 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("5 backspace ", "0", "");
-      testUtil.doTest("55 backspace ", "5", "");
-      testUtil.doTest("55 backspace backspace", "0", "");
-      testUtil.doTest("555 backspace backspace", "5", "");
-      testUtil.doTest("555 backspace backspace backspace", "0", "");
-      testUtil.doTest("555 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("5 ← ", "0", "");
+      testUtil.doTest("55 ← ", "5", "");
+      testUtil.doTest("55 ← ←", "0", "");
+      testUtil.doTest("555 ← ←", "5", "");
+      testUtil.doTest("555 ← ← ←", "0", "");
+      testUtil.doTest("555 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("6 backspace ", "0", "");
-      testUtil.doTest("66 backspace ", "6", "");
-      testUtil.doTest("66 backspace backspace", "0", "");
-      testUtil.doTest("666 backspace backspace", "6", "");
-      testUtil.doTest("666 backspace backspace backspace", "0", "");
-      testUtil.doTest("666 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("6 ← ", "0", "");
+      testUtil.doTest("66 ← ", "6", "");
+      testUtil.doTest("66 ← ←", "0", "");
+      testUtil.doTest("666 ← ←", "6", "");
+      testUtil.doTest("666 ← ← ←", "0", "");
+      testUtil.doTest("666 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("7 backspace ", "0", "");
-      testUtil.doTest("77 backspace ", "7", "");
-      testUtil.doTest("77 backspace backspace", "0", "");
-      testUtil.doTest("777 backspace backspace", "7", "");
-      testUtil.doTest("777 backspace backspace backspace", "0", "");
-      testUtil.doTest("777 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("7 ← ", "0", "");
+      testUtil.doTest("77 ← ", "7", "");
+      testUtil.doTest("77 ← ←", "0", "");
+      testUtil.doTest("777 ← ←", "7", "");
+      testUtil.doTest("777 ← ← ←", "0", "");
+      testUtil.doTest("777 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("8 backspace ", "0", "");
-      testUtil.doTest("88 backspace ", "8", "");
-      testUtil.doTest("88 backspace backspace", "0", "");
-      testUtil.doTest("888 backspace backspace", "8", "");
-      testUtil.doTest("888 backspace backspace backspace", "0", "");
-      testUtil.doTest("888 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("8 ← ", "0", "");
+      testUtil.doTest("88 ← ", "8", "");
+      testUtil.doTest("88 ← ←", "0", "");
+      testUtil.doTest("888 ← ←", "8", "");
+      testUtil.doTest("888 ← ← ←", "0", "");
+      testUtil.doTest("888 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("9 backspace ", "0", "");
-      testUtil.doTest("99 backspace ", "9", "");
-      testUtil.doTest("99 backspace backspace", "0", "");
-      testUtil.doTest("999 backspace backspace", "9", "");
-      testUtil.doTest("999 backspace backspace backspace", "0", "");
-      testUtil.doTest("999 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("9 ← ", "0", "");
+      testUtil.doTest("99 ← ", "9", "");
+      testUtil.doTest("99 ← ←", "0", "");
+      testUtil.doTest("999 ← ←", "9", "");
+      testUtil.doTest("999 ← ← ←", "0", "");
+      testUtil.doTest("999 ← ← ← ← ←", "0", "");
 
-      testUtil.doTest("0 backspace ", "0", "");
-      testUtil.doTest("00 backspace ", "0", "");
-      testUtil.doTest("00 backspace backspace", "0", "");
-      testUtil.doTest("000 backspace backspace", "0", "");
-      testUtil.doTest("000 backspace backspace backspace", "0", "");
-      testUtil.doTest("000 backspace backspace backspace backspace backspace", "0", "");
+      testUtil.doTest("0 ← ", "0", "");
+      testUtil.doTest("00 ← ", "0", "");
+      testUtil.doTest("00 ← ←", "0", "");
+      testUtil.doTest("000 ← ←", "0", "");
+      testUtil.doTest("000 ← ← ←", "0", "");
+      testUtil.doTest("000 ← ← ← ← ←", "0", "");
    }
 
    /**

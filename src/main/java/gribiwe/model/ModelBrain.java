@@ -570,7 +570,7 @@ public class ModelBrain {
     * @throws ZeroDivideException if tries to divide by zero
     */
    private void verifyOneDivX(SpecialOperation operation) throws ZeroDivideException {
-      if (operation == ONE_DIV_X && isZero(tailSpecialOperationHistory.calculate())) {// TODO: 24.10.2018 swap in if is faster done
+      if (operation == ONE_DIV_X && isZero(tailSpecialOperationHistory.calculate())) {
          tailSpecialOperationHistory.addOperation(operation);
 
          throw new ZeroDivideException("Cant divide one by zero!");

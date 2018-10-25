@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="root" stylesheets="@stylesheet/main.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gribiwe.controller.Controller">
     <AnchorPane fx:id="borderedVisionPane">
-        <GridPane fx:id="visionPane" styleClass="visionPane" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
+        <GridPane fx:id="visionPane" style="-fx-background-color: lightgray;" styleClass="visionPane" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
                 <ColumnConstraints />
             </columnConstraints>

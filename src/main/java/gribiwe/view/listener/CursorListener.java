@@ -240,53 +240,33 @@ public class CursorListener {
             isTopDiagonal = true;
             onBorder = true;
             area.setCursor(Cursor.NW_RESIZE);
-
-            return;
-         }
-         if (isRightBorder && isTopDiagonalBorder) {
+         } else if (isRightBorder && isTopDiagonalBorder) {
             isTopDiagonal = true;
             onBorder = true;
             area.setCursor(Cursor.NE_RESIZE);
-            return;
-         } else {
-            isTopDiagonal = false;
-         }
-
-         if (isBottomLeftBorder && isBottomBorder) {
+         } else if (isBottomLeftBorder && isBottomBorder) {
             onBorder = true;
             area.setCursor(Cursor.SW_RESIZE);
-            return;
-         }
-         if (isBottomRightBorder && isBottomBorder) {
+         } else if (isBottomRightBorder && isBottomBorder) {
             onBorder = true;
             area.setCursor(Cursor.SE_RESIZE);
-            return;
-         }
-
-         if (isLeftBorder) {
+         } else if (isLeftBorder) {
             onBorder = true;
-
             area.setCursor(Cursor.W_RESIZE);
-            return;
-         }
-         if (isRightBorder) {
+         } else if (isRightBorder) {
             onBorder = true;
             area.setCursor(Cursor.E_RESIZE);
-            return;
-         }
-         if (isTopBorder) {
+         } else if (isTopBorder) {
             onBorder = true;
             area.setCursor(Cursor.N_RESIZE);
-            return;
-         }
-         if (isBottomBorder) {
+         } else if (isBottomBorder) {
             onBorder = true;
             area.setCursor(Cursor.S_RESIZE);
-            return;
+         } else {
+            isTopDiagonal = false;
+            onBorder = false;
+            area.setCursor(Cursor.DISAPPEAR);
          }
-
-         onBorder = false;
-         area.setCursor(Cursor.DISAPPEAR);
       }
    }
 
@@ -346,24 +326,25 @@ public class CursorListener {
          if (bottomMenuView != null && bottomMenuView.isShows()) {
             bottomMenuView.closeHistory();
          }
-         if (area.getCursor().equals(Cursor.W_RESIZE)) {
+         Cursor cursor = area.getCursor();
+         if (cursor.equals(Cursor.W_RESIZE)) {
             doResizeW(mouseEvent);
-         } else if (area.getCursor().equals(Cursor.E_RESIZE)) {
+         } else if (cursor == Cursor.E_RESIZE) {
             doResizeE(mouseEvent);
-         } else if (area.getCursor().equals(Cursor.S_RESIZE)) {
+         } else if (cursor == Cursor.S_RESIZE) {
             doResizeS(mouseEvent);
-         } else if (area.getCursor().equals(Cursor.N_RESIZE)) {
+         } else if (cursor == Cursor.N_RESIZE) {
             doResizeN(mouseEvent);
-         } else if (area.getCursor().equals(Cursor.SE_RESIZE)) {
+         } else if (cursor == Cursor.SE_RESIZE) {
             doResizeS(mouseEvent);
             doResizeE(mouseEvent);
-         } else if (area.getCursor().equals(Cursor.NE_RESIZE)) {
+         } else if (cursor == Cursor.NE_RESIZE) {
             doResizeN(mouseEvent);
             doResizeE(mouseEvent);
-         } else if (area.getCursor().equals(Cursor.SW_RESIZE)) {
+         } else if (cursor == Cursor.SW_RESIZE) {
             doResizeS(mouseEvent);
             doResizeW(mouseEvent);
-         } else if (area.getCursor().equals(Cursor.NW_RESIZE)) {
+         } else if (cursor == Cursor.NW_RESIZE) {
             doResizeN(mouseEvent);
             doResizeW(mouseEvent);
          }

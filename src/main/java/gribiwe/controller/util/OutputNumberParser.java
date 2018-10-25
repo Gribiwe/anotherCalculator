@@ -140,7 +140,7 @@ public class OutputNumberParser {
     * @param dto {@code BuildingNumber} to parse
     * @return string value of {@code BuildingNumber}
     */
-   public static String formatInput(BuildingNumber dto) { //todo minus adding done
+   public static String formatInput(BuildingNumber dto) {
       BigDecimal value = dto.getValue();
       BUILT_NUMBER_FORMATTER.setMinimumFractionDigits(value.scale());
       BUILT_NUMBER_FORMATTER.setDecimalSeparatorAlwaysShown(dto.isPointed());
@@ -176,11 +176,11 @@ public class OutputNumberParser {
     * @param value number to formatting, must be not negated
     * @return formatted number
     */
-   public static String formatResult(BigDecimal value, boolean needSpaces) {//todo remove minus str done
+   public static String formatResult(BigDecimal value, boolean needSpaces) {
       String toReturn;
       if (isZero(value)) {
          toReturn = "0";
-      } else if (value.toBigInteger().abs().compareTo(BigInteger.ONE) >= 0) {
+      } else if (value.abs().compareTo(BigDecimal.ONE) >= 0) {
          toReturn = formatResultBiggerOrEqualsOne(value, needSpaces);
       } else {
          toReturn = formatResultLessOne(value, needSpaces);
@@ -219,7 +219,7 @@ public class OutputNumberParser {
     * @param value formatting number
     * @return formatted string value
     */
-   private static String formatResultLessOne(BigDecimal value, boolean needSpace) {//todo removed string done
+   private static String formatResultLessOne(BigDecimal value, boolean needSpace) {
       int indexOfNotZeroNumber = value.scale() - value.precision();
       int indexOfLastNormNumber = indexOfNotZeroNumber;
 
@@ -313,7 +313,7 @@ public class OutputNumberParser {
     * @return string of formatted number
     */
    private static String formatWithFormatter(String pattern, BigDecimal value, boolean needSpace, Exponent exponent, int maximumFractionNumbers) {
-      RESULT_FORMATTER.applyPattern(pattern);// TODO: 24.10.2018 remove string on it and same done
+      RESULT_FORMATTER.applyPattern(pattern);
       RESULT_FORMATTER.setGroupingSize(GROUP_SIZE);
       RESULT_FORMATTER.setGroupingUsed(needSpace);
       RESULT_FORMATTER.setRoundingMode(RoundingMode.HALF_UP);
