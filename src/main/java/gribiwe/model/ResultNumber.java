@@ -14,22 +14,14 @@ class ResultNumber {
    /**
     * current number
     */
-   private BigDecimal number;
+   private BigDecimal number = BigDecimal.ZERO;
 
    /**
     * current status
     *
     * @see ResultNumberStatus
     */
-   private ResultNumberStatus status;
-
-   /**
-    * initial of default values
-    */
-   ResultNumber() {
-      number = BigDecimal.ZERO;
-      status = ResultNumberStatus.EQUALS_RESULT;
-   }
+   private ResultNumberStatus status = ResultNumberStatus.EQUALS_RESULT;
 
    /**
     * method for loading number with

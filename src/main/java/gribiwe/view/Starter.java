@@ -96,6 +96,65 @@ public class Starter extends Application {
    private final static String fullInvisibleBackgroundStyle = "-fx-background-color: rgba(0, 0, 0, 0);";
 
    /**
+    * id of button plus
+    */
+   private final static String BUTTON_PLUS = "#button_plus";
+
+   /**
+    * id of output number label
+    */
+   private final static String LABEL_OUTPUT = "#inputFieldNumber";
+
+   /**
+    * id of button maximize
+    */
+   private final static String BUTTON_MAXIMIZE = "#maximize";
+
+   /**
+    * id of text of maximize button
+    */
+   private final static String MAXIMIZE_TEXT_ID = "#maximizeText";
+
+   /**
+    * id of pane of bar of window
+    */
+   private final static String PANE_BAR = "#bar";
+
+   /**
+    * id of button exit
+    */
+   private final static String BUTTON_EXIT = "#exit";
+
+   /**
+    * id of button hide
+    */
+   private final static String BUTTON_HIDE = "#hide";
+
+   /**
+    * id of button open menu
+    */
+   private final static String BUTTON_OPEN_MENU = "#menuButton";
+
+   /**
+    * id of button open history
+    */
+   private final static String BUTTON_OPEN_HISTORY = "#button_history";
+
+   /**
+    * id of button open memory
+    */
+   private final static String BUTTON_OPEN_MEMORY = "#button_open_memory";
+
+   /**
+    * dir at resources of icon image of calculator
+    */
+   private final static String ICON_IMAGE_PATH = "/calc.png";
+
+   /**
+    * path of fxml file of calculator
+    */
+   private final static String FXML_PATH = "/sample.fxml";
+   /**
     * start method for javaFx Application
     */
    @Override
@@ -124,7 +183,7 @@ public class Starter extends Application {
     * loads application structure from fxml file
     */
    private void initRootLayout() {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PATH));
       try {
          rootLayout = loader.load();
       } catch (IOException e) {
@@ -149,7 +208,8 @@ public class Starter extends Application {
       primaryStage.setResizable(true);
       primaryStage.toBack();
       primaryStage.show();
-      Image image = new Image(String.valueOf((getClass().getResource("/calc.png"))));
+
+      Image image = new Image(String.valueOf((getClass().getResource(ICON_IMAGE_PATH))));
       ImageView scaledImageView = new ImageView(image);
       scaledImageView.setSmooth(false);
       primaryStage.getIcons().add(scaledImageView.getImage());
@@ -205,23 +265,23 @@ public class Starter extends Application {
     * initializing of listeners of keys and mouse
     */
    private void initViewListeners() {
-      KeyListener keyListener = new KeyListener(controller, scene.lookup("#button_plus"));
-      Label outputNumber = (Label) scene.lookup("#inputFieldNumber");
+      KeyListener keyListener = new KeyListener(controller, scene.lookup(BUTTON_PLUS));
+      Label outputNumber = (Label) scene.lookup(LABEL_OUTPUT);
       new OverrunListener(outputNumber);
 
-      Pane maximizeButton = (Pane) scene.lookup("#maximize");
+      Pane maximizeButton = (Pane) scene.lookup(BUTTON_MAXIMIZE);
       cursorListener = new CursorListener((AnchorPane) borderedVisiblePane,
-              (Label) maximizeButton.lookup("#maximizeText"), keyListener);
+              (Label) maximizeButton.lookup(MAXIMIZE_TEXT_ID), keyListener);
       borderedVisiblePane.setOnMouseMoved((mouseEvent) -> cursorListener.updateCursor(mouseEvent));
       borderedVisiblePane.setOnMouseDragged((mouseEvent) -> cursorListener.resizeWindow(mouseEvent));
       borderedVisiblePane.setOnMousePressed((mouseEvent) -> cursorListener.beforeResizePress(mouseEvent));
 
-      Pane toolBar = (Pane) scene.lookup("#bar");
+      Pane toolBar = (Pane) scene.lookup(PANE_BAR);
       toolBar.setOnMousePressed((mouseEvent) -> cursorListener.pressing(mouseEvent));
       toolBar.setOnMouseDragged((mouseEvent) -> cursorListener.dragging(mouseEvent));
       toolBar.setOnMouseReleased((mouseEvent) -> cursorListener.draggingFinish());
 
-      Pane exitButton = (Pane) scene.lookup("#exit");
+      Pane exitButton = (Pane) scene.lookup(BUTTON_EXIT);
       exitButton.setOnMouseClicked((mouseEvent) -> cursorListener.closeApp());
       exitButton.setOnMouseExited((mouseEvent) -> cursorListener.buttonUnDetected());
       exitButton.setOnMouseEntered((mouseEvent) -> cursorListener.buttonDetected());
@@ -230,18 +290,18 @@ public class Starter extends Application {
       maximizeButton.setOnMouseEntered((mouseEvent) -> cursorListener.buttonDetected());
       maximizeButton.setOnMouseClicked((mouseEvent) -> cursorListener.fullScreen());
 
-      Pane minimizeButton = (Pane) scene.lookup("#hide");
+      Pane minimizeButton = (Pane) scene.lookup(BUTTON_HIDE);
       minimizeButton.setOnMouseExited((mouseEvent) -> cursorListener.buttonUnDetected());
       minimizeButton.setOnMouseEntered((mouseEvent) -> cursorListener.buttonDetected());
       minimizeButton.setOnMouseClicked((mouseEvent) -> cursorListener.hide(primaryStage));
 
-      AnchorPane showMenuButton = (AnchorPane) scene.lookup("#menuButton");
+      AnchorPane showMenuButton = (AnchorPane) scene.lookup(BUTTON_OPEN_MENU);
       showMenuButton.setOnMouseClicked((mouseEvent) -> cursorListener.showMenu(showMenuButton, rootLayout));
 
-      AnchorPane showHistoryButton = (AnchorPane) scene.lookup("#button_history");
+      AnchorPane showHistoryButton = (AnchorPane) scene.lookup(BUTTON_OPEN_HISTORY);
       showHistoryButton.setOnMouseClicked((mouseEvent) -> cursorListener.showBottomMenu(rootLayout, true));
 
-      AnchorPane showMemoryButton = (AnchorPane) scene.lookup("#button_open_memory");
+      AnchorPane showMemoryButton = (AnchorPane) scene.lookup(BUTTON_OPEN_MEMORY);
       showMemoryButton.setOnMouseClicked((mouseEvent) -> cursorListener.showBottomMenu(rootLayout, false));
 
       borderedVisiblePane.setOnMouseClicked((mouseEvent) -> cursorListener.focusUnfocusedMainPane(mouseEvent, exitButton, maximizeButton, minimizeButton));

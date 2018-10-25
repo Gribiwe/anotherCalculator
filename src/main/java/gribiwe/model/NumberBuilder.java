@@ -1,6 +1,7 @@
 package gribiwe.model;
 
 import gribiwe.model.dto.BuildingNumber;
+import gribiwe.model.util.BigDecimalZeroComparator;
 import gribiwe.model.util.Digit;
 
 import java.math.BigDecimal;
@@ -131,7 +132,7 @@ class NumberBuilder {
     * @return true, if number equals to zero
     */
    private boolean isZero() {
-      return number.compareTo(BigDecimal.ZERO) == 0;
+      return BigDecimalZeroComparator.isZero(number);
    }
 
    /**

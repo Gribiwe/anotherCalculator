@@ -18,24 +18,24 @@ class Memory {
    /**
     * current memory number
     */
-   private BigDecimal number;
-
-   /**
-    * initial of default values
-    */
-   Memory() {
-      number = null;
-   }
+   private BigDecimal number = null;
 
    /**
     * @return current memory number
     */
    public BigDecimal getNumber() {
+      checkAndUpdateNullNumberToZero();
+      return number;
+   }
+
+   /**
+    * method checks is number is null
+    * if it's null, sets number to BigDecimal.ZERO value
+    */
+   private void checkAndUpdateNullNumberToZero() {
       if (number == null) {
          number = BigDecimal.ZERO;
       }
-
-      return number;
    }
 
    /**
@@ -46,10 +46,7 @@ class Memory {
     * @see MemoryOperation
     */
    void doOperation(BigDecimal num, MemoryOperation operation) {
-      if (number == null) {
-         number = BigDecimal.ZERO;
-      }
-
+      checkAndUpdateNullNumberToZero();
       if (operation == ADD) {
          number = number.add(num);
       } else {

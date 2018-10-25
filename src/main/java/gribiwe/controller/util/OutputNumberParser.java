@@ -72,7 +72,7 @@ public class OutputNumberParser {
    /**
     * Decimal symbols for formatting
     */
-   private final static DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+   private final static DecimalFormatSymbols DECIMAL_FORMAT_SYMBOLS = new DecimalFormatSymbols();
 
    /**
     * string of plus exponent
@@ -88,6 +88,12 @@ public class OutputNumberParser {
     * string of minus prefix of building number formatter
     */
    private final static String MINUS = "-";
+
+   /**
+    * Empty string value for empty pattern and
+    * empty positive number prefix
+    */
+   private final static String EMPTY = "";
 
    /**
     * enum for showing is exponent needs
@@ -119,10 +125,10 @@ public class OutputNumberParser {
     * {@link #RESULT_FORMATTER}
     */
    static {
-      decimalFormatSymbols.setDecimalSeparator(',');
-      decimalFormatSymbols.setGroupingSeparator(' ');
+      DECIMAL_FORMAT_SYMBOLS.setDecimalSeparator(',');
+      DECIMAL_FORMAT_SYMBOLS.setGroupingSeparator(' ');
 
-      BUILT_NUMBER_FORMATTER.setDecimalFormatSymbols(decimalFormatSymbols);
+      BUILT_NUMBER_FORMATTER.setDecimalFormatSymbols(DECIMAL_FORMAT_SYMBOLS);
       BUILT_NUMBER_FORMATTER.setGroupingSize(GROUP_SIZE);
       BUILT_NUMBER_FORMATTER.setGroupingUsed(true);
    }
@@ -134,21 +140,34 @@ public class OutputNumberParser {
     * @param dto {@code BuildingNumber} to parse
     * @return string value of {@code BuildingNumber}
     */
-   public static String formatInput(BuildingNumber dto) {
+   public static String formatInput(BuildingNumber dto) { //todo minus adding done
       BigDecimal value = dto.getValue();
       BUILT_NUMBER_FORMATTER.setMinimumFractionDigits(value.scale());
       BUILT_NUMBER_FORMATTER.setDecimalSeparatorAlwaysShown(dto.isPointed());
-      if (dto.isNegated() && isZero(value)) {
-         BUILT_NUMBER_FORMATTER.setPositivePrefix(MINUS);
-      }
-      String result = BUILT_NUMBER_FORMATTER.format(value);
-      BUILT_NUMBER_FORMATTER.setPositivePrefix(MINUS);
-      //      if (dto.isNegated() && isZero(value)) { //todo minus adding have a question
-//         result = "-" + result;
-//      }
-      return result;
+      String positivePrefix = getPositiveNumberPrefix(dto.isNegated(), value);
+      BUILT_NUMBER_FORMATTER.setPositivePrefix(positivePrefix);
+      return BUILT_NUMBER_FORMATTER.format(value);
    }
 
+   /**
+    * Method for getting positive number
+    * prefix for formatter
+    * it's needs if value should be like
+    * -0.000 on building status
+    *
+    * @param negated is number should be negated
+    * @param value   number to process
+    * @return positive number prefix for formatter
+    */
+   private static String getPositiveNumberPrefix(boolean negated, BigDecimal value) {
+      String positivePrefix;
+      if (negated && isZero(value)) {
+         positivePrefix = MINUS;
+      } else {
+         positivePrefix = EMPTY;
+      }
+      return positivePrefix;
+   }
 
    /**
     * method for formatting a BigDecimal value
@@ -185,7 +204,7 @@ public class OutputNumberParser {
          toReturn = formatWithFormatter(PATTERN_NOT_POINTED_NOT_EXPONENT_VALUE, value, needSpace, Exponent.NOT_NEEDS);
       } else {
          int fractionalNumberLength = MAX_NUMBERS - integerDigitsLength;
-         toReturn = formatWithFormatter("", value, needSpace, Exponent.NOT_NEEDS, fractionalNumberLength);
+         toReturn = formatWithFormatter(EMPTY, value, needSpace, Exponent.NOT_NEEDS, fractionalNumberLength);
       }
       return toReturn;
    }
@@ -206,8 +225,8 @@ public class OutputNumberParser {
 
       if (indexOfNotZeroNumber > 0) {
          int maxLastIndex = indexOfLastNormNumber + MAX_NUMBERS;
-         if (reScaleAndGetLastNotZeroDigit(value, maxLastIndex) != indexOfNotZeroNumber) {
-            indexOfLastNormNumber = reScaleAndGetLastNotZeroDigit(value, maxLastIndex + 2);
+         if (reScaleAndGetLastNotZeroDigitIndex(value, maxLastIndex) != indexOfNotZeroNumber) {
+            indexOfLastNormNumber = reScaleAndGetLastNotZeroDigitIndex(value, maxLastIndex + 2);
          }
       }
 
@@ -229,7 +248,7 @@ public class OutputNumberParser {
     * @param newScale value of new scale of number
     * @return index of not zero digit
     */
-   private static int reScaleAndGetLastNotZeroDigit(BigDecimal number, int newScale) {
+   private static int reScaleAndGetLastNotZeroDigitIndex(BigDecimal number, int newScale) {
       number = reScale(number, newScale);
       return number.stripTrailingZeros().scale() - 1;
    }
@@ -301,7 +320,20 @@ public class OutputNumberParser {
       if (maximumFractionNumbers > -1) {
          RESULT_FORMATTER.setMaximumFractionDigits(maximumFractionNumbers);
       }
-      boolean showAlwaysDecimalSeparator = false;
+      proceedExponent(exponent);
+      return RESULT_FORMATTER.format(value);
+   }
+
+   /**
+    * helpful method for proceeding
+    * an exponent value
+    * sets needed to {@link #RESULT_FORMATTER}
+    * the parameterized {@link #DECIMAL_FORMAT_SYMBOLS}
+    *
+    * @param exponent exponent value to proceed
+    */
+   private static void proceedExponent(Exponent exponent) {
+      boolean showAlwaysDecimalSeparator;
       if (exponent != Exponent.NOT_NEEDS) {
          showAlwaysDecimalSeparator = true;
          String exponentToSet;
@@ -310,11 +342,12 @@ public class OutputNumberParser {
          } else {
             exponentToSet = EXPONENT_MINUS;
          }
-         decimalFormatSymbols.setExponentSeparator(exponentToSet);
+         DECIMAL_FORMAT_SYMBOLS.setExponentSeparator(exponentToSet);
+      } else {
+         showAlwaysDecimalSeparator = false;
       }
       RESULT_FORMATTER.setDecimalSeparatorAlwaysShown(showAlwaysDecimalSeparator);
-      RESULT_FORMATTER.setDecimalFormatSymbols(decimalFormatSymbols);
-      return RESULT_FORMATTER.format(value);
+      RESULT_FORMATTER.setDecimalFormatSymbols(DECIMAL_FORMAT_SYMBOLS);
    }
 
    /**

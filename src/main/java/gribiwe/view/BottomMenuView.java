@@ -125,12 +125,17 @@ public class BottomMenuView {
    /**
     * font for label in history
     */
-   private final Font fontForHistoryLabel = Font.font("Segoe UI Semibold", FontWeight.SEMI_BOLD, FontPosture.REGULAR, 14.5);
+   private static final Font FONT_FOR_HISTORY_LABEL = Font.font("Segoe UI Semibold", FontWeight.SEMI_BOLD, FontPosture.REGULAR, 14.5);
 
    /**
     * font for label in memory
     */
-   private final Font fontForMemoryLabel = Font.font("Segoe UI Semibold", FontWeight.NORMAL, FontPosture.REGULAR, 23);
+   private static final Font FONT_FOR_MEMORY_LABEL = Font.font("Segoe UI Semibold", FontWeight.NORMAL, FontPosture.REGULAR, 23);
+
+   /**
+    * text of empty journal
+    */
+   private static final String JOURNAL_IS_EMPTY_TEXT = "Журнала еще нет";
 
    /**
     * shows is this history bottom menu or not
@@ -227,7 +232,7 @@ public class BottomMenuView {
       memoryLabel = (Label) root.lookup("#memoryText");
       memoryLabel.setOpacity(1);
       memoryNumber.getChildren().add(memoryLabel);
-      memoryLabel.setFont(fontForMemoryLabel);
+      memoryLabel.setFont(FONT_FOR_MEMORY_LABEL);
 
       AnchorPane.setTopAnchor(memoryLabel, 0D);
       AnchorPane.setRightAnchor(memoryLabel, 15D);
@@ -238,10 +243,10 @@ public class BottomMenuView {
     * it's doesn't have any better "Журнала еще нет"
     */
    private void initHistoryLabel() {
-      Label thereIsNoHistory = new Label("Журнала еще нет");
+      Label thereIsNoHistory = new Label(JOURNAL_IS_EMPTY_TEXT);
       thereIsNoHistory.setId("no_history_label");
       visibleArea.getChildren().add(thereIsNoHistory);
-      thereIsNoHistory.setFont(fontForHistoryLabel);
+      thereIsNoHistory.setFont(FONT_FOR_HISTORY_LABEL);
 
       thereIsNoHistory.setLayoutX(15);
       thereIsNoHistory.setLayoutY(15);
